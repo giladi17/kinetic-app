@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.35s ease forwards; }
+.animate-fade-up-delay-1 { animation: fadeUp 0.35s ease 0.05s forwards; opacity: 0; }
+.animate-fade-up-delay-2 { animation: fadeUp 0.35s ease 0.10s forwards; opacity: 0; }
+.animate-fade-up-delay-3 { animation: fadeUp 0.35s ease 0.15s forwards; opacity: 0; }
+
+:root {
+  --accent-color: #beee00;
+  --accent-bright: #cafd00;
+  --accent-dim: #beee00;
+  --bg-primary: #0e0e0e;
+  --text-primary: #ffffff;
+}
+
+body.theme-blue {
+  --accent-color: #00c8ff;
+  --accent-bright: #00e5ff;
+  --accent-dim: #00b8e6;
+}
+
+body.theme-orange {
+  --accent-color: #ff8c00;
+  --accent-bright: #ffa500;
+  --accent-dim: #e07800;
+}
+
+body.light-mode {
+  --bg-primary: #f5f5f5;
+  --text-primary: #1a1a1a;
+}
+
+body.light-mode .bg-surface-container-low,
+body.light-mode .bg-surface-container-high,
+body.light-mode .bg-surface-container-highest {
+  background-color: #ffffff !important;
+}
+
+body.light-mode .bg-surface-container {
+  background-color: #f0f0f0 !important;
+}
+
+body.light-mode .text-on-surface,
+body.light-mode .text-on-surface-variant {
+  color: #444 !important;
+}
+
+body.light-mode .kinetic-nav-bg {
+  background-color: rgba(255,255,255,0.92) !important;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  line-height: 1;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Manrope', sans-serif;
+  min-height: 100dvh;
+}
+
+.circular-progress {
+  background: radial-gradient(closest-side, var(--bg-primary) 85%, transparent 86% 100%),
+              conic-gradient(var(--accent-bright) var(--progress, 75%), #262626 0);
+}
+
+.hud-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.text-glow-lime {
+  text-shadow: 0 0 20px rgba(204, 255, 0, 0.4);
+}
+
+.kinetic-grid {
+  background-image: radial-gradient(circle at 2px 2px, #1a1a1a 1px, transparent 0);
+  background-size: 24px 24px;
+}

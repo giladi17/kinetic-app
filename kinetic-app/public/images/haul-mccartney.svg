@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2b0f3a"/>
+      <stop offset="0.6" stop-color="#0f0f1a"/>
+      <stop offset="1" stop-color="#17324a"/>
+    </linearGradient>
+    <linearGradient id="truck" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#4c1d95"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2e8f0" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#94a3b8" stop-opacity="0.9"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#f59e0b" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="80" fill="url(#bg)"/>
+  <circle cx="250" cy="220" r="180" fill="#8b5cf6" opacity="0.08"/>
+  <circle cx="820" cy="260" r="220" fill="#f59e0b" opacity="0.06"/>
+  <circle cx="600" cy="900" r="260" fill="#60a5fa" opacity="0.06"/>
+
+  <!-- Ground -->
+  <path d="M120 760 C 260 700, 420 690, 540 720 C 680 760, 820 780, 930 760 L 930 940 L 120 940 Z"
+        fill="#0b0b12" opacity="0.7"/>
+
+  <!-- Trailer -->
+  <g filter="url(#softShadow)">
+    <rect x="210" y="520" width="520" height="190" rx="26" fill="#111827" stroke="#ffffff" stroke-opacity="0.10" stroke-width="4"/>
+    <rect x="230" y="540" width="480" height="150" rx="22" fill="#0f172a" opacity="0.9"/>
+    <rect x="260" y="575" width="420" height="18" rx="9" fill="#ffffff" opacity="0.06"/>
+    <rect x="260" y="615" width="360" height="18" rx="9" fill="#ffffff" opacity="0.05"/>
+    <rect x="260" y="655" width="300" height="18" rx="9" fill="#ffffff" opacity="0.04"/>
+  </g>
+
+  <!-- Guitars on trailer -->
+  <g filter="url(#glow)" opacity="0.95">
+    <!-- Guitar 1 -->
+    <g transform="translate(360 585) rotate(-10)">
+      <path d="M70 60 C35 40, 20 85, 45 105 C20 145, 70 165, 95 135 C125 150, 150 115, 125 95 C150 70, 110 40, 95 60 C85 50, 80 50, 70 60 Z"
+            fill="#f59e0b" opacity="0.95"/>
+      <rect x="92" y="8" width="16" height="80" rx="8" fill="#eab308"/>
+      <rect x="86" y="0" width="28" height="22" rx="8" fill="#fbbf24"/>
+      <circle cx="78" cy="102" r="16" fill="#0b0b12" opacity="0.35"/>
+      <circle cx="78" cy="102" r="10" fill="#0b0b12" opacity="0.55"/>
+    </g>
+    <!-- Guitar 2 -->
+    <g transform="translate(520 600) rotate(8)">
+      <path d="M70 60 C35 40, 20 85, 45 105 C20 145, 70 165, 95 135 C125 150, 150 115, 125 95 C150 70, 110 40, 95 60 C85 50, 80 50, 70 60 Z"
+            fill="#60a5fa" opacity="0.9"/>
+      <rect x="92" y="8" width="16" height="80" rx="8" fill="#93c5fd"/>
+      <rect x="86" y="0" width="28" height="22" rx="8" fill="#bfdbfe"/>
+      <circle cx="78" cy="102" r="16" fill="#0b0b12" opacity="0.32"/>
+      <circle cx="78" cy="102" r="10" fill="#0b0b12" opacity="0.5"/>
+    </g>
+  </g>
+
+  <!-- Cab -->
+  <g filter="url(#softShadow)">
+    <path d="M700 540 C700 500, 730 470, 770 470 L880 470 C920 470, 950 500, 950 540 L950 710 L700 710 Z"
+          fill="url(#truck)" stroke="#ffffff" stroke-opacity="0.12" stroke-width="4"/>
+    <rect x="730" y="505" width="155" height="95" rx="18" fill="#0b1220" opacity="0.85" stroke="#ffffff" stroke-opacity="0.10" stroke-width="4"/>
+    <path d="M700 610 L950 610" stroke="#ffffff" stroke-opacity="0.08" stroke-width="6"/>
+    <rect x="712" y="580" width="60" height="38" rx="10" fill="#fbbf24" opacity="0.9"/>
+    <circle cx="728" cy="730" r="52" fill="url(#metal)"/>
+    <circle cx="728" cy="730" r="28" fill="#0b0b12" opacity="0.55"/>
+    <circle cx="890" cy="730" r="52" fill="url(#metal)"/>
+    <circle cx="890" cy="730" r="28" fill="#0b0b12" opacity="0.55"/>
+  </g>
+
+  <!-- Driver (simple caricature silhouette) -->
+  <g transform="translate(760 520)">
+    <circle cx="70" cy="50" r="34" fill="#f1f5f9" opacity="0.9"/>
+    <path d="M40 82 C60 70, 80 70, 100 82 C96 104, 86 125, 70 125 C54 125, 44 104, 40 82 Z"
+          fill="#e2e8f0" opacity="0.9"/>
+    <path d="M40 48 C52 30, 62 24, 70 24 C82 24, 94 34, 100 48 C90 40, 78 40, 70 40 C60 40, 48 42, 40 48 Z"
+          fill="#0b0b12" opacity="0.65"/>
+    <circle cx="60" cy="54" r="4" fill="#0b0b12" opacity="0.6"/>
+    <circle cx="80" cy="54" r="4" fill="#0b0b12" opacity="0.6"/>
+    <path d="M58 68 C64 74, 76 74, 82 68" stroke="#0b0b12" stroke-opacity="0.5" stroke-width="4" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- Minimal badge -->
+  <g opacity="0.9">
+    <rect x="140" y="120" width="310" height="72" rx="24" fill="#111827" stroke="#ffffff" stroke-opacity="0.10" stroke-width="4"/>
+    <path d="M175 156 C190 132, 220 132, 235 156 C220 180, 190 180, 175 156 Z" fill="#f59e0b" opacity="0.95"/>
+    <path d="M250 152 h160" stroke="#ffffff" stroke-opacity="0.22" stroke-width="6" stroke-linecap="round"/>
+    <path d="M250 172 h120" stroke="#ffffff" stroke-opacity="0.14" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

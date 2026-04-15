@@ -1,0 +1,19 @@
+@echo off
+title KINETIC — Starting...
+echo.
+echo  ██╗  ██╗██╗███╗   ██╗███████╗████████╗██╗ ██████╗
+echo  ██║ ██╔╝██║████╗  ██║██╔════╝╚══██╔══╝██║██╔════╝
+echo  █████╔╝ ██║██╔██╗ ██║█████╗     ██║   ██║██║
+echo  ██╔═██╗ ██║██║╚██╗██║██╔══╝     ██║   ██║██║
+echo  ██║  ██╗██║██║ ╚████║███████╗   ██║   ██║╚██████╗
+echo  ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝ ╚═════╝
+echo.
+echo  Starting server + client...
+echo.
+start "KINETIC Server" cmd /k "cd server && node index.js"
+timeout /t 2 /nobreak > nul
+start "KINETIC Client" cmd /k "cd client && npm run dev"
+timeout /t 3 /nobreak > nul
+start http://localhost:5173
+echo  App opened at http://localhost:5173
+echo.

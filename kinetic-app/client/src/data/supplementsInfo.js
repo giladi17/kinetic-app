@@ -1,0 +1,58 @@
+export const SUPPLEMENT_INFO = {
+  'Creatine': {
+    shortDesc: '💪 התוסף המחקרי ביותר בעולם — מגביר כוח ומסת שריר ב-10-15%',
+    fullName: 'קריאטין מונוהידראט',
+    description: 'אחד התוספים המחקרים ביותר בעולם. מגביר כוח, עוצמה ומסת שריר.',
+    benefits: ['עלייה בכוח מרבי', 'שיפור ביצועי HIIT', 'האצת ריקברי', 'הגדלת מסת שריר'],
+    dosage: '5 גרם ביום',
+    timing: 'בוקר עם אוכל — לא חייב לסביב אימון',
+    warnings: 'שתה הרבה מים. לא מתאים לאנשים עם בעיות כליות.',
+    buyLinks: [
+      { name: 'iHerb', url: 'https://www.iherb.com/search#query=creatine+monohydrate', flag: '🌍' },
+      { name: 'Super-Pharm', url: 'https://www.super-pharm.co.il/search?q=קריאטין', flag: '🇮🇱' },
+      { name: 'Be-Easy', url: 'https://www.be-easy.co.il/search?q=קריאטין', flag: '🇮🇱' },
+    ],
+  },
+  'Whey Protein': {
+    shortDesc: '🥛 הדרך הכי מהירה לתת לשריר מה שהוא צריך אחרי אימון',
+    fullName: 'אבקת חלבון מי גבינה',
+    description: 'מקור חלבון מהיר ספיגה. אידיאלי לאחר אימון לבניית שריר.',
+    benefits: ['25-30g חלבון למנה', 'ספיגה מהירה', 'כל חומצות האמינו החיוניות', 'סגירת חלון אנאבולי'],
+    dosage: 'מנה אחת (30g) — 25-30g חלבון',
+    timing: 'תוך 30-60 דקות אחרי אימון',
+    warnings: 'לא מתאים לרגישים ללקטוז. בחר Isolate אם יש בעיה.',
+    buyLinks: [
+      { name: 'iHerb', url: 'https://www.iherb.com/search#query=whey+protein+powder', flag: '🌍' },
+      { name: 'Super-Pharm', url: 'https://www.super-pharm.co.il/search?q=אבקת+חלבון', flag: '🇮🇱' },
+      { name: 'Be-Easy', url: 'https://www.be-easy.co.il/search?q=whey+protein', flag: '🇮🇱' },
+    ],
+  },
+  'Omega-3': {
+    shortDesc: '🐟 מפחית כאבי שרירים, מגן על הלב ומשפר ריכוז',
+    fullName: 'אומגה 3 — EPA & DHA',
+    description: 'חומצות שומן חיוניות לבריאות הלב, המוח וצמצום דלקות.',
+    benefits: ['הפחתת כאבי שרירים', 'שיפור בריאות הלב', 'חיזוק מערכת החיסון', 'תמיכה בריקברי'],
+    dosage: '2-3 כמוסות ביום (1000mg EPA+DHA)',
+    timing: 'עם ארוחה — עדיף עם אוכל שמן',
+    warnings: 'מדיל דם — התייעץ עם רופא אם נוטל תרופות.',
+    buyLinks: [
+      { name: 'iHerb', url: 'https://www.iherb.com/search#query=omega+3+fish+oil', flag: '🌍' },
+      { name: 'Super-Pharm', url: 'https://www.super-pharm.co.il/search?q=אומגה+3', flag: '🇮🇱' },
+      { name: 'Be-Easy', url: 'https://www.be-easy.co.il/search?q=אומגה+3', flag: '🇮🇱' },
+    ],
+  },
+  'Mass Gainer': {
+    shortDesc: '⚡ פתרון קלורי למי שמתקשה לעלות במשקל ולבנות מסה',
+    fullName: 'גיינר — עלייה במסה',
+    description: 'שייק קלורי גבוה לאנשים שמתקשים לעלות במשקל. עשיר בפחמימות וחלבון.',
+    benefits: ['500-1000 קלוריות למנה', 'עלייה קלה במשקל', 'אנרגיה לאימונים קשים', 'חלבון + פחמימות יחד'],
+    dosage: 'מנה אחת (100-150g אבקה)',
+    timing: 'בין ארוחות או אחרי אימון',
+    warnings: 'מכיל הרבה סוכר. מתאים רק לאנשים שמתקשים לאכול מספיק.',
+    buyLinks: [
+      { name: 'iHerb', url: 'https://www.iherb.com/search#query=mass+gainer', flag: '🌍' },
+      { name: 'Super-Pharm', url: 'https://www.super-pharm.co.il/search?q=גיינר', flag: '🇮🇱' },
+      { name: 'Be-Easy', url: 'https://www.be-easy.co.il/search?q=mass+gainer', flag: '🇮🇱' },
+    ],
+  },
+}
