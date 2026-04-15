@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@clerk/clerk-react": "^5.61.4",
+    "stripe": "^22.0.1"
+  }
+}
