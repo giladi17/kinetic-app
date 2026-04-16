@@ -1638,23 +1638,28 @@ function buildSystemPrompt(personaPrompt, userData) {
 כללים: ענה תמיד בעברית. היה ספציפי לנתונים. אל תתן עצות גנריות. דבר כמו חבר, לא כמו בוט.`
 }
 
+// Direct HTTP call to Gemini — bypasses SDK routing issues
+async function callGeminiDirectly(prompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }]
+    })
+  })
+  const data = await response.json()
+  if (data.error) throw new Error(data.error.message)
+  return data.candidates[0].content.parts[0].text
+}
+
 // POST /api/ai/chat
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   try {
-    const { message, history, userData } = req.body
-    // uses top-level model (v1, gemini-1.5-flash)
-
-    const chat = model.startChat({
-      history: (history || []).map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }],
-      })),
-    })
-
+    const { message, userData } = req.body
     const systemPrompt = `אתה תום, סוכן AI אישי בקבוצת KINETIC. מתאמן: ${userData?.name || 'חבר'}. ענה תמיד בעברית בצורה מעודדת ומקצועית.`
-    const result = await chat.sendMessage(`${systemPrompt}\n\n${message}`)
-
-    res.json({ content: result.response.text() })
+    const text = await callGeminiDirectly(`${systemPrompt}\n\n${message}`)
+    res.json({ content: text })
   } catch (e) {
     console.error('Chat Error:', e)
     res.status(500).json({ error: 'שגיאה בחיבור לתום', details: e.message })
