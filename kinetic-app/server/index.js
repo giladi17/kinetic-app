@@ -16,6 +16,10 @@ const { sendWelcomeEmail, sendReminderEmail, sendProOfferEmail } = require('./em
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 const { GoogleGenerativeAI } = require('@google/generative-ai')
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
+const model = genAI.getGenerativeModel(
+  { model: 'gemini-1.5-flash' },
+  { apiVersion: 'v1' }
+)
 
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
@@ -1638,7 +1642,7 @@ function buildSystemPrompt(personaPrompt, userData) {
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   try {
     const { message, history, userData } = req.body
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    // uses top-level model (v1, gemini-1.5-flash)
 
     const chat = model.startChat({
       history: (history || []).map(h => ({
@@ -1690,7 +1694,7 @@ app.post('/api/ai/generate-plan', requireAuth, asyncHandler(async (req, res) => 
 
   if (apiKey) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+      // uses top-level model (v1, gemini-1.5-flash)
       const result = await model.generateContent(prompt)
       const text = result.response.text()
       const jsonMatch = text.match(/\{[\s\S]*\}/)
