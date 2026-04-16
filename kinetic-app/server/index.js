@@ -1,7 +1,5 @@
 // v2
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const Database = require('better-sqlite3')
@@ -31,10 +29,11 @@ const corsOptions = {
   origin: [
     'https://kinetic-app-git-master-gilads-projects-053a65e1.vercel.app',
     'https://kinetic-app-lovat.vercel.app',
+    'https://kinetic-app-production.up.railway.app',
     'http://localhost:5173'
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept']
 }
 
@@ -1638,64 +1637,24 @@ function buildSystemPrompt(personaPrompt, userData) {
 
 // POST /api/ai/chat
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
-  const { message, history, systemPrompt, clientContext } = req.body
-
-  if (!process.env.GEMINI_API_KEY) {
-    console.error('AI ERROR: GEMINI_API_KEY is missing from environment')
-    return res.status(500).json({ error: 'AI not configured' })
-  }
-
-  // Gather context from DB
-  const stats = db.prepare('SELECT * FROM user_stats WHERE id = ?').get(req.dbUserId)
-  const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.dbUserId)
-  const today = new Date().toISOString().split('T')[0]
-  const todayNutrition = db.prepare(`
-    SELECT SUM(calories) AS calories, SUM(protein) AS protein FROM nutrition_logs WHERE date = ? AND user_id = ?
-  `).get(today, req.dbUserId)
-  const readiness = db.prepare('SELECT * FROM daily_readiness WHERE date = ?').get(today)
-  const lastSession = db.prepare(`
-    SELECT s.date, s.duration, s.calories, s.volume, w.name AS workout_name
-    FROM sessions s LEFT JOIN workouts w ON s.workout_id = w.id
-    WHERE s.user_id = ?
-    ORDER BY s.date DESC LIMIT 1
-  `).get(req.dbUserId)
-
-  const userData = {
-    name: user.name,
-    currentWeight: stats.current_weight,
-    streak: stats.streak,
-    calorieTarget: user.daily_calorie_target,
-    proteinTarget: user.daily_protein_target,
-    todayCalories: clientContext?.todayCalories ?? Math.round(todayNutrition?.calories || 0),
-    todayProtein: clientContext?.todayProtein ?? Math.round(todayNutrition?.protein || 0),
-    waterToday: clientContext?.waterToday ?? (stats.water_date === today ? (stats.water_today || 0) : 0),
-    readinessScore: clientContext?.readinessScore ?? readiness?.system_readiness_score ?? null,
-    personaName: clientContext?.personaName,
-    personaRole: clientContext?.personaRole,
-    lastSession: clientContext?.lastSession ?? (lastSession
-      ? `${lastSession.workout_name || 'אימון'} לפני ${Math.round((Date.now() - new Date(lastSession.date).getTime()) / 86400000)} ימים`
-      : 'אין נתונים'),
-  }
-
-  const finalSystemPrompt = buildSystemPrompt(systemPrompt, userData)
-
   try {
+    const { message, history, userData } = req.body
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
     const chat = model.startChat({
-      history: Array.isArray(history) ? history.map(item => ({
-        role: item.role === 'user' ? 'user' : 'model',
-        parts: [{ text: item.content }],
-      })) : [],
-      generationConfig: { maxOutputTokens: 500 },
+      history: (history || []).map(h => ({
+        role: h.role === 'user' ? 'user' : 'model',
+        parts: [{ text: h.content }],
+      })),
     })
 
-    const result = await chat.sendMessage(`${finalSystemPrompt}\n\nהודעת המשתמש: ${message}`)
-    const text = result.response.text()
-    res.json({ reply: text || 'מצטער, לא הצלחתי לעבד את הבקשה.' })
+    const systemPrompt = `אתה תום, סוכן AI אישי בקבוצת KINETIC. מתאמן: ${userData?.name || 'חבר'}. ענה תמיד בעברית בצורה מעודדת ומקצועית.`
+    const result = await chat.sendMessage(`${systemPrompt}\n\n${message}`)
+
+    res.json({ content: result.response.text() })
   } catch (e) {
-    console.error('AI ERROR:', e)
-    res.status(500).json({ error: 'AI connection failed', details: e.message })
+    console.error('Chat Error:', e)
+    res.status(500).json({ error: 'שגיאה בחיבור לתום', details: e.message })
   }
 })
 
