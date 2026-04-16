@@ -1638,7 +1638,7 @@ function buildSystemPrompt(personaPrompt, userData) {
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   try {
     const { message, history, userData } = req.body
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
 
     const chat = model.startChat({
       history: (history || []).map(h => ({
@@ -1690,7 +1690,7 @@ app.post('/api/ai/generate-plan', requireAuth, asyncHandler(async (req, res) => 
 
   if (apiKey) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
       const result = await model.generateContent(prompt)
       const text = result.response.text()
       const jsonMatch = text.match(/\{[\s\S]*\}/)
