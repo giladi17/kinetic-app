@@ -27,13 +27,7 @@ if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
 
 const ALLOWED_ORIGINS = [
   'http://localhost:3000',
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'http://localhost:5175',
-  'https://kinetic-app-lovat.vercel.app',
-]
-
-const corsOptions = {
+  // וודא שאין פה קוד פתוח מלמעלה
 const corsOptions = {
   origin: [
     'https://kinetic-app-git-master-gilads-projects-053a65e1.vercel.app',
@@ -48,16 +42,12 @@ const corsOptions = {
 
 const app = express();
 app.set('trust proxy', 1);
+
+// כאן אנחנו מחילים את ה-CORS על האפליקציה
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
-// ⚠️ Stripe webhook MUST be registered before express.json() —
-// Stripe signature verification requires the raw unparsed body.
-app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
-    return res.status(500).json({ error: 'Stripe webhook not configured' })
-  }
-  const Stripe = require('stripe')
-  const stripe = Stripe(process.env.STRIPE_SECRET_KEY)
+
+// שים לב שמתחת לזה חייב להופיע הקוד של ה-Stripe Webhook כפי שהוא
   const sig = req.headers['stripe-signature']
   let event
   try {
