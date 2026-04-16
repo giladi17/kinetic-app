@@ -16,6 +16,8 @@ const webpush = require('web-push')
 const cron = require('node-cron')
 const { sendWelcomeEmail, sendReminderEmail, sendProOfferEmail } = require('./emails')
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+const { GoogleGenerativeAI } = require('@google/generative-ai')
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
@@ -1636,8 +1638,12 @@ function buildSystemPrompt(personaPrompt, userData) {
 
 // POST /api/ai/chat
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
-  const { message, systemPrompt, clientContext } = req.body
-  const apiKey = process.env.GEMINI_API_KEY
+  const { message, history, systemPrompt, clientContext } = req.body
+
+  if (!process.env.GEMINI_API_KEY) {
+    console.error('AI ERROR: GEMINI_API_KEY is missing from environment')
+    return res.status(500).json({ error: 'AI not configured' })
+  }
 
   // Gather context from DB
   const stats = db.prepare('SELECT * FROM user_stats WHERE id = ?').get(req.dbUserId)
@@ -1654,7 +1660,6 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
     ORDER BY s.date DESC LIMIT 1
   `).get(req.dbUserId)
 
-  // Prefer client-supplied values (fresher), fall back to DB
   const userData = {
     name: user.name,
     currentWeight: stats.current_weight,
@@ -1673,50 +1678,31 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   }
 
   const finalSystemPrompt = buildSystemPrompt(systemPrompt, userData)
-  const context = '' // merged into buildSystemPrompt above
-
-  if (!apiKey) {
-    // Smart fallback without API key
-    const lower = message.toLowerCase()
-    let reply = 'שלום! אני KINETIC AI. '
-    if (lower.includes('חלבון') || lower.includes('protein')) {
-      const gap = user.daily_protein_target - (todayNutrition?.protein || 0)
-      reply += gap > 0
-        ? `עדיין חסרים לך ${Math.round(gap)}g חלבון להיום. אני ממליץ על שייק חלבון או קוטג׳.`
-        : 'כל הכבוד! הגעת ליעד החלבון היומי.'
-    } else if (lower.includes('עייפות') || lower.includes('אנרגיה')) {
-      const score = readiness?.system_readiness_score || 70
-      reply += score < 60
-        ? 'עם ציון מוכנות נמוך, שקול אימון קל יותר היום. גוף שנח מתאושש טוב יותר.'
-        : 'מצב המוכנות שלך טוב! אפשר ללחוץ היום.'
-    } else if (lower.includes('אימון') || lower.includes('workout')) {
-      reply += `יש לך ${stats.streak} ימי רצף — מדהים! ההמשך הוא הגורם המכריע.`
-    } else {
-      reply += `רצף נוכחי: ${stats.streak} ימים. קלוריות: ${userData.todayCalories}/${userData.calorieTarget}.`
-    }
-    return res.json({ reply })
-  }
 
   try {
-    const { GoogleGenerativeAI } = require('@google/generative-ai')
-    const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({
-      model: "gemini-pro",
-      systemInstruction: finalSystemPrompt,
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+
+    const chat = model.startChat({
+      history: Array.isArray(history) ? history.map(item => ({
+        role: item.role === 'user' ? 'user' : 'model',
+        parts: [{ text: item.content }],
+      })) : [],
+      generationConfig: { maxOutputTokens: 500 },
     })
-    const result = await model.generateContent(message)
-    const reply = result.response.text()
-    res.json({ reply: reply || 'מצטער, לא הצלחתי לעבד את הבקשה.' })
+
+    const result = await chat.sendMessage(`${finalSystemPrompt}\n\nהודעת המשתמש: ${message}`)
+    const text = result.response.text()
+    res.json({ reply: text || 'מצטער, לא הצלחתי לעבד את הבקשה.' })
   } catch (e) {
     console.error('AI ERROR:', e)
-    res.json({ reply: 'שגיאה בחיבור ל-AI. נסה שוב.' })
+    res.status(500).json({ error: 'AI connection failed', details: e.message })
   }
 })
 
 // POST /api/ai/generate-plan
 app.post('/api/ai/generate-plan', requireAuth, asyncHandler(async (req, res) => {
   const { goal, daysPerWeek, equipment, limitations, level, gender } = req.body
-  const apiKey = process.env.GEMINI_API_KEY
+  const apiKey = process.env.GEMINI_API_KEY  // used for the `if (apiKey)` guard below
 
   const prompt = `בנה תוכנית אימון מותאמת אישית בפורמט JSON בלבד (ללא טקסט נוסף):
 מטרה: ${goal}
@@ -1746,8 +1732,6 @@ app.post('/api/ai/generate-plan', requireAuth, asyncHandler(async (req, res) => 
 
   if (apiKey) {
     try {
-      const { GoogleGenerativeAI } = require('@google/generative-ai')
-      const genAI = new GoogleGenerativeAI(apiKey)
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
       const result = await model.generateContent(prompt)
       const text = result.response.text()
