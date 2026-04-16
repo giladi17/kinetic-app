@@ -17,7 +17,7 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 const { GoogleGenerativeAI } = require('@google/generative-ai')
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 const model = genAI.getGenerativeModel(
-  { model: 'gemini-1.5-flash' },
+  { model: 'gemini-pro' },
   { apiVersion: 'v1' }
 )
 
@@ -1640,7 +1640,7 @@ function buildSystemPrompt(personaPrompt, userData) {
 
 // Direct HTTP call to Gemini — bypasses SDK routing issues
 async function callGeminiDirectly(prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1699,7 +1699,7 @@ app.post('/api/ai/generate-plan', requireAuth, asyncHandler(async (req, res) => 
 
   if (apiKey) {
     try {
-      // uses top-level model (v1, gemini-1.5-flash)
+      // uses top-level model (v1, gemini-pro)
       const result = await model.generateContent(prompt)
       const text = result.response.text()
       const jsonMatch = text.match(/\{[\s\S]*\}/)
