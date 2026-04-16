@@ -27,28 +27,28 @@ if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   )
 }
 
-const ALLOWED_ORIGINS = [
-  'http://localhost:3000',
 const corsOptions = {
   origin: [
     'https://kinetic-app-git-master-gilads-projects-053a65e1.vercel.app',
     'https://kinetic-app-lovat.vercel.app',
-    'https://kinetic-app-production.up.railway.app',
     'http://localhost:5173'
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept']
+}
 
-const app = express();
-app.set('trust proxy', 1);
+const app = express()
+app.set('trust proxy', 1)
+app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
 
-// כאן אנחנו מחילים את ה-CORS על האפליקציה
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
-// שים לב שמתחת לזה חייב להופיע הקוד של ה-Stripe Webhook כפי שהוא
+// ⚠️ Stripe webhook MUST be before express.json() — needs raw body
+app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
+    return res.status(500).json({ error: 'Stripe webhook not configured' })
+  }
+  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
   const sig = req.headers['stripe-signature']
   let event
   try {
