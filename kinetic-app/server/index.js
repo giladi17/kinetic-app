@@ -34,23 +34,22 @@ const ALLOWED_ORIGINS = [
 ]
 
 const corsOptions = {
-  origin: function(origin, callback) {
-    if (!origin || ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.vercel.app')) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
+const corsOptions = {
+  origin: [
+    'https://kinetic-app-git-master-gilads-projects-053a65e1.vercel.app',
+    'https://kinetic-app-lovat.vercel.app',
+    'https://kinetic-app-production.up.railway.app',
+    'http://localhost:5173'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-const app = express()
-app.set('trust proxy', 1)
-app.use(cors(corsOptions))
-app.options(/.*/, cors(corsOptions))
-
+const app = express();
+app.set('trust proxy', 1);
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 // ⚠️ Stripe webhook MUST be registered before express.json() —
 // Stripe signature verification requires the raw unparsed body.
 app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
