@@ -27,7 +27,6 @@ if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
 
 const ALLOWED_ORIGINS = [
   'http://localhost:3000',
-  // וודא שאין פה קוד פתוח מלמעלה
 const corsOptions = {
   origin: [
     'https://kinetic-app-git-master-gilads-projects-053a65e1.vercel.app',
