@@ -40,7 +40,6 @@ const corsOptions = {
 const app = express()
 app.set('trust proxy', 1)
 app.use(cors(corsOptions))
-app.options('*', cors(corsOptions))
 
 // ⚠️ Stripe webhook MUST be before express.json() — needs raw body
 app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
