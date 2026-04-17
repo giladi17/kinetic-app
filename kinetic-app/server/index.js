@@ -14,12 +14,6 @@ const webpush = require('web-push')
 const cron = require('node-cron')
 const { sendWelcomeEmail, sendReminderEmail, sendProOfferEmail } = require('./emails')
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-const { GoogleGenerativeAI } = require('@google/generative-ai')
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-const model = genAI.getGenerativeModel(
-  { model: 'gemini-pro' },
-  { apiVersion: 'v1' }
-)
 
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
@@ -1717,9 +1711,7 @@ app.post('/api/ai/generate-plan', requireAuth, asyncHandler(async (req, res) => 
 
   if (apiKey) {
     try {
-      // uses top-level model (v1, gemini-pro)
-      const result = await model.generateContent(prompt)
-      const text = result.response.text()
+      const text = await callGeminiDirectly(prompt)
       const jsonMatch = text.match(/\{[\s\S]*\}/)
       if (jsonMatch) plan = JSON.parse(jsonMatch[0])
     } catch (e) {
