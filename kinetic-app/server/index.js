@@ -1646,17 +1646,26 @@ async function callGeminiDirectly(prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{
-        parts: [{ text: prompt }]
-      }]
+      contents: [{ parts: [{ text: prompt }] }],
+      safetySettings: [
+        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+      ]
     })
   })
 
   const data = await response.json()
 
   if (data.error) {
-    console.error('Google API Error:', data.error)
+    console.error('GOOGLE_ERROR_DETAIL:', JSON.stringify(data.error))
     throw new Error(data.error.message)
+  }
+
+  if (!data.candidates || data.candidates.length === 0) {
+    console.error('GOOGLE_EMPTY_RESPONSE:', JSON.stringify(data))
+    throw new Error('No candidates returned from Google')
   }
 
   return data.candidates[0].content.parts[0].text
