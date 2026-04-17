@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { authFetch } from '../api'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
@@ -10,7 +11,7 @@ export default function MorningCheckin({ onComplete }) {
 
   useEffect(() => {
     // Show if not checked in today
-    fetch(`${API}/readiness/today`)
+    authFetch(`${API}/readiness/today`)
       .then(r => r.json())
       .then(data => { if (!data) setShow(true) })
       .catch(() => {})

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { authFetch } from '../api'
 
 export default function StreakProtectionBanner() {
   const [status, setStatus] = useState(null)
@@ -9,7 +10,7 @@ export default function StreakProtectionBanner() {
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), 3000)
 
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/reminders/streak-check`, { signal: controller.signal })
+    authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/reminders/streak-check`)
       .then(r => r.json())
       .then(setStatus)
       .catch(() => {})
