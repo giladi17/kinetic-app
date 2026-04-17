@@ -1668,13 +1668,31 @@ async function callGeminiDirectly(prompt) {
 // POST /api/ai/chat
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   try {
-    const { message, userData } = req.body
-    const systemPrompt = `אתה תום, סוכן AI אישי בקבוצת KINETIC. מתאמן: ${userData?.name || 'חבר'}. ענה תמיד בעברית בצורה מעודדת ומקצועית.`
-    const text = await callGeminiDirectly(`${systemPrompt}\n\n${message}`)
-    res.json({ content: text })
-  } catch (e) {
-    console.error('Chat Error:', e)
-    res.status(500).json({ error: 'שגיאה בחיבור לתום', details: e.message })
+    const { message } = req.body
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: message }] }]
+      })
+    })
+
+    const data = await response.json()
+
+    if (data.error) {
+      console.error('Google API Error:', data.error)
+      return res.status(500).json({ content: `שגיאת AI: ${data.error.message}` })
+    }
+
+    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'לא התקבלה תגובה מפורמטת'
+    res.json({ content: aiResponse })
+
+  } catch (error) {
+    console.error('Critical Server Error:', error)
+    res.status(500).json({ content: 'השרת נתקל בשגיאה קריטית בתקשורת' })
   }
 })
 
