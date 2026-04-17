@@ -79,7 +79,7 @@ export default function AIChat() {
       })
       if (!res) { setLoading(false); return }
       const data = await res.json()
-      setMessages(m => [...m, { role: 'ai', text: data.reply }])
+      setMessages(m => [...m, { role: 'ai', text: data.content || data.reply || 'שגיאה בתגובה' }])
     } catch {
       setMessages(m => [...m, { role: 'ai', text: 'שגיאה בחיבור. נסה שוב.' }])
     } finally {
