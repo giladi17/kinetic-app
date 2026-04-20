@@ -1683,7 +1683,7 @@ async function callGeminiDirectly(prompt) {
 }
 
 // POST /api/ai/chat
-app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
+app.post('/api/ai/chat', requireAuth, async (req, res) => {
   try {
     const { message, systemPrompt, clientContext } = req.body
     const apiKey = process.env.GEMINI_API_KEY
