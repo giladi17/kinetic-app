@@ -1648,7 +1648,7 @@ ${userData.latestPR ? `- שיא אחרון (PR): ${userData.latestPR}` : ''}
 כללים: ענה תמיד בעברית. היה ספציפי לנתונים. אל תתן עצות גנריות. דבר כמו חבר, לא כמו בוט.`
 }
 
-const GEMINI_MODELS = ['gemini-pro']
+const GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash']
 
 async function callGeminiDirectly(prompt) {
   const body = JSON.stringify({
