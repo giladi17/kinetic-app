@@ -1643,6 +1643,7 @@ function buildSystemPrompt(personaPrompt, userData) {
 - משקל: ${userData.currentWeight}kg | Streak: ${userData.streak} ימים
 - קלוריות: ${userData.todayCalories}/${userData.calorieTarget} | חלבון: ${userData.todayProtein}/${userData.proteinTarget}g
 - אימון אחרון: ${userData.lastSession || 'אין עדיין'} | Readiness: ${userData.readinessScore ?? 'לא נמדד'}
+${userData.latestPR ? `- שיא אחרון (PR): ${userData.latestPR}` : ''}
 
 כללים: ענה תמיד בעברית. היה ספציפי לנתונים. אל תתן עצות גנריות. דבר כמו חבר, לא כמו בוט.`
 }
@@ -1700,9 +1701,17 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
       WHERE s.user_id = ? ORDER BY s.date DESC LIMIT 1
     `).get(req.dbUserId)
 
+    const lastWeight = db.prepare(
+      'SELECT weight FROM weight_logs WHERE user_id = ? ORDER BY date DESC LIMIT 1'
+    ).get(req.dbUserId)
+
+    const latestPR = db.prepare(
+      'SELECT exercise_name, weight FROM personal_records WHERE user_id = ? ORDER BY date DESC LIMIT 1'
+    ).get(req.dbUserId)
+
     const userData = {
       name:           user?.name || 'מתאמן',
-      currentWeight:  stats?.current_weight || '—',
+      currentWeight:  lastWeight?.weight || stats?.current_weight || '—',
       streak:         stats?.streak || 0,
       calorieTarget:  user?.daily_calorie_target || 2500,
       proteinTarget:  user?.daily_protein_target || 160,
@@ -1712,6 +1721,7 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
       lastSession:    clientContext?.lastSession ?? (lastSession
         ? `${lastSession.workout_name || 'אימון'} לפני ${Math.round((Date.now() - new Date(lastSession.date).getTime()) / 86400000)} ימים`
         : 'אין עדיין'),
+      latestPR: latestPR ? `${latestPR.exercise_name} — ${latestPR.weight} ק"ג` : null,
     }
 
     // Pull last 10 messages for conversational memory
