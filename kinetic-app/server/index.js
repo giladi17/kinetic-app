@@ -1670,27 +1670,8 @@ async function callGeminiDirectly(prompt) {
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   try {
     const { message } = req.body
-
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: message }] }]
-      })
-    })
-
-    const data = await response.json()
-
-    if (data.error) {
-      console.error('Google API Error:', data.error)
-      return res.status(500).json({ content: `שגיאת AI: ${data.error.message}` })
-    }
-
-    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'לא התקבלה תגובה מפורמטת'
-    res.json({ content: aiResponse })
-
+    const text = await callGeminiDirectly(message)
+    res.json({ content: text })
   } catch (error) {
     console.error('Critical Server Error:', error)
     res.status(500).json({ content: 'השרת נתקל בשגיאה קריטית בתקשורת' })
