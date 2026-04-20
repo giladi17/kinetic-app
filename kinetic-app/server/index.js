@@ -216,6 +216,14 @@ db.exec(`
     UNIQUE(user_id, date)
   );
 
+  CREATE TABLE IF NOT EXISTS chat_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    role TEXT NOT NULL CHECK(role IN ('user','model')),
+    content TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
   CREATE TABLE IF NOT EXISTS push_subscriptions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
@@ -1706,15 +1714,28 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
         : 'אין עדיין'),
     }
 
-    const fullPrompt = `${buildSystemPrompt(systemPrompt, userData)}\n\nהמשתמש: ${message}`
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`
+    // Pull last 10 messages for conversational memory
+    const history = db.prepare(
+      'SELECT role, content FROM chat_messages WHERE user_id = ? ORDER BY created_at DESC LIMIT 10'
+    ).all(req.dbUserId).reverse()
 
+    // Save user message
+    db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'user', message)
+
+    // Build contents array: system prompt as first user turn, then history, then current message
+    const sysPrompt = buildSystemPrompt(systemPrompt, userData)
+    const contents = [
+      { role: 'user', parts: [{ text: sysPrompt }] },
+      { role: 'model', parts: [{ text: 'מובן, אני מוכן לעזור!' }] },
+      ...history.map(m => ({ role: m.role, parts: [{ text: m.content }] })),
+      { role: 'user', parts: [{ text: message }] },
+    ]
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }]
-      })
+      body: JSON.stringify({ contents })
     })
 
     const data = await response.json()
@@ -1725,6 +1746,10 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
     }
 
     const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'תום כרגע לא זמין.'
+
+    // Save TOM's reply
+    db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'model', aiResponse)
+
     res.json({ content: aiResponse })
 
   } catch (error) {
