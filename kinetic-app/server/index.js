@@ -1777,19 +1777,35 @@ app.post('/api/ai/chat', requireAuth, async (req, res) => {
     ]
 
     const tools = [{
-      functionDeclarations: [{
-        name: 'add_nutrition_log',
-        description: 'הוספת מאכל או ארוחה ליומן התזונה של המשתמש',
-        parameters: {
-          type: 'OBJECT',
-          properties: {
-            meal_name: { type: 'string',  description: 'שם המאכל (למשל: חביתה, שייק חלבון)' },
-            calories:  { type: 'number',  description: 'כמות הקלוריות המשוערת' },
-            protein:   { type: 'number',  description: 'כמות החלבון בגרמים' }
-          },
-          required: ['meal_name', 'calories', 'protein']
+      functionDeclarations: [
+        {
+          name: 'add_nutrition_log',
+          description: 'רישום ארוחה למסד הנתונים',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              meal_name: { type: 'string', description: 'שם הארוחה' },
+              calories:  { type: 'number', description: 'קלוריות' },
+              protein:   { type: 'number', description: 'חלבון בגרמים' }
+            },
+            required: ['meal_name', 'calories', 'protein']
+          }
+        },
+        {
+          name: 'add_workout_log',
+          description: 'רישום סט של אימון (תרגיל, משקל, חזרות) למסד הנתונים',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              exercise_name: { type: 'string', description: 'שם התרגיל (למשל: דדליפט, לחיצת חזה)' },
+              weight:        { type: 'number', description: 'משקל בקילוגרמים' },
+              reps:          { type: 'number', description: 'מספר חזרות' },
+              set_number:    { type: 'number', description: 'מספר הסט (אופציונלי)' }
+            },
+            required: ['exercise_name', 'weight', 'reps']
+          }
         }
-      }]
+      ]
     }]
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`
@@ -1809,7 +1825,7 @@ app.post('/api/ai/chat', requireAuth, async (req, res) => {
     const candidate = data.candidates?.[0]
     const part = candidate?.content?.parts?.[0]
 
-    // Handle function call from Gemini
+    // Handle function calls from Gemini
     if (part?.functionCall?.name === 'add_nutrition_log') {
       const { meal_name, calories, protein } = part.functionCall.args
       db.prepare(
@@ -1818,6 +1834,16 @@ app.post('/api/ai/chat', requireAuth, async (req, res) => {
       const confirmText = `✅ הוספתי "${meal_name}" ליומן: ${Math.round(calories)} קל׳ | ${Math.round(protein)}g חלבון`
       db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'model', confirmText)
       return res.json({ content: confirmText, action: 'nutrition_logged' })
+    }
+
+    if (part?.functionCall?.name === 'add_workout_log') {
+      const { exercise_name, weight, reps, set_number } = part.functionCall.args
+      db.prepare(
+        'INSERT INTO workout_sets (user_id, date, exercise_name, weight, reps, set_number) VALUES (?, ?, ?, ?, ?, ?)'
+      ).run(req.dbUserId, today, exercise_name, weight, reps, set_number || 1)
+      const confirmText = `💪 רשמתי: ${exercise_name} — ${weight}kg × ${reps} חזרות`
+      db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'model', confirmText)
+      return res.json({ content: confirmText, action: 'workout_logged' })
     }
 
     const aiResponse = part?.text || 'תום כרגע לא זמין.'
