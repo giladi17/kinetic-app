@@ -1632,7 +1632,7 @@ function buildSystemPrompt(personaPrompt, userData) {
 כללים: ענה תמיד בעברית. היה ספציפי לנתונים. אל תתן עצות גנריות. דבר כמו חבר, לא כמו בוט.`
 }
 
-const GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-flash-8b']
+const GEMINI_MODELS = ['gemini-pro']
 
 async function callGeminiDirectly(prompt) {
   const body = JSON.stringify({
@@ -1646,7 +1646,7 @@ async function callGeminiDirectly(prompt) {
   })
 
   for (const model of GEMINI_MODELS) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`
+    const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`
     const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
     const data = await response.json()
 
