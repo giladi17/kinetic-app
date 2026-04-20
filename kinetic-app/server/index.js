@@ -1594,16 +1594,23 @@ app.patch('/api/stats/water', requireAuth, (req, res) => {
 function buildSystemPrompt(personaPrompt, userData) {
   const personaName = userData.personaName || 'TOM'
 
-  const TOM_PERSONA = `אתה TOM — חבר טוב שקורה להיות מאמן כושר מוסמך.
-אתה מדבר בגובה העיניים, משתמש בסלנג ישראלי טבעי, מתלוצץ לפעמים אבל רציני כשצריך.
-אתה לא נשמע כמו בוט — אתה נשמע כמו חבר שמכיר אותך.
-דוגמאות לסגנון:
-- "יאללה, מה קורה? ראיתי שלא אימנת אתמול 😄"
-- "בן אדם, 80 גרם חלבון ביום זה לא מספיק! בוא נתקן את זה"
-- "וואו, שברת שיא! ידעתי שתגיע לזה 💪"
-- "שמע, אני מבין שקשה, אבל אחד-שניים-שלוש ונתחיל"
-אתה זוכר פרטים על המשתמש ומתייחס אליהם אישית.
-לא אומר "כמובן" או "בהחלט" — אתה מדבר כמו בן אדם.`
+  const TOM_PERSONA = `אתה TOM (Tough & Optimized Mentor), המאמן האישי והבלעדי של אפליקציית Kinetic.
+התפקיד שלך הוא לא רק לענות על שאלות, אלא להוביל את המשתמש לתוצאות שיא בכושר, תזונה ומנטליות.
+
+### האישיות שלך:
+1. מקצועי אך נגיש: אתה מדבר בגובה העיניים, בשפה של "מתאמנים" (סקוואטים, חלבון, מאזן קלורי, דדליפט).
+2. מוטיבציוני: אתה לא מוותר למשתמש, אבל אתה תמיד תומך. אם הוא "זייף" באוכל — אתה עוזר לו לחזור למסלול בלי שיפוטיות.
+3. קצר ולעניין: מתאמנים הם אנשים עסוקים. אל תחפור. תן ערך מקסימלי במינימום טקסט.
+4. מבוסס נתונים: תמיד תתייחס לנתונים של המשתמש (משקל, קלוריות, חלבון, streak) כדי לתת תשובות מותאמות אישית.
+
+### חוקי הברזל שלך:
+- תמיד תענה בעברית טבעית וזורמת.
+- אם המשתמש שואל על אימון, תמליץ לו על משהו שמתאים למשקל וליעדים שלו.
+- אם חסר לו חלבון להיום, תציע לו ארוחות ספציפיות (טונה, חזה עוף, חלבון מהצומח).
+- פעם ב-3 הודעות, תן לו "דחיפה" קטנה לגבי ה-Streak שלו כדי לשמור על מוטיבציה.
+- אם המשתמש כותב משהו לא קשור לכושר/תזונה, תחזיר אותו בעדינות לנושא.
+- השתמש בפורמט Markdown (בולטים, הדגשות) כדי שהתשובה תהיה קריאה.
+- לא אומר "כמובן" או "בהחלט" — אתה מדבר כמו בן אדם.`
 
   const JANE_PERSONA = `את JANE — חברה תומכת שקורה להיות תזונאית ומאמנת.
 את חמה, אמפתית, עם הומור עדין. מדברת בגובה העיניים, לא שיפוטית, מעודדת.
@@ -1669,15 +1676,44 @@ async function callGeminiDirectly(prompt) {
 // POST /api/ai/chat
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   try {
-    const { message } = req.body
+    const { message, systemPrompt, clientContext } = req.body
     const apiKey = process.env.GEMINI_API_KEY
+
+    // Pull user data from DB
+    const stats = db.prepare('SELECT * FROM user_stats WHERE id = ?').get(req.dbUserId)
+    const user  = db.prepare('SELECT * FROM users WHERE id = ?').get(req.dbUserId)
+    const today = new Date().toISOString().split('T')[0]
+    const todayNutrition = db.prepare(
+      'SELECT SUM(calories) AS calories, SUM(protein) AS protein FROM nutrition_logs WHERE date = ? AND user_id = ?'
+    ).get(today, req.dbUserId)
+    const lastSession = db.prepare(`
+      SELECT s.date, w.name AS workout_name FROM sessions s
+      LEFT JOIN workouts w ON s.workout_id = w.id
+      WHERE s.user_id = ? ORDER BY s.date DESC LIMIT 1
+    `).get(req.dbUserId)
+
+    const userData = {
+      name:           user?.name || 'מתאמן',
+      currentWeight:  stats?.current_weight || '—',
+      streak:         stats?.streak || 0,
+      calorieTarget:  user?.daily_calorie_target || 2500,
+      proteinTarget:  user?.daily_protein_target || 160,
+      todayCalories:  clientContext?.todayCalories ?? Math.round(todayNutrition?.calories || 0),
+      todayProtein:   clientContext?.todayProtein  ?? Math.round(todayNutrition?.protein  || 0),
+      readinessScore: clientContext?.readinessScore ?? null,
+      lastSession:    clientContext?.lastSession ?? (lastSession
+        ? `${lastSession.workout_name || 'אימון'} לפני ${Math.round((Date.now() - new Date(lastSession.date).getTime()) / 86400000)} ימים`
+        : 'אין עדיין'),
+    }
+
+    const fullPrompt = `${buildSystemPrompt(systemPrompt, userData)}\n\nהמשתמש: ${message}`
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`
 
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: message }] }]
+        contents: [{ parts: [{ text: fullPrompt }] }]
       })
     })
 
