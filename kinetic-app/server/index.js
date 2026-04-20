@@ -1838,10 +1838,18 @@ app.post('/api/ai/chat', requireAuth, async (req, res) => {
 
     if (part?.functionCall?.name === 'add_workout_log') {
       const { exercise_name, weight, reps, set_number } = part.functionCall.args
+      // מצא session קיים להיום, או צור חדש
+      let session = db.prepare('SELECT id FROM sessions WHERE date = ? AND user_id = ?').get(today, req.dbUserId)
+      if (!session) {
+        const result = db.prepare(
+          'INSERT INTO sessions (workout_id, duration, calories, volume, date, user_id) VALUES (?, 0, 0, 0, ?, ?)'
+        ).run(null, today, req.dbUserId)
+        session = { id: result.lastInsertRowid }
+      }
       db.prepare(
-        'INSERT INTO workout_sets (user_id, date, exercise_name, weight, reps, set_number) VALUES (?, ?, ?, ?, ?, ?)'
-      ).run(req.dbUserId, today, exercise_name, weight, reps, set_number || 1)
-      const confirmText = `💪 רשמתי: ${exercise_name} — ${weight}kg × ${reps} חזרות`
+        'INSERT INTO workout_sets (session_id, exercise_name, weight, reps, rpe, is_ai_alternative, date, user_id, set_number, completed) VALUES (?, ?, ?, ?, 7, 0, ?, ?, ?, 1)'
+      ).run(session.id, exercise_name, weight, reps, today, req.dbUserId, set_number || 1)
+      const confirmText = `💪 רשמתי לך: ${exercise_name} — ${weight} ק"ג × ${reps} חזרות. אש!`
       db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'model', confirmText)
       return res.json({ content: confirmText, action: 'workout_logged' })
     }
