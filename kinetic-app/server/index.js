@@ -27,6 +27,7 @@ const corsOptions = {
   origin: [
     'https://kinetic-app-git-master-gilads-projects-053a65e1.vercel.app',
     'https://kinetic-app-lovat.vercel.app',
+    'https://kinetic-app-arbel.vercel.app',
     'https://kinetic-app-production.up.railway.app',
     'http://localhost:5173'
   ],
