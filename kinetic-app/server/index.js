@@ -1687,27 +1687,61 @@ app.post('/api/ai/chat', requireAuth, async (req, res) => {
   try {
     const { message, systemPrompt, clientContext } = req.body
     const apiKey = process.env.GEMINI_API_KEY
-
-    // Pull user data from DB
-    const stats = db.prepare('SELECT * FROM user_stats WHERE id = ?').get(req.dbUserId)
-    const user  = db.prepare('SELECT * FROM users WHERE id = ?').get(req.dbUserId)
+    const userId = req.dbUserId
     const today = new Date().toISOString().split('T')[0]
-    const todayNutrition = db.prepare(
-      'SELECT SUM(calories) AS calories, SUM(protein) AS protein FROM nutrition_logs WHERE date = ? AND user_id = ?'
-    ).get(today, req.dbUserId)
-    const lastSession = db.prepare(`
-      SELECT s.date, w.name AS workout_name FROM sessions s
-      LEFT JOIN workouts w ON s.workout_id = w.id
-      WHERE s.user_id = ? ORDER BY s.date DESC LIMIT 1
-    `).get(req.dbUserId)
 
-    const lastWeight = db.prepare(
-      'SELECT weight FROM weight_logs WHERE user_id = ? ORDER BY date DESC LIMIT 1'
-    ).get(req.dbUserId)
+    // Pull user data safely — each query wrapped so a missing column never crashes the route
+    let stats = {}
+    try {
+      stats = db.prepare('SELECT * FROM user_stats WHERE user_id = ?').get(userId) || {}
+    } catch (e) {
+      console.log('⚠️ user_stats query failed, using defaults:', e.message)
+    }
 
-    const latestPR = db.prepare(
-      'SELECT exercise_name, weight FROM personal_records WHERE user_id = ? ORDER BY date DESC LIMIT 1'
-    ).get(req.dbUserId)
+    let user = {}
+    try {
+      user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId) || {}
+    } catch (e) {
+      console.log('⚠️ users query failed:', e.message)
+    }
+
+    let todayNutrition = { calories: 0, protein: 0 }
+    try {
+      todayNutrition = db.prepare(
+        'SELECT SUM(calories) AS calories, SUM(protein) AS protein FROM nutrition_logs WHERE date = ? AND user_id = ?'
+      ).get(today, userId) || todayNutrition
+    } catch (e) {
+      console.log('⚠️ nutrition_logs query failed:', e.message)
+    }
+
+    let lastSession = null
+    try {
+      lastSession = db.prepare(`
+        SELECT s.date, w.name AS workout_name FROM sessions s
+        LEFT JOIN workouts w ON s.workout_id = w.id
+        WHERE s.user_id = ? ORDER BY s.date DESC LIMIT 1
+      `).get(userId)
+    } catch (e) {
+      console.log('⚠️ sessions query failed:', e.message)
+    }
+
+    let lastWeight = null
+    try {
+      lastWeight = db.prepare(
+        'SELECT weight FROM weight_logs WHERE user_id = ? ORDER BY date DESC LIMIT 1'
+      ).get(userId)
+    } catch (e) {
+      console.log('⚠️ weight_logs query failed:', e.message)
+    }
+
+    let latestPR = null
+    try {
+      latestPR = db.prepare(
+        'SELECT exercise_name, weight FROM personal_records WHERE user_id = ? ORDER BY date DESC LIMIT 1'
+      ).get(userId)
+    } catch (e) {
+      console.log('⚠️ personal_records query failed:', e.message)
+    }
 
     const userData = {
       name:           user?.name || 'מתאמן',
