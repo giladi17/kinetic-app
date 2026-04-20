@@ -1666,34 +1666,20 @@ async function callGeminiDirectly(prompt) {
   throw new Error('All Gemini models failed')
 }
 
-// POST /api/ai/chat
+// POST /api/ai/chat — DEBUG MODE: returns available models list
 app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
   try {
-    const { message } = req.body
     const apiKey = process.env.GEMINI_API_KEY
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-001:generateContent?key=${apiKey}`
+    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: message }] }]
-      })
-    })
-
+    const response = await fetch(url)
     const data = await response.json()
 
-    if (data.error) {
-      console.error('Google Error:', data.error)
-      return res.json({ content: `שגיאת AI: ${data.error.message}` })
-    }
-
-    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'תום כרגע לא זמין, נסה שוב.'
-    res.json({ content: aiResponse })
+    const models = data.models ? data.models.map(m => m.name.replace('models/', '')).join(', ') : 'לא נמצאו מודלים'
+    res.json({ content: `המודלים שזמינים לך: ${models}` })
 
   } catch (error) {
-    console.error('Critical Error:', error)
-    res.status(500).json({ content: 'השרת נתקל בשגיאה קריטית בתקשורת' })
+    res.status(500).json({ content: 'שגיאה בבדיקת המודלים' })
   }
 })
 
