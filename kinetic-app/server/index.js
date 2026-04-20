@@ -1741,11 +1741,27 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
       { role: 'user', parts: [{ text: message }] },
     ]
 
+    const tools = [{
+      functionDeclarations: [{
+        name: 'add_nutrition_log',
+        description: 'הוספת מאכל או ארוחה ליומן התזונה של המשתמש',
+        parameters: {
+          type: 'OBJECT',
+          properties: {
+            meal_name: { type: 'string',  description: 'שם המאכל (למשל: חביתה, שייק חלבון)' },
+            calories:  { type: 'number',  description: 'כמות הקלוריות המשוערת' },
+            protein:   { type: 'number',  description: 'כמות החלבון בגרמים' }
+          },
+          required: ['meal_name', 'calories', 'protein']
+        }
+      }]
+    }]
+
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents })
+      body: JSON.stringify({ contents, tools })
     })
 
     const data = await response.json()
@@ -1755,11 +1771,23 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
       return res.json({ content: `שגיאת AI: ${data.error.message}` })
     }
 
-    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'תום כרגע לא זמין.'
+    const candidate = data.candidates?.[0]
+    const part = candidate?.content?.parts?.[0]
 
-    // Save TOM's reply
+    // Handle function call from Gemini
+    if (part?.functionCall?.name === 'add_nutrition_log') {
+      const { meal_name, calories, protein } = part.functionCall.args
+      db.prepare(
+        'INSERT INTO nutrition_logs (user_id, date, name, calories, protein, carbs, fat) VALUES (?, ?, ?, ?, ?, 0, 0)'
+      ).run(req.dbUserId, today, meal_name, Math.round(calories), Math.round(protein))
+
+      const confirmText = `✅ הוספתי "${meal_name}" ליומן: ${Math.round(calories)} קל׳ | ${Math.round(protein)}g חלבון`
+      db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'model', confirmText)
+      return res.json({ content: confirmText, action: 'nutrition_logged' })
+    }
+
+    const aiResponse = part?.text || 'תום כרגע לא זמין.'
     db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'model', aiResponse)
-
     res.json({ content: aiResponse })
 
   } catch (error) {

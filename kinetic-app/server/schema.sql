@@ -129,3 +129,11 @@ CREATE TABLE IF NOT EXISTS personal_records (
   session_id    INTEGER      REFERENCES sessions(id) ON DELETE SET NULL,
   created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
+CREATE TABLE IF NOT EXISTS chat_messages (
+  id          SERIAL PRIMARY KEY,
+  user_id     INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  role        TEXT NOT NULL CHECK (role IN ('user', 'model')),
+  content     TEXT NOT NULL,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_user ON chat_messages(user_id);
