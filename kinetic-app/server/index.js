@@ -1632,36 +1632,38 @@ function buildSystemPrompt(personaPrompt, userData) {
 כללים: ענה תמיד בעברית. היה ספציפי לנתונים. אל תתן עצות גנריות. דבר כמו חבר, לא כמו בוט.`
 }
 
-// Direct HTTP call to Gemini — bypasses SDK routing issues
+const GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-flash-8b']
+
 async function callGeminiDirectly(prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      safetySettings: [
-        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-      ]
-    })
+  const body = JSON.stringify({
+    contents: [{ parts: [{ text: prompt }] }],
+    safetySettings: [
+      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+    ]
   })
 
-  const data = await response.json()
+  for (const model of GEMINI_MODELS) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`
+    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
+    const data = await response.json()
 
-  if (data.error) {
-    console.error('GOOGLE_ERROR_DETAIL:', JSON.stringify(data.error))
-    throw new Error(data.error.message)
+    if (data.error) {
+      console.error(`GEMINI [${model}] error:`, data.error.message)
+      continue // try next model
+    }
+
+    if (!data.candidates || data.candidates.length === 0) {
+      console.error(`GEMINI [${model}] empty response`)
+      continue
+    }
+
+    return data.candidates[0].content.parts[0].text
   }
 
-  if (!data.candidates || data.candidates.length === 0) {
-    console.error('GOOGLE_EMPTY_RESPONSE:', JSON.stringify(data))
-    throw new Error('No candidates returned from Google')
-  }
-
-  return data.candidates[0].content.parts[0].text
+  throw new Error('All Gemini models failed')
 }
 
 // POST /api/ai/chat
