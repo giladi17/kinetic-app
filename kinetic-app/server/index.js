@@ -1635,7 +1635,6 @@ function buildSystemPrompt(personaPrompt, userData) {
 // Direct HTTP call to Gemini — bypasses SDK routing issues
 async function callGeminiDirectly(prompt) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`
-
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
