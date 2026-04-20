@@ -80,7 +80,8 @@ CREATE TABLE IF NOT EXISTS weight_logs (
 );
 
 CREATE TABLE IF NOT EXISTS nutrition_logs (
-  id           SERIAL PRIMARY KEY,
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id      INTEGER,
   date         DATE         NOT NULL DEFAULT CURRENT_DATE,
   meal_name    TEXT         NOT NULL,
   calories     INTEGER      NOT NULL DEFAULT 0,
@@ -88,7 +89,7 @@ CREATE TABLE IF NOT EXISTS nutrition_logs (
   carbs        NUMERIC(6,2) NOT NULL DEFAULT 0,
   fat          NUMERIC(6,2) NOT NULL DEFAULT 0,
   entry_method TEXT         NOT NULL DEFAULT 'manual',
-  created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+  created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS idx_nutrition_logs_date ON nutrition_logs(date);
 
