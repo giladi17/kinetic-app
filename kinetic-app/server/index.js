@@ -1778,9 +1778,8 @@ app.post('/api/ai/chat', requireAuth, checkPremium, async (req, res) => {
     if (part?.functionCall?.name === 'add_nutrition_log') {
       const { meal_name, calories, protein } = part.functionCall.args
       db.prepare(
-        'INSERT INTO nutrition_logs (user_id, date, name, calories, protein, carbs, fat) VALUES (?, ?, ?, ?, ?, 0, 0)'
-      ).run(req.dbUserId, today, meal_name, Math.round(calories), Math.round(protein))
-
+        'INSERT INTO nutrition_logs (date, meal_name, calories, protein, carbs, fat) VALUES (?, ?, ?, ?, 0, 0)'
+      ).run(today, meal_name, Math.round(calories), Math.round(protein))
       const confirmText = `✅ הוספתי "${meal_name}" ליומן: ${Math.round(calories)} קל׳ | ${Math.round(protein)}g חלבון`
       db.prepare('INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)').run(req.dbUserId, 'model', confirmText)
       return res.json({ content: confirmText, action: 'nutrition_logged' })
