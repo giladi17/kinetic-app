@@ -2990,6 +2990,14 @@ cron.schedule('0 9 * * *', async () => {
   }
 }, { timezone: 'Asia/Jerusalem' })
 
+// הרצת המיגרציה אוטומטית בסטארטאפ
+try {
+  db.prepare('ALTER TABLE nutrition_logs ADD COLUMN user_id INTEGER').run()
+  console.log('✅ Migration: user_id added to nutrition_logs')
+} catch (e) {
+  // אם העמודה כבר קיימת, ממשיך הלאה בלי לקרוס
+}
+
 const PORT = process.env.PORT
 if (!PORT) throw new Error('PORT environment variable is required')
 app.listen(PORT, '0.0.0.0', () => {
