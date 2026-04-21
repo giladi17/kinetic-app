@@ -134,21 +134,23 @@ function AppRoutes() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/*" element={
-          <AuthGuard>
-            <LanguageProvider>
-              <UserProvider>
-                <AppDataProvider>
-                  <AppRoutes />
-                </AppDataProvider>
-              </UserProvider>
-            </LanguageProvider>
-          </AuthGuard>
-        } />
-      </Routes>
+      <div className="min-h-screen transition-colors duration-300 bg-landing-surface dark:bg-[#0E0E0E] text-landing-on-surface dark:text-white font-space">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/*" element={
+            <AuthGuard>
+              <LanguageProvider>
+                <UserProvider>
+                  <AppDataProvider>
+                    <AppRoutes />
+                  </AppDataProvider>
+                </UserProvider>
+              </LanguageProvider>
+            </AuthGuard>
+          } />
+        </Routes>
+      </div>
     </ErrorBoundary>
   )
 }
