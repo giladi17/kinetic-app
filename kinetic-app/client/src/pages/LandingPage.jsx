@@ -30,33 +30,22 @@ function AnimSection({ children, className = '', delay = 0 }) {
   );
 }
 
-// ─── Phone Mockup (dark phone on light bg) ────────────────────────────────
+// ─── Phone Mockup ─────────────────────────────────────────────────────────
 function AppMockup() {
   const bars = [55, 70, 45, 85, 60, 95, 75];
   const max = 95;
-  const H = 80;
 
   return (
     <div className="relative select-none w-56" aria-hidden>
-      {/* Soft lime glow behind phone */}
-      <div className="absolute inset-0 bg-[#CCFF00]/20 rounded-[2.5rem] blur-3xl scale-110 pointer-events-none" />
-
       <svg viewBox="0 0 176 340" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full drop-shadow-2xl relative">
-        {/* Body */}
         <rect x="1" y="1" width="174" height="338" rx="28" fill="#111" stroke="#222" strokeWidth="2" />
         <rect x="60" y="10" width="56" height="10" rx="5" fill="#1e1e1e" />
         <rect x="10" y="30" width="156" height="280" rx="16" fill="#0e0e0e" />
 
-        {/* Header */}
         <text x="88" y="54" textAnchor="middle" fill="#CCFF00" fontSize="8" fontWeight="900" fontFamily="Arial Black, Arial" letterSpacing="2">KINETIC</text>
         <text x="88" y="66" textAnchor="middle" fill="#555" fontSize="6" fontFamily="Arial">שבוע נוכחי</text>
 
-        {/* Stat chips */}
-        {[
-          { x: 18, label: 'רצף', val: '12', unit: 'ימים' },
-          { x: 76, label: 'אימונים', val: '4', unit: 'השבוע' },
-          { x: 116, label: 'נפח', val: '2.4', unit: 'טון' },
-        ].map(chip => (
+        {[{ x: 18, label: 'רצף', val: '12' }, { x: 76, label: 'אימונים', val: '4' }, { x: 116, label: 'נפח', val: '2.4' }].map(chip => (
           <g key={chip.x}>
             <rect x={chip.x} y="74" width={chip.x === 18 ? 50 : 36} height="28" rx="6" fill="#1a1a1a" />
             <text x={chip.x + (chip.x === 18 ? 25 : 18)} y="85" textAnchor="middle" fill="#CCFF00" fontSize="8" fontWeight="900" fontFamily="Arial Black">{chip.val}</text>
@@ -64,7 +53,6 @@ function AppMockup() {
           </g>
         ))}
 
-        {/* Chart */}
         <rect x="18" y="112" width="140" height="100" rx="10" fill="#141414" />
         <text x="26" y="125" fill="#444" fontSize="5.5" fontFamily="Arial">נפח שבועי (kg)</text>
         {bars.map((v, i) => (
@@ -76,13 +64,11 @@ function AppMockup() {
           fill="none" stroke="#CCFF00" strokeWidth="1.5" strokeOpacity="0.5" strokeLinecap="round" strokeLinejoin="round"
         />
 
-        {/* Protein */}
         <text x="26" y="228" fill="#555" fontSize="5.5" fontFamily="Arial">חלבון יומי</text>
         <text x="150" y="228" textAnchor="end" fill="#CCFF00" fontSize="5.5" fontFamily="Arial">128/160g</text>
         <rect x="26" y="231" width="130" height="5" rx="2.5" fill="#222" />
         <rect x="26" y="231" width="104" height="5" rx="2.5" fill="#CCFF00" />
 
-        {/* AI bubble */}
         <rect x="18" y="245" width="140" height="36" rx="8" fill="#1a200a" stroke="#CCFF00" strokeWidth="0.5" strokeOpacity="0.3" />
         <circle cx="29" cy="256" r="6" fill="#CCFF00" fillOpacity="0.15" />
         <text x="29" y="259" textAnchor="middle" fill="#CCFF00" fontSize="7">🤖</text>
@@ -90,7 +76,6 @@ function AppMockup() {
         <text x="40" y="265" fill="#777" fontSize="5" fontFamily="Arial">העלת 5kg בסקוואט!</text>
         <text x="40" y="274" fill="#777" fontSize="5" fontFamily="Arial">חסר 32g חלבון לסגירת יעד.</text>
 
-        {/* Nav */}
         <rect x="10" y="295" width="156" height="14" rx="0" fill="#0a0a0a" />
         {['🏠','💪','🍽️','📊'].map((icon, i) => (
           <text key={i} x={35 + i * 36} y="305" textAnchor="middle" fontSize="8" fill={i === 0 ? '#CCFF00' : '#444'}>{icon}</text>
@@ -119,21 +104,15 @@ const TESTIMONIALS = [
 
 const PRICING = [
   {
-    name: 'Free',
-    price: '₪0',
-    period: 'לתמיד',
+    name: 'Free', price: '₪0', period: 'לתמיד',
     features: ['מעקב אימונים בסיסי', 'מעקב תזונה', 'תוספי תזונה', 'Progress גרפים (7 ימים)'],
-    cta: 'התחל חינם',
-    highlight: false,
+    cta: 'התחל חינם', highlight: false,
   },
   {
-    name: 'Pro',
-    price: '₪49',
-    period: 'לחודש',
+    name: 'Pro', price: '₪49', period: 'לחודש',
     note: '14 ימי Trial חינם · ללא כרטיס אשראי',
     features: ['כל מה שב-Free', 'AI Coach אישי', 'Plateau Detection', 'Gap Filler תזונתי', 'War Room שבועי', 'היסטוריה מלאה', 'Analytics מתקדם'],
-    cta: 'התחל Trial חינם',
-    highlight: true,
+    cta: 'התחל Trial חינם', highlight: true,
   },
 ];
 
@@ -152,31 +131,23 @@ const LandingPage = () => {
   function goLogin()    { navigate('/login'); }
 
   return (
-    <div
-      className="min-h-screen bg-[#F8F9FF] text-[#151C25]"
-      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-      dir="rtl"
-    >
+    <div className="min-h-screen bg-landing-surface text-landing-on-surface font-space" dir="rtl">
 
       {/* ── Navbar ── */}
       <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#F8F9FF]/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
+        scrolled ? 'bg-landing-surface/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       }`}>
         <div className="flex justify-between items-center px-8 py-5 max-w-7xl mx-auto">
-          <div className="text-xl font-black tracking-tighter text-[#151C25]">
-            KINETIC<span className="text-[#CCFF00]" style={{ textShadow: '0 0 12px rgba(204,255,0,0.6)' }}>.</span>
+          <div className="text-xl font-black tracking-tighter text-landing-on-surface">
+            KINETIC<span className="text-electric-lime" style={{ textShadow: '0 0 12px rgba(204,255,0,0.6)' }}>.</span>
           </div>
           <div className="flex items-center gap-4">
-            <button
-              onClick={goLogin}
-              className="text-sm text-[#656464] hover:text-[#151C25] transition-colors px-3 py-2 font-medium"
-            >
+            <button onClick={goLogin}
+              className="text-sm text-landing-muted hover:text-landing-on-surface transition-colors px-3 py-2 font-medium">
               התחברות
             </button>
-            <button
-              onClick={goRegister}
-              className="text-sm font-bold bg-[#CCFF00] text-[#151C25] px-5 py-2.5 rounded-xl hover:bg-[#b3e600] active:scale-95 transition-all shadow-sm"
-            >
+            <button onClick={goRegister}
+              className="text-sm font-bold bg-electric-lime text-black px-5 py-2.5 rounded-full hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)] active:scale-95 transition-all">
               התחל חינם
             </button>
           </div>
@@ -184,77 +155,59 @@ const LandingPage = () => {
       </nav>
 
       {/* ── Hero ── */}
-      <main className="max-w-7xl mx-auto px-8 pt-32 pb-28">
-        <div className="grid lg:grid-cols-[1fr_1.6fr] gap-16 items-center">
+      <section className="bg-landing-surface min-h-screen flex items-center pt-20 pb-16">
+        <div className="container mx-auto px-8 grid md:grid-cols-2 gap-12 items-center max-w-7xl">
 
-          {/* Right — App Mockup (60% side) */}
-          <div className="flex justify-center lg:justify-end order-1 lg:order-2 lg:pl-12">
-            <AppMockup />
-          </div>
-
-          {/* Left — text */}
-          <div className="space-y-8 text-right order-2 lg:order-1">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#CCFF00]/20 text-[#4a6600] text-xs font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00] animate-pulse" style={{ backgroundColor: '#7cbf00' }} />
+          {/* Right — text */}
+          <div className="flex flex-col items-end space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-electric-lime/20 text-[#4a6600] text-xs font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-electric-lime animate-pulse" />
               הדור הבא של אפליקציות הכושר
             </div>
 
-            {/* Headline */}
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-[1.05] text-[#151C25]">
-              הפלטפורמה שהופכת<br />
-              כל אימון<br />
-              <span className="text-[#151C25] relative inline-block">
-                לנתון.
-                <span
-                  className="absolute -bottom-1 right-0 left-0 h-3 opacity-60 rounded"
-                  style={{ background: '#CCFF00', zIndex: -1 }}
-                />
-              </span>
+            <h1 className="text-6xl md:text-8xl font-black italic tracking-tighter uppercase leading-none text-right">
+              מהירות <br />
+              <span className="text-electric-lime drop-shadow-md">= כוח.</span>
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-lg text-[#656464] leading-relaxed max-w-md">
-              KINETIC משלבת מעקב טכני מדויק עם AI Coach אישי —
-              כי נתונים בלי פעולה הם רק מספרים.
+            <p className="text-lg md:text-xl text-landing-muted max-w-md font-medium text-right leading-relaxed">
+              מערכת ניהול האימונים והתזונה החכמה ביותר.<br />
+              בלי בולשיט, רק תוצאות.
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button
-                onClick={goRegister}
-                className="px-8 py-4 bg-[#CCFF00] text-[#151C25] font-bold rounded-xl text-base hover:bg-[#b3e600] transition-all active:scale-95 shadow-md"
-                style={{ boxShadow: '0 4px 24px rgba(180,220,0,0.35)' }}
-              >
-                התחל 14 ימי Trial חינם ✦
+            <div className="flex flex-col sm:flex-row gap-3 justify-end">
+              <button onClick={goRegister}
+                className="bg-electric-lime text-black font-bold text-lg px-10 py-4 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)] active:scale-95">
+                התחל 14 יום חינם ✦
               </button>
-              <button
-                onClick={goLogin}
-                className="px-8 py-4 bg-white text-[#656464] font-medium rounded-xl text-base hover:text-[#151C25] transition-all active:scale-95 shadow-sm"
-              >
+              <button onClick={goLogin}
+                className="bg-white text-landing-muted font-medium text-base px-8 py-4 rounded-full hover:text-landing-on-surface transition-all active:scale-95 shadow-sm">
                 יש לי חשבון
               </button>
             </div>
 
-            {/* Social proof */}
-            <p className="text-xs text-[#9ea8b3] flex flex-wrap gap-x-3 gap-y-1 justify-end sm:justify-start">
+            <p className="text-xs text-[#9ea8b3] flex flex-wrap gap-x-3 gap-y-1 justify-end">
               <span>✦ 500+ מתאמנים פעילים</span>
-              <span>·</span>
-              <span>⭐ 4.9/5</span>
-              <span>·</span>
-              <span>🔒 ללא כרטיס אשראי</span>
+              <span>·</span><span>⭐ 4.9/5</span>
+              <span>·</span><span>🔒 ללא כרטיס אשראי</span>
             </p>
           </div>
 
+          {/* Left — App Mockup with lime depth */}
+          <div className="relative flex justify-center order-first md:order-last">
+            <div className="absolute inset-0 bg-electric-lime rounded-3xl transform translate-x-4 translate-y-4 opacity-30 blur-sm" />
+            <div className="relative z-10"><AppMockup /></div>
+          </div>
+
         </div>
-      </main>
+      </section>
 
       {/* ── Features ── */}
       <section id="features" className="bg-white py-28">
         <div className="max-w-7xl mx-auto px-8">
           <AnimSection className="text-center mb-16">
             <p className="text-xs text-[#4a6600] uppercase tracking-widest font-bold mb-3">פיצ׳רים</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#151C25]">
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-landing-on-surface">
               היתרון הלא הוגן שלך<br />בחדר הכושר
             </h2>
           </AnimSection>
@@ -262,12 +215,12 @@ const LandingPage = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURES.map((f, i) => (
               <AnimSection key={i} delay={i * 60}>
-                <div className="bg-[#F8F9FF] p-8 rounded-2xl hover:-translate-y-1 transition-all duration-300 h-full group cursor-default">
-                  <div className="w-12 h-12 rounded-xl bg-[#CCFF00]/20 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform duration-300">
+                <div className="bg-landing-surface p-8 rounded-2xl hover:-translate-y-1 transition-all duration-300 h-full group cursor-default">
+                  <div className="w-12 h-12 rounded-xl bg-electric-lime/20 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform duration-300">
                     {f.emoji}
                   </div>
-                  <h3 className="text-base font-bold mb-2 text-[#151C25]">{f.title}</h3>
-                  <p className="text-sm text-[#656464] leading-relaxed">{f.desc}</p>
+                  <h3 className="text-base font-bold mb-2 text-landing-on-surface">{f.title}</h3>
+                  <p className="text-sm text-landing-muted leading-relaxed">{f.desc}</p>
                 </div>
               </AnimSection>
             ))}
@@ -276,11 +229,11 @@ const LandingPage = () => {
       </section>
 
       {/* ── Testimonials ── */}
-      <section className="py-28 px-8 bg-[#F8F9FF]">
+      <section className="py-28 px-8 bg-landing-surface">
         <div className="max-w-7xl mx-auto">
           <AnimSection className="text-center mb-16">
             <p className="text-xs text-[#4a6600] uppercase tracking-widest font-bold mb-3">ביקורות</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#151C25]">
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-landing-on-surface">
               מה אומרים המשתמשים
             </h2>
           </AnimSection>
@@ -289,21 +242,16 @@ const LandingPage = () => {
             {TESTIMONIALS.map((t, i) => (
               <AnimSection key={i} delay={i * 80}>
                 <div className="bg-white rounded-2xl p-8 flex flex-col gap-5 h-full">
-                  {/* Stars */}
                   <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, k) => (
-                      <span key={k} className="text-[#CCFF00] text-base" style={{ color: '#7cbf00' }}>★</span>
-                    ))}
+                    {[...Array(5)].map((_, k) => <span key={k} className="text-base" style={{ color: '#7cbf00' }}>★</span>)}
                   </div>
-                  {/* Quote */}
-                  <p className="text-sm text-[#656464] leading-relaxed flex-1">{t.text}</p>
-                  {/* Author */}
+                  <p className="text-sm text-landing-muted leading-relaxed flex-1">{t.text}</p>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#CCFF00] flex items-center justify-center text-[#151C25] font-black text-sm">
+                    <div className="w-10 h-10 rounded-full bg-electric-lime flex items-center justify-center text-black font-black text-sm">
                       {t.name[0]}
                     </div>
                     <div>
-                      <div className="font-bold text-sm text-[#151C25]">{t.name}</div>
+                      <div className="font-bold text-sm text-landing-on-surface">{t.name}</div>
                       <div className="text-xs text-[#9ea8b3]">גיל {t.age}</div>
                     </div>
                   </div>
@@ -319,39 +267,36 @@ const LandingPage = () => {
         <div className="max-w-3xl mx-auto">
           <AnimSection className="text-center mb-14">
             <p className="text-xs text-[#4a6600] uppercase tracking-widest font-bold mb-3">מחיר</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#151C25]">
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-landing-on-surface">
               פשוט, שקוף, הוגן
             </h2>
-            <p className="text-[#656464] mt-3 text-sm">14 ימי Trial חינם על Pro — ביטול בכל עת</p>
+            <p className="text-landing-muted mt-3 text-sm">14 ימי Trial חינם על Pro — ביטול בכל עת</p>
           </AnimSection>
 
           <div className="grid sm:grid-cols-2 gap-6">
             {PRICING.map((plan, i) => (
               <AnimSection key={i} delay={i * 80}>
                 <div className={`rounded-2xl p-8 h-full flex flex-col gap-6 transition-all duration-300 ${
-                  plan.highlight
-                    ? 'bg-[#151C25] text-white'
-                    : 'bg-[#F8F9FF]'
+                  plan.highlight ? 'bg-landing-on-surface text-white' : 'bg-landing-surface'
                 }`}>
                   {plan.highlight && (
-                    <span className="self-start text-[10px] font-black uppercase tracking-widest bg-[#CCFF00] text-[#151C25] px-3 py-1 rounded-full">
+                    <span className="self-start text-[10px] font-black uppercase tracking-widest bg-electric-lime text-black px-3 py-1 rounded-full">
                       הכי פופולרי
                     </span>
                   )}
-
                   <div>
                     <div className="font-black text-xl uppercase tracking-wider">{plan.name}</div>
                     <div className="flex items-baseline gap-1.5 mt-1">
-                      <span className={`font-black text-5xl ${plan.highlight ? 'text-[#CCFF00]' : 'text-[#151C25]'}`}>{plan.price}</span>
+                      <span className={`font-black text-5xl ${plan.highlight ? 'text-electric-lime' : 'text-landing-on-surface'}`}>{plan.price}</span>
                       <span className={`text-sm ${plan.highlight ? 'text-white/50' : 'text-[#9ea8b3]'}`}>/{plan.period}</span>
                     </div>
-                    {plan.note && <p className="text-xs text-[#CCFF00]/80 mt-1">{plan.note}</p>}
+                    {plan.note && <p className="text-xs text-electric-lime/80 mt-1">{plan.note}</p>}
                   </div>
 
                   <ul className="space-y-3 flex-1">
                     {plan.features.map((f, j) => (
-                      <li key={j} className={`flex items-center gap-2.5 text-sm ${plan.highlight ? 'text-white/80' : 'text-[#656464]'}`}>
-                        <span className="text-[#CCFF00] font-bold flex-shrink-0" style={{ color: plan.highlight ? '#CCFF00' : '#7cbf00' }}>✓</span>
+                      <li key={j} className={`flex items-center gap-2.5 text-sm ${plan.highlight ? 'text-white/80' : 'text-landing-muted'}`}>
+                        <span className="font-bold flex-shrink-0" style={{ color: '#7cbf00' }}>✓</span>
                         {f}
                       </li>
                     ))}
@@ -359,10 +304,10 @@ const LandingPage = () => {
 
                   <button
                     onClick={() => navigate('/pricing')}
-                    className={`w-full py-4 rounded-xl font-bold text-sm uppercase tracking-wider active:scale-95 transition-all duration-200 ${
+                    className={`w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider active:scale-95 transition-all duration-200 ${
                       plan.highlight
-                        ? 'bg-[#CCFF00] text-[#151C25] hover:bg-[#b3e600]'
-                        : 'bg-white text-[#151C25] hover:bg-[#f0f1f8]'
+                        ? 'bg-electric-lime text-black hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)]'
+                        : 'bg-white text-landing-on-surface hover:bg-[#f0f1f8]'
                     }`}
                   >
                     {plan.cta}
@@ -376,9 +321,9 @@ const LandingPage = () => {
 
       {/* ── Final CTA ── */}
       <AnimSection>
-        <section className="py-28 px-8 bg-[#151C25] text-center">
+        <section className="py-28 px-8 bg-landing-on-surface text-center">
           <div className="max-w-lg mx-auto space-y-8">
-            <h2 className="text-5xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+            <h2 className="text-5xl sm:text-6xl font-black italic tracking-tighter uppercase leading-tight text-white">
               מוכן להפוך<br />כל אימון לנתון?
             </h2>
             <p className="text-white/50 text-base leading-relaxed">
@@ -387,8 +332,7 @@ const LandingPage = () => {
             </p>
             <button
               onClick={goRegister}
-              className="px-12 py-5 bg-[#CCFF00] text-[#151C25] font-black rounded-xl text-base hover:bg-[#b3e600] active:scale-95 transition-all duration-200 inline-block"
-              style={{ boxShadow: '0 0 50px rgba(204,255,0,0.25)' }}
+              className="bg-electric-lime text-black font-black text-lg px-12 py-5 rounded-full inline-block hover:scale-105 hover:shadow-[0_0_50px_rgba(204,255,0,0.25)] active:scale-95 transition-all"
             >
               התחל 14 יום חינם ✦
             </button>
@@ -398,9 +342,9 @@ const LandingPage = () => {
       </AnimSection>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#151C25] py-8 px-8">
+      <footer className="bg-landing-on-surface py-8 px-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/30">
-          <span className="font-black text-base text-[#CCFF00]/60 uppercase tracking-tighter">KINETIC</span>
+          <span className="font-black text-base text-electric-lime/60 uppercase tracking-tighter">KINETIC</span>
           <span>© 2026 KINETIC Performance · כל הזכויות שמורות</span>
           <div className="flex gap-5">
             <button onClick={goLogin}                    className="hover:text-white/60 transition-colors">כניסה</button>
