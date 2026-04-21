@@ -88,12 +88,12 @@ function AppMockup() {
 
 // ─── Data ─────────────────────────────────────────────────────────────────
 const FEATURES = [
-  { emoji: '🧠', title: 'AI Coach צמוד',        desc: 'מנתח את האימונים, התזונה והתוצאות שלך ונותן עצות ספציפיות — לא תשובות גנריות.' },
-  { emoji: '⚡', title: 'Gap Filler תזונתי',     desc: 'חסר לך חלבון? המערכת מחשבת בדיוק מה לאכול עד סוף היום כדי לסגור את הגירעון.' },
-  { emoji: '📈', title: 'Plateau Detection',      desc: 'זיהוי אוטומטי כשאתה תקוע — ועצות מבוססות נתונים לפריצה קדימה.' },
-  { emoji: '⏱️', title: 'מעקב אימונים מדויק',   desc: 'רשום סטים, משקלים וחזרות בשנייה. שיאים אישיים מזוהים אוטומטית.' },
-  { emoji: '💊', title: 'תוספי תזונה חכמים',     desc: 'תזכורות, streak יומי ואזהרת מלאי נמוך — הכל בלי לחשוב על זה.' },
-  { emoji: '🔥', title: 'War Room שבועי',        desc: 'ציון ביצועים, מגמות נפח והשוואה שבוע-על-שבוע בדשבורד אחד.' },
+  { emoji: '🥩', title: 'מעקב תזונה חכם',        desc: 'חישוב אוטומטי של קלוריות וחלבונים עם תום ה-AI שלנו.' },
+  { emoji: '🏋️‍♂️', title: 'תכנון אימונים דינמי', desc: 'ניהול סטים, חזרות ומשקלים. שבירת PRs מעולם לא הייתה קלה יותר.' },
+  { emoji: '🔋', title: 'אנליטיקת התאוששות',      desc: 'מעקב אחרי מדדי התאוששות כדי להבטיח שאתה מגיע לאימון ב-100%.' },
+  { emoji: '🤖', title: "צ'אט AI צמוד",           desc: 'המאמן האישי שלך זמין 24/7 לכל שאלה, שינוי או התייעצות.' },
+  { emoji: '📈', title: 'Plateau Detection',       desc: 'זיהוי אוטומטי כשאתה תקוע — ועצות מבוססות נתונים לפריצה קדימה.' },
+  { emoji: '🔥', title: 'War Room שבועי',          desc: 'ציון ביצועים, מגמות נפח והשוואה שבוע-על-שבוע בדשבורד אחד.' },
 ];
 
 const TESTIMONIALS = [
@@ -203,24 +203,24 @@ const LandingPage = () => {
       </section>
 
       {/* ── Features ── */}
-      <section id="features" className="bg-white py-28">
-        <div className="max-w-7xl mx-auto px-8">
+      <section id="features" className="bg-white text-landing-on-surface font-space py-24">
+        <div className="container mx-auto px-8 max-w-7xl">
           <AnimSection className="text-center mb-16">
-            <p className="text-xs text-[#4a6600] uppercase tracking-widest font-bold mb-3">פיצ׳רים</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-landing-on-surface">
-              היתרון הלא הוגן שלך<br />בחדר הכושר
+            <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tight">
+              Precise Tools For <br />
+              <span className="text-landing-muted">Peak Velocity</span>
             </h2>
           </AnimSection>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {FEATURES.map((f, i) => (
               <AnimSection key={i} delay={i * 60}>
-                <div className="bg-landing-surface p-8 rounded-2xl hover:-translate-y-1 transition-all duration-300 h-full group cursor-default">
-                  <div className="w-12 h-12 rounded-xl bg-electric-lime/20 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform duration-300">
+                <div className="bg-landing-surface p-8 rounded-3xl border border-gray-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_-10px_rgba(204,255,0,0.5)] cursor-pointer group h-full">
+                  <div className="text-4xl mb-4 bg-white w-16 h-16 rounded-full flex items-center justify-center shadow-sm group-hover:bg-electric-lime transition-colors duration-300">
                     {f.emoji}
                   </div>
-                  <h3 className="text-base font-bold mb-2 text-landing-on-surface">{f.title}</h3>
-                  <p className="text-sm text-landing-muted leading-relaxed">{f.desc}</p>
+                  <h3 className="text-2xl font-bold mb-3 text-landing-on-surface">{f.title}</h3>
+                  <p className="text-landing-muted font-medium leading-relaxed">{f.desc}</p>
                 </div>
               </AnimSection>
             ))}
