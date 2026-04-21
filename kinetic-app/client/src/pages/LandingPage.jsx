@@ -263,54 +263,63 @@ const LandingPage = () => {
       </section>
 
       {/* ── Pricing ── */}
-      <section className="py-24 px-8 bg-white">
-        <div className="max-w-3xl mx-auto">
-          <AnimSection className="text-center mb-14">
-            <p className="text-xs text-[#4a6600] uppercase tracking-widest font-bold mb-3">מחיר</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-landing-on-surface">
-              פשוט, שקוף, הוגן
+      <section className="bg-landing-surface text-landing-on-surface font-space py-24">
+        <div className="container mx-auto px-8 max-w-5xl">
+          <AnimSection className="text-center mb-16">
+            <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter">
+              Choose Your <br />
+              <span className="text-electric-lime">Velocity</span>
             </h2>
-            <p className="text-landing-muted mt-3 text-sm">14 ימי Trial חינם על Pro — ביטול בכל עת</p>
+            <p className="text-landing-muted mt-4 text-sm">14 ימי Trial חינם על Pro — ביטול בכל עת</p>
           </AnimSection>
 
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="flex flex-col md:flex-row justify-center items-stretch gap-8">
             {PRICING.map((plan, i) => (
-              <AnimSection key={i} delay={i * 80}>
-                <div className={`rounded-2xl p-8 h-full flex flex-col gap-6 transition-all duration-300 ${
-                  plan.highlight ? 'bg-landing-on-surface text-white' : 'bg-landing-surface'
+              <AnimSection key={i} delay={i * 80} className="flex-1">
+                <div className={`relative flex flex-col p-10 rounded-[2.5rem] h-full transition-all duration-300 ${
+                  plan.highlight
+                    ? 'bg-landing-on-surface text-white scale-105 shadow-2xl z-10 border-4 border-electric-lime'
+                    : 'bg-white border border-gray-100'
                 }`}>
                   {plan.highlight && (
-                    <span className="self-start text-[10px] font-black uppercase tracking-widest bg-electric-lime text-black px-3 py-1 rounded-full">
-                      הכי פופולרי
-                    </span>
-                  )}
-                  <div>
-                    <div className="font-black text-xl uppercase tracking-wider">{plan.name}</div>
-                    <div className="flex items-baseline gap-1.5 mt-1">
-                      <span className={`font-black text-5xl ${plan.highlight ? 'text-electric-lime' : 'text-landing-on-surface'}`}>{plan.price}</span>
-                      <span className={`text-sm ${plan.highlight ? 'text-white/50' : 'text-[#9ea8b3]'}`}>/{plan.period}</span>
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-electric-lime text-black font-black px-6 py-2 rounded-full text-sm tracking-widest uppercase shadow-lg whitespace-nowrap">
+                      Most Popular
                     </div>
-                    {plan.note && <p className="text-xs text-electric-lime/80 mt-1">{plan.note}</p>}
+                  )}
+
+                  <div className="mb-8">
+                    <h3 className={`text-2xl font-black italic uppercase ${plan.highlight ? 'text-electric-lime' : ''}`}>
+                      {plan.name}
+                    </h3>
+                    <div className="flex items-baseline mt-4 gap-1.5">
+                      <span className="text-5xl font-black">{plan.price}</span>
+                      <span className={`text-sm ${plan.highlight ? 'text-gray-400' : 'text-landing-muted'}`}>/{plan.period}</span>
+                    </div>
+                    {plan.note && (
+                      <p className={`mt-3 text-sm leading-relaxed ${plan.highlight ? 'text-gray-300' : 'text-landing-muted'}`}>
+                        {plan.note}
+                      </p>
+                    )}
                   </div>
 
-                  <ul className="space-y-3 flex-1">
+                  <ul className="space-y-4 mb-10 flex-1">
                     {plan.features.map((f, j) => (
-                      <li key={j} className={`flex items-center gap-2.5 text-sm ${plan.highlight ? 'text-white/80' : 'text-landing-muted'}`}>
-                        <span className="font-bold flex-shrink-0" style={{ color: '#7cbf00' }}>✓</span>
-                        {f}
+                      <li key={j} className="flex items-center gap-3 rtl:space-x-reverse">
+                        <span className={`text-lg font-bold flex-shrink-0 ${plan.highlight ? 'text-electric-lime' : 'text-green-500'}`}>✓</span>
+                        <span className={`font-medium text-sm ${plan.highlight ? 'text-white/80' : 'text-landing-muted'}`}>{f}</span>
                       </li>
                     ))}
                   </ul>
 
                   <button
                     onClick={() => navigate('/pricing')}
-                    className={`w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider active:scale-95 transition-all duration-200 ${
+                    className={`w-full py-4 rounded-2xl font-black text-lg transition-all active:scale-95 ${
                       plan.highlight
-                        ? 'bg-electric-lime text-black hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)]'
-                        : 'bg-white text-landing-on-surface hover:bg-[#f0f1f8]'
+                        ? 'bg-electric-lime text-black hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] hover:scale-105'
+                        : 'bg-landing-on-surface text-white hover:bg-black'
                     }`}
                   >
-                    {plan.cta}
+                    {plan.highlight ? 'UPGRADE NOW' : 'GET STARTED'}
                   </button>
                 </div>
               </AnimSection>
