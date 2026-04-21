@@ -42,11 +42,17 @@ export default {
         "tertiary-dim": "#edd13a",
         "surface-container": "#1a1a1a",
         "on-secondary-container": "#fff6f4",
+        // Landing page light-mode tokens
+        "electric-lime": "#CCFF00",
+        "landing-surface": "#F8F9FF",
+        "landing-on-surface": "#151C25",
+        "landing-muted": "#656464",
       },
       fontFamily: {
         headline: ["Space Grotesk", "sans-serif"],
         body: ["Manrope", "sans-serif"],
         label: ["Inter", "sans-serif"],
+        space: ["Space Grotesk", "sans-serif"],
       },
       borderRadius: {
         DEFAULT: "0.125rem",
