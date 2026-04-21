@@ -80,15 +80,15 @@ export default function Dashboard() {
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (loading) return (
-    <main className="min-h-screen bg-[#F8F9FF] pt-20 px-6 md:px-10 pb-28">
+    <main className="min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] pt-20 px-6 md:px-10 pb-28">
       <div className="max-w-7xl mx-auto animate-pulse space-y-6 mt-6">
-        <div className="h-12 bg-white rounded-2xl w-64 shadow-sm" />
+        <div className="h-12 bg-white dark:bg-[#151C25] rounded-2xl w-64" />
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 h-56 bg-white rounded-3xl shadow-sm" />
+          <div className="md:col-span-2 h-56 bg-white dark:bg-[#151C25] rounded-3xl" />
           <div className="h-56 bg-[#151C25] rounded-3xl" />
         </div>
         <div className="grid md:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-32 bg-white rounded-3xl shadow-sm" />)}
+          {[...Array(4)].map((_, i) => <div key={i} className="h-32 bg-white dark:bg-[#151C25] rounded-3xl" />)}
         </div>
       </div>
     </main>
@@ -109,7 +109,7 @@ export default function Dashboard() {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <main className="min-h-screen bg-[#F8F9FF] text-[#151C25] font-space pt-20 pb-28 px-6 md:px-10" dir="rtl">
+    <main className="min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] text-[#151C25] dark:text-white font-space pt-20 pb-28 px-6 md:px-10" dir="rtl">
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* ── Header ── */}
@@ -119,9 +119,9 @@ export default function Dashboard() {
               Welcome back,{' '}
               <span className="text-electric-lime drop-shadow-sm">{displayName}</span>
             </h1>
-            <p className="text-gray-500 font-medium mt-1">מוכן לשיא הבא שלך?</p>
+            <p className="text-gray-500 dark:text-gray-400 font-medium mt-1">מוכן לשיא הבא שלך?</p>
           </div>
-          <div className="bg-electric-lime/20 text-[#4a6600] px-4 py-2 rounded-full flex items-center gap-2 font-bold text-sm">
+          <div className="bg-electric-lime/20 text-[#4a6600] dark:text-[#CCFF00] px-4 py-2 rounded-full flex items-center gap-2 font-bold text-sm">
             🔥 {d.streak ?? 0} {t('dashboard.streak')}
           </div>
         </header>
@@ -131,7 +131,7 @@ export default function Dashboard() {
 
         {/* ── Daily Challenge ── */}
         {challenge && (
-          <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm flex items-center gap-4">
+          <div className="bg-white dark:bg-[#151C25] rounded-3xl p-5 border border-gray-100 dark:border-transparent shadow-sm flex items-center gap-4">
             <div className="text-3xl shrink-0">{challenge.text.split(' ').pop()}</div>
             <div className="flex-1">
               <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold block mb-1">{t('dashboard.dailyChallenge')}</span>
@@ -146,7 +146,7 @@ export default function Dashboard() {
               className={`px-4 py-2 rounded-full font-black text-xs uppercase transition-all ${
                 challengeDone
                   ? 'bg-electric-lime text-black'
-                  : 'bg-gray-100 text-gray-600 hover:bg-electric-lime hover:text-black'
+                  : 'bg-gray-100 dark:bg-[#0E0E0E] text-gray-600 dark:text-gray-400 hover:bg-electric-lime hover:text-black'
               }`}
             >
               {challengeDone ? t('dashboard.challengeDone') : t('dashboard.challengeComplete')}
@@ -158,30 +158,30 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Nutrition Card */}
-          <div className="md:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+          <div className="md:col-span-2 bg-white dark:bg-[#151C25] rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-transparent">
             <div className="flex justify-between items-start mb-6">
               <h2 className="text-2xl font-black italic uppercase">Nutrition</h2>
-              <span className="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Today</span>
+              <span className="bg-gray-100 dark:bg-[#0E0E0E] text-gray-600 dark:text-gray-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Today</span>
             </div>
             <div className="grid grid-cols-2 gap-8">
               <div>
-                <p className="text-gray-500 font-medium mb-1">חלבון</p>
+                <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">חלבון</p>
                 <div className="flex items-baseline mb-3 gap-1">
                   <span className="text-4xl font-black">{proteinCurrent}</span>
                   <span className="text-gray-400 font-bold">/ {proteinGoal}g</span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-3">
+                <div className="w-full bg-gray-100 dark:bg-[#0E0E0E] rounded-full h-3">
                   <div className="bg-electric-lime h-3 rounded-full transition-all duration-1000 ease-out" style={{ width: `${proteinPercent}%` }} />
                 </div>
               </div>
               <div>
-                <p className="text-gray-500 font-medium mb-1">קלוריות</p>
+                <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">קלוריות</p>
                 <div className="flex items-baseline mb-3 gap-1">
                   <span className="text-4xl font-black">{calorieCurrent}</span>
                   <span className="text-gray-400 font-bold">kcal</span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-3">
-                  <div className="bg-[#151C25] h-3 rounded-full transition-all duration-1000 ease-out" style={{ width: `${caloriePercent}%` }} />
+                <div className="w-full bg-gray-100 dark:bg-[#0E0E0E] rounded-full h-3">
+                  <div className="bg-[#151C25] dark:bg-white h-3 rounded-full transition-all duration-1000 ease-out" style={{ width: `${caloriePercent}%` }} />
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@ export default function Dashboard() {
           </div>
 
           {/* Weekly Activity */}
-          <div className="md:col-span-7 bg-white rounded-3xl p-8 border border-gray-100 shadow-sm space-y-4">
+          <div className="md:col-span-7 bg-white dark:bg-[#151C25] rounded-3xl p-8 border border-gray-100 dark:border-transparent shadow-sm space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-black italic uppercase">{t('dashboard.weeklyActivity')}</h3>
               <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t('dashboard.lastDays')}</span>
@@ -244,7 +244,7 @@ export default function Dashboard() {
               {(d.weeklyActivity || []).length === 0
                 ? ['א','ב','ג','ד','ה','ו','ש'].map((l, i) => (
                     <div key={i} className="flex flex-col items-center gap-1 flex-1">
-                      <div className="w-full bg-gray-100 rounded-full h-24 animate-pulse" />
+                      <div className="w-full bg-gray-100 dark:bg-[#0E0E0E] rounded-full h-24 animate-pulse" />
                       <span className="text-[10px] text-gray-400 font-bold">{l}</span>
                     </div>
                   ))
@@ -258,7 +258,7 @@ export default function Dashboard() {
                         <div className="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:flex bg-[#151C25] text-white rounded-lg px-2 py-1 whitespace-nowrap z-10 pointer-events-none">
                           <span className="text-[10px]">{day.label}: {day.pct}%</span>
                         </div>
-                        <div className="w-full bg-gray-100 rounded-full h-24 relative overflow-hidden mt-4">
+                        <div className="w-full bg-gray-100 dark:bg-[#0E0E0E] rounded-full h-24 relative overflow-hidden mt-4">
                           <div className="absolute bottom-0 w-full rounded-full transition-all duration-300"
                             style={{ height: `${day.pct}%`, backgroundColor: day.pct > 0 ? '#CCFF00' : 'transparent' }} />
                         </div>
@@ -279,10 +279,10 @@ export default function Dashboard() {
             { icon: '💧', label: t('dashboard.hydration'),      value: `${water.toFixed(1)}`,     unit: 'L' },
             { icon: '⏱', label: t('dashboard.activeMinutes'),  value: `${d.activeMinutes || 54}`, unit: t('common.minutes') },
           ].map((m, i) => (
-            <div key={i} className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
+            <div key={i} className="bg-white dark:bg-[#151C25] rounded-3xl p-6 border border-gray-100 dark:border-transparent shadow-sm">
               <div className="text-2xl mb-3">{m.icon}</div>
-              <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">{m.label}</p>
-              <p className="text-2xl font-black text-[#151C25]">
+              <p className="text-gray-400 dark:text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">{m.label}</p>
+              <p className="text-2xl font-black text-[#151C25] dark:text-white">
                 {m.value}{' '}
                 {m.unit && <span className="text-sm font-medium text-gray-400">{m.unit}</span>}
               </p>
@@ -291,7 +291,7 @@ export default function Dashboard() {
         </div>
 
         {/* ── Water Tracker ── */}
-        <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-[#151C25] rounded-3xl p-8 border border-gray-100 dark:border-transparent shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-2xl">💧</span>
@@ -301,7 +301,7 @@ export default function Dashboard() {
               {water.toFixed(2)} <span className="text-sm font-normal text-gray-400 mr-1">/ 2.5L</span>
             </span>
           </div>
-          <div className="relative w-full h-8 bg-gray-100 rounded-full overflow-hidden">
+          <div className="relative w-full h-8 bg-gray-100 dark:bg-[#0E0E0E] rounded-full overflow-hidden">
             <div
               className="absolute inset-y-0 left-0 rounded-full transition-all duration-700"
               style={{ width: `${Math.min(100, Math.round(water / 2.5 * 100))}%`, background: 'linear-gradient(90deg, #0096c7, #00b4d8, #48cae4)' }}
@@ -314,7 +314,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-4 gap-2">
             {[{ ml: 250, label: '250ml' }, { ml: 330, label: '330ml' }, { ml: 500, label: '500ml' }, { ml: 750, label: '750ml' }].map(b => (
               <button key={b.ml} onClick={() => addWater(b.ml / 1000)}
-                className="py-2.5 rounded-xl font-black text-xs text-[#00b4d8] bg-[#e0f7ff] hover:bg-[#00b4d8] hover:text-white transition-colors active:scale-90 duration-200">
+                className="py-2.5 rounded-xl font-black text-xs text-[#00b4d8] bg-[#e0f7ff] dark:bg-[#0E0E0E] hover:bg-[#00b4d8] hover:text-white transition-colors active:scale-90 duration-200">
                 +{b.label}
               </button>
             ))}
@@ -323,7 +323,7 @@ export default function Dashboard() {
 
         {/* ── Macros ── */}
         {macros && (
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-[#151C25] rounded-3xl p-8 border border-gray-100 dark:border-transparent shadow-sm space-y-4">
             <h3 className="font-black text-lg italic uppercase">{t('dashboard.macrosToday')}</h3>
             <div className="space-y-4">
               {[
@@ -342,7 +342,7 @@ export default function Dashboard() {
                         {m.consumed ?? 0}<span className="text-gray-400 font-normal">/{m.target ?? 0}{unit}</span>
                       </span>
                     </div>
-                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-gray-100 dark:bg-[#0E0E0E] rounded-full overflow-hidden">
                       <div className="h-full rounded-full transition-all duration-700" style={{ width: `${m.pct ?? 0}%`, backgroundColor: color }} />
                     </div>
                   </div>

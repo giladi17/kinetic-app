@@ -131,11 +131,11 @@ const LandingPage = () => {
   function goLogin()    { navigate('/login'); }
 
   return (
-    <div className="min-h-screen bg-landing-surface text-landing-on-surface font-space" dir="rtl">
+    <div className="min-h-screen bg-landing-surface dark:bg-[#0E0E0E] text-landing-on-surface dark:text-white font-space" dir="rtl">
 
       {/* ── Navbar ── */}
       <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-landing-surface/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
+        scrolled ? 'bg-landing-surface/95 dark:bg-[#0E0E0E]/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       }`}>
         <div className="flex justify-between items-center px-8 py-5 max-w-7xl mx-auto">
           <div className="text-xl font-black tracking-tighter text-landing-on-surface">
@@ -155,7 +155,7 @@ const LandingPage = () => {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="bg-landing-surface min-h-screen flex items-center pt-20 pb-16">
+      <section className="bg-landing-surface dark:bg-[#0E0E0E] min-h-screen flex items-center pt-20 pb-16">
         <div className="container mx-auto px-8 grid md:grid-cols-2 gap-12 items-center max-w-7xl">
 
           {/* Right — text */}
@@ -203,7 +203,7 @@ const LandingPage = () => {
       </section>
 
       {/* ── Features ── */}
-      <section id="features" className="bg-white text-landing-on-surface font-space py-24">
+      <section id="features" className="bg-white dark:bg-[#0E0E0E] text-landing-on-surface dark:text-white font-space py-24">
         <div className="container mx-auto px-8 max-w-7xl">
           <AnimSection className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tight">
@@ -215,8 +215,8 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {FEATURES.map((f, i) => (
               <AnimSection key={i} delay={i * 60}>
-                <div className="bg-landing-surface p-8 rounded-3xl border border-gray-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_-10px_rgba(204,255,0,0.5)] cursor-pointer group h-full">
-                  <div className="text-4xl mb-4 bg-white w-16 h-16 rounded-full flex items-center justify-center shadow-sm group-hover:bg-electric-lime transition-colors duration-300">
+                <div className="bg-landing-surface dark:bg-[#151C25] p-8 rounded-3xl border border-gray-100 dark:border-transparent transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_-10px_rgba(204,255,0,0.5)] cursor-pointer group h-full">
+                  <div className="text-4xl mb-4 bg-white dark:bg-[#0E0E0E] w-16 h-16 rounded-full flex items-center justify-center shadow-sm group-hover:bg-electric-lime transition-colors duration-300">
                     {f.emoji}
                   </div>
                   <h3 className="text-2xl font-bold mb-3 text-landing-on-surface">{f.title}</h3>
@@ -229,7 +229,7 @@ const LandingPage = () => {
       </section>
 
       {/* ── Testimonials ── */}
-      <section className="py-28 px-8 bg-landing-surface">
+      <section className="py-28 px-8 bg-landing-surface dark:bg-[#0E0E0E]">
         <div className="max-w-7xl mx-auto">
           <AnimSection className="text-center mb-16">
             <p className="text-xs text-[#4a6600] uppercase tracking-widest font-bold mb-3">ביקורות</p>
@@ -241,7 +241,7 @@ const LandingPage = () => {
           <div className="grid sm:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t, i) => (
               <AnimSection key={i} delay={i * 80}>
-                <div className="bg-white rounded-2xl p-8 flex flex-col gap-5 h-full">
+                <div className="bg-white dark:bg-[#151C25] rounded-2xl p-8 flex flex-col gap-5 h-full">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, k) => <span key={k} className="text-base" style={{ color: '#7cbf00' }}>★</span>)}
                   </div>
@@ -263,7 +263,7 @@ const LandingPage = () => {
       </section>
 
       {/* ── Pricing ── */}
-      <section className="bg-landing-surface text-landing-on-surface font-space py-24">
+      <section className="bg-landing-surface dark:bg-[#0E0E0E] text-landing-on-surface dark:text-white font-space py-24">
         <div className="container mx-auto px-8 max-w-5xl">
           <AnimSection className="text-center mb-16">
             <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter">
@@ -279,7 +279,7 @@ const LandingPage = () => {
                 <div className={`relative flex flex-col p-10 rounded-[2.5rem] h-full transition-all duration-300 ${
                   plan.highlight
                     ? 'bg-landing-on-surface text-white scale-105 shadow-2xl z-10 border-4 border-electric-lime'
-                    : 'bg-white border border-gray-100'
+                    : 'bg-white dark:bg-[#151C25] border border-gray-100 dark:border-transparent'
                 }`}>
                   {plan.highlight && (
                     <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-electric-lime text-black font-black px-6 py-2 rounded-full text-sm tracking-widest uppercase shadow-lg whitespace-nowrap">
