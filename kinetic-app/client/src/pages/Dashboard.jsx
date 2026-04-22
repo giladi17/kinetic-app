@@ -188,7 +188,7 @@ export default function Dashboard() {
           </div>
 
           {/* TOM AI Card */}
-          <div className="bg-[#151C25] text-white rounded-3xl p-8 shadow-xl flex flex-col justify-between border border-gray-800 relative overflow-hidden">
+          <div className="bg-[#151C25] text-white rounded-3xl p-8 shadow-xl flex flex-col justify-between relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-electric-lime opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
             <div>
               <h2 className="text-2xl font-black italic uppercase text-electric-lime mb-2">TOM.</h2>
@@ -262,7 +262,7 @@ export default function Dashboard() {
                           <div className="absolute bottom-0 w-full rounded-full transition-all duration-300"
                             style={{ height: `${day.pct}%`, backgroundColor: day.pct > 0 ? '#CCFF00' : 'transparent' }} />
                         </div>
-                        <span className={`text-[10px] font-bold ${day.today ? 'text-[#4a6600]' : 'text-gray-400'}`}>{day.label}</span>
+                        <span className={`text-[10px] font-bold ${day.today ? 'text-electric-lime' : 'text-gray-400'}`}>{day.label}</span>
                       </div>
                     )
                   })

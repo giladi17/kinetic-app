@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 
 // ─── Scroll-in animation hook ──────────────────────────────────────────────
 function useInView(ref) {
@@ -141,9 +142,10 @@ const LandingPage = () => {
           <div className="text-xl font-black tracking-tighter text-landing-on-surface">
             KINETIC<span className="text-electric-lime" style={{ textShadow: '0 0 12px rgba(204,255,0,0.6)' }}>.</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
             <button onClick={goLogin}
-              className="text-sm text-landing-muted hover:text-landing-on-surface transition-colors px-3 py-2 font-medium">
+              className="text-sm text-landing-muted dark:text-gray-400 hover:text-landing-on-surface dark:hover:text-white transition-colors px-3 py-2 font-medium">
               התחברות
             </button>
             <button onClick={goRegister}
@@ -160,7 +162,7 @@ const LandingPage = () => {
 
           {/* Right — text */}
           <div className="flex flex-col items-end space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-electric-lime/20 text-[#4a6600] text-xs font-semibold">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-electric-lime/20 text-[#4a6600] dark:text-electric-lime text-xs font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-electric-lime animate-pulse" />
               הדור הבא של אפליקציות הכושר
             </div>
@@ -181,7 +183,7 @@ const LandingPage = () => {
                 התחל 14 יום חינם ✦
               </button>
               <button onClick={goLogin}
-                className="bg-white text-landing-muted font-medium text-base px-8 py-4 rounded-full hover:text-landing-on-surface transition-all active:scale-95 shadow-sm">
+                className="bg-white dark:bg-[#151C25] text-landing-muted dark:text-gray-400 font-medium text-base px-8 py-4 rounded-full hover:text-landing-on-surface dark:hover:text-white transition-all active:scale-95 shadow-sm">
                 יש לי חשבון
               </button>
             </div>
@@ -219,8 +221,8 @@ const LandingPage = () => {
                   <div className="text-4xl mb-4 bg-white dark:bg-[#0E0E0E] w-16 h-16 rounded-full flex items-center justify-center shadow-sm group-hover:bg-electric-lime transition-colors duration-300">
                     {f.emoji}
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 text-landing-on-surface">{f.title}</h3>
-                  <p className="text-landing-muted font-medium leading-relaxed">{f.desc}</p>
+                  <h3 className="text-2xl font-bold mb-3 text-landing-on-surface dark:text-white">{f.title}</h3>
+                  <p className="text-landing-muted dark:text-gray-400 font-medium leading-relaxed">{f.desc}</p>
                 </div>
               </AnimSection>
             ))}
@@ -232,7 +234,7 @@ const LandingPage = () => {
       <section className="py-28 px-8 bg-landing-surface dark:bg-[#0E0E0E]">
         <div className="max-w-7xl mx-auto">
           <AnimSection className="text-center mb-16">
-            <p className="text-xs text-[#4a6600] uppercase tracking-widest font-bold mb-3">ביקורות</p>
+            <p className="text-xs text-[#4a6600] dark:text-electric-lime uppercase tracking-widest font-bold mb-3">ביקורות</p>
             <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-landing-on-surface">
               מה אומרים המשתמשים
             </h2>
