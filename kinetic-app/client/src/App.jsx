@@ -115,6 +115,7 @@ function AppRoutes() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="workouts" element={<WorkoutLibrary />} />
           <Route path="workout/:id" element={<ActiveWorkout />} />
+          <Route path="active-workout" element={<ActiveWorkout />} />
           <Route path="progress" element={<Progress />} />
           <Route path="nutrition" element={<Nutrition />} />
           <Route path="supplements" element={<Supplements />} />
