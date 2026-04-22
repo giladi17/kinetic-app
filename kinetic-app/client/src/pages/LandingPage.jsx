@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 // ─── Scroll-in animation hook ──────────────────────────────────────────────
 function useInView(ref) {
@@ -79,7 +80,14 @@ function AppMockup() {
 // ─── Main Component ────────────────────────────────────────────────────────
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!loading && (user || localStorage.getItem('kinetic_token'))) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
