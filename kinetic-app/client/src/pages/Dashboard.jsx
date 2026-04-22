@@ -131,7 +131,7 @@ export default function Dashboard() {
 
         {/* ── Daily Challenge ── */}
         {challenge && (
-          <div className="bg-white dark:bg-[#151C25] rounded-3xl p-5 border border-gray-100 dark:border-transparent shadow-sm flex items-center gap-4">
+          <div className="bg-white dark:bg-[#151C25] rounded-3xl p-5 shadow-sm flex items-center gap-4">
             <div className="text-3xl shrink-0">{challenge.text.split(' ').pop()}</div>
             <div className="flex-1">
               <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold block mb-1">{t('dashboard.dailyChallenge')}</span>
@@ -158,7 +158,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Nutrition Card */}
-          <div className="md:col-span-2 bg-white dark:bg-[#151C25] rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-transparent">
+          <div className="md:col-span-2 bg-white dark:bg-[#151C25] rounded-3xl p-8 shadow-sm">
             <div className="flex justify-between items-start mb-6">
               <h2 className="text-2xl font-black italic uppercase">Nutrition</h2>
               <span className="bg-gray-100 dark:bg-[#0E0E0E] text-gray-600 dark:text-gray-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Today</span>
@@ -234,7 +234,7 @@ export default function Dashboard() {
           </div>
 
           {/* Weekly Activity */}
-          <div className="md:col-span-7 bg-white dark:bg-[#151C25] rounded-3xl p-8 border border-gray-100 dark:border-transparent shadow-sm space-y-4">
+          <div className="md:col-span-7 bg-white dark:bg-[#151C25] rounded-3xl p-8 shadow-sm space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-black italic uppercase">{t('dashboard.weeklyActivity')}</h3>
               <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t('dashboard.lastDays')}</span>
@@ -278,7 +278,7 @@ export default function Dashboard() {
             { icon: '💧', label: t('dashboard.hydration'),      value: `${water.toFixed(1)}`,     unit: 'L' },
             { icon: '⏱', label: t('dashboard.activeMinutes'),  value: `${d.activeMinutes || 54}`, unit: t('common.minutes') },
           ].map((m, i) => (
-            <div key={i} className="bg-white dark:bg-[#151C25] rounded-3xl p-6 border border-gray-100 dark:border-transparent shadow-sm">
+            <div key={i} className="bg-white dark:bg-[#151C25] rounded-3xl p-6 shadow-sm">
               <div className="text-2xl mb-3">{m.icon}</div>
               <p className="text-gray-400 dark:text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">{m.label}</p>
               <p className="text-2xl font-black text-[#151C25] dark:text-white">
@@ -290,7 +290,7 @@ export default function Dashboard() {
         </div>
 
         {/* ── Water Tracker ── */}
-        <div className="bg-white dark:bg-[#151C25] rounded-3xl p-8 border border-gray-100 dark:border-transparent shadow-sm space-y-4">
+        <div className="bg-white dark:bg-[#151C25] rounded-3xl p-8 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-2xl">💧</span>
@@ -322,7 +322,7 @@ export default function Dashboard() {
 
         {/* ── Macros ── */}
         {macros && (
-          <div className="bg-white dark:bg-[#151C25] rounded-3xl p-8 border border-gray-100 dark:border-transparent shadow-sm space-y-4">
+          <div className="bg-white dark:bg-[#151C25] rounded-3xl p-8 shadow-sm space-y-4">
             <h3 className="font-black text-lg italic uppercase">{t('dashboard.macrosToday')}</h3>
             <div className="space-y-4">
               {[
