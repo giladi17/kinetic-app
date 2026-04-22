@@ -84,7 +84,7 @@ const LandingPage = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    if (!loading && (user || localStorage.getItem('kinetic_token'))) {
+    if (!loading && user) {
       navigate('/dashboard', { replace: true });
     }
   }, [user, loading, navigate]);
