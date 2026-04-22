@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply transition-colors duration-300;
+}
+
+/* ── Tonal Layering Rule ──────────────────────────────────────────────────────
+   במקום קווים לבנים, שינוי גוון עדין בין שכבות. bg-white בdark mode → #151C25 */
+.dark .bg-white {
+  background-color: #151C25 !important;
+}
+
+.dark .text-landing-on-surface {
+  color: #ffffff !important;
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
