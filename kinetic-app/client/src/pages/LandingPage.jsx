@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle';
+import Navbar from '../components/Navbar';
 
 // ─── Scroll-in animation hook ──────────────────────────────────────────────
 function useInView(ref) {
@@ -120,14 +121,6 @@ const PRICING = [
 // ─── Main Component ────────────────────────────────────────────────────────
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 40); }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
   function goRegister() { navigate('/login?mode=register'); }
   function goLogin()    { navigate('/login'); }
 
@@ -135,26 +128,7 @@ const LandingPage = () => {
     <div className="min-h-screen bg-landing-surface dark:bg-[#0E0E0E] text-landing-on-surface dark:text-white font-space" dir="rtl">
 
       {/* ── Navbar ── */}
-      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-landing-surface/95 dark:bg-[#0E0E0E]/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
-      }`}>
-        <div className="flex justify-between items-center px-8 py-5 max-w-7xl mx-auto">
-          <div className="text-xl font-black tracking-tighter text-landing-on-surface">
-            KINETIC<span className="text-electric-lime" style={{ textShadow: '0 0 12px rgba(204,255,0,0.6)' }}>.</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <button onClick={goLogin}
-              className="text-sm text-landing-muted dark:text-gray-400 hover:text-landing-on-surface dark:hover:text-white transition-colors px-3 py-2 font-medium">
-              התחברות
-            </button>
-            <button onClick={goRegister}
-              className="text-sm font-bold bg-electric-lime text-black px-5 py-2.5 rounded-full hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)] active:scale-95 transition-all">
-              התחל חינם
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* ── Hero ── */}
       <section className="bg-landing-surface dark:bg-[#0E0E0E] min-h-screen flex items-center pt-20 pb-16">
