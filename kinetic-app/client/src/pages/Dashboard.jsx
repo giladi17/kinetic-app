@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { fetchDashboard, authFetch } from '../api'
 import { useUser } from '../context/UserContext'
 import { useAuth } from '../context/AuthContext'
@@ -225,12 +225,11 @@ export default function Dashboard() {
                   <span>⚡ {t(`workouts.${(d.nextWorkout?.intensity || 'advanced').toLowerCase()}`)}</span>
                 </div>
               </div>
-              <button
-                onClick={() => navigate(`/workout/${d.nextWorkout?.id || 1}`)}
-                className="mt-6 bg-electric-lime text-black px-8 py-4 rounded-2xl font-black tracking-widest uppercase active:scale-95 transition-all hover:scale-105"
-              >
-                {t('dashboard.startWorkout')}
-              </button>
+              <Link to="/active-workout">
+                <button className="mt-6 bg-electric-lime text-black font-black py-4 px-8 rounded-2xl w-full uppercase tracking-widest hover:shadow-[0_0_20px_rgba(204,255,0,0.5)] hover:scale-105 active:scale-95 transition-all">
+                  START NEXT SESSION
+                </button>
+              </Link>
             </div>
           </div>
 
