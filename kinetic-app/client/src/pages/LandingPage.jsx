@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ThemeToggle from '../components/ThemeToggle';
+import ThemeToggle from '../components/ThemeToggle.jsx';
 import Navbar from '../components/Navbar';
 
 // ─── Scroll-in animation hook ──────────────────────────────────────────────
