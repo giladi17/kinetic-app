@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authFetch } from '../api'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 
 const THEMES = [
   { key: 'theme-lime', label: 'Lime', color: '#CCFF00', remove: ['theme-blue', 'theme-orange'] },
@@ -12,6 +13,7 @@ const THEMES = [
 export default function TopAppBar() {
   const navigate = useNavigate()
   const { logout } = useAuth()
+  const { isDark, toggleTheme } = useTheme()
   const [showTheme, setShowTheme] = useState(false)
   const [showNotifs, setShowNotifs] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -26,10 +28,6 @@ export default function TopAppBar() {
       document.body.classList.add(theme.key)
     }
     setShowTheme(false)
-  }
-
-  function toggleLight() {
-    document.body.classList.toggle('light-mode')
   }
 
   function toggleNotifs() {
@@ -94,11 +92,14 @@ export default function TopAppBar() {
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={toggleLight}
-            className="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200"
-            title="Toggle light/dark"
+            onClick={toggleTheme}
+            className="p-2 rounded-xl bg-gray-100 dark:bg-[#151C25] transition-all duration-300 hover:scale-110 active:scale-90"
+            aria-label={isDark ? 'עבור למצב בהיר' : 'עבור למצב כהה'}
           >
-            <span className="material-symbols-outlined">light_mode</span>
+            {isDark
+              ? <span className="material-symbols-outlined text-electric-lime" style={{ fontVariationSettings: "'FILL' 1" }}>light_mode</span>
+              : <span className="material-symbols-outlined text-[#151C25]" style={{ fontVariationSettings: "'FILL' 1" }}>dark_mode</span>
+            }
           </button>
           <div className="relative" ref={themeRef}>
             <button
