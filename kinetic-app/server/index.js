@@ -29,7 +29,8 @@ const corsOptions = {
     'https://kinetic-app-lovat.vercel.app',
     'https://kinetic-app-arbel.vercel.app',
     'https://kinetic-app-production.up.railway.app',
-    'http://localhost:5173'
+    'http://localhost:5173',
+    /\.vercel\.app$/,
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
