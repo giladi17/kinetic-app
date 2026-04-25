@@ -1,9 +1,16 @@
-const BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
+// In production (Vercel): empty string → relative URL → Vercel proxy → Railway (no CORS)
+// In dev (localhost): use VITE_API_URL or fallback to localhost:3001
+const API_ORIGIN = import.meta.env.DEV
+  ? (import.meta.env.VITE_API_URL || 'http://localhost:3001')
+  : (import.meta.env.VITE_API_URL || '')
+
+const BASE = `${API_ORIGIN}/api`
+
+export { API_ORIGIN as API_URL }
 
 export async function authFetch(url, options = {}) {
   const token = localStorage.getItem('kinetic_token')
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-  const fullUrl = url.startsWith('http') ? url : `${API}${url}`
+  const fullUrl = url.startsWith('http') ? url : `${API_ORIGIN}${url}`
   return fetch(fullUrl, {
     ...options,
     headers: {
@@ -14,9 +21,6 @@ export async function authFetch(url, options = {}) {
   })
 }
 
-// Wraps authFetch — on 403 premium_required, fires global paywall event.
-// Pass `feature` (e.g. 'ai_coach', 'analytics') to show a contextual modal message.
-// Returns null on 401/403 to prevent error objects leaking into state.
 export async function premiumFetch(url, options = {}, feature = '') {
   const res = await authFetch(url, options)
   if (res.status === 401 || res.status === 403) {
@@ -45,15 +49,6 @@ export async function fetchWorkouts(category = '') {
 
 export async function fetchProgress() {
   const res = await authFetch(`${BASE}/progress`)
-  if (!res.ok) return null
-  return res.json()
-}
-
-export async function addWeightLog({ weight, date, body_fat, notes }) {
-  const res = await authFetch(`${BASE}/weight`, {
-    method: 'POST',
-    body: JSON.stringify({ weight, date, body_fat, notes }),
-  })
   if (!res.ok) return null
   return res.json()
 }
