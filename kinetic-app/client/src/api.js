@@ -53,6 +53,15 @@ export async function fetchProgress() {
   return res.json()
 }
 
+export async function addWeightLog({ weight, date, body_fat, notes }) {
+  const res = await authFetch(`${BASE}/weight`, {
+    method: 'POST',
+    body: JSON.stringify({ weight, date, body_fat, notes }),
+  })
+  if (!res.ok) return null
+  return res.json()
+}
+
 export async function saveWorkoutSession(data) {
   const res = await authFetch(`${BASE}/sessions`, {
     method: 'POST',
