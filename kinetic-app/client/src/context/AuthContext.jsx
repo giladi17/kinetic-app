@@ -1,10 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-
-console.log('AuthContext loading...')
+import { API_URL } from '../api'
 
 const AuthContext = createContext(null)
-// וודא שה-URL הזה ב-Vercel מוגדר לכתובת של Railway
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API = API_URL
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)

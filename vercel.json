@@ -1,0 +1,16 @@
+{
+  "buildCommand": "npm install --prefix kinetic-app/client && npm run build --prefix kinetic-app/client",
+  "outputDirectory": "kinetic-app/client/dist",
+  "installCommand": "echo skip",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
