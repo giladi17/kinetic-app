@@ -68,7 +68,7 @@ export default function Analytics() {
   }
 
   if (loading) return (
-    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-8 min-h-screen">
+    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-8 min-h-screen bg-[#0e0e0e]">
       <div className="pt-4 space-y-2">
         <SkeletonText width="w-24" />
         <SkeletonText width="w-40" />
@@ -86,59 +86,65 @@ export default function Analytics() {
   const maData = movingAvg?.exercises?.[selectedExercise] || []
 
   return (
-    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-8 min-h-screen">
+    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-10 min-h-screen bg-[#0e0e0e]">
 
-      {/* Header */}
+      {/* ── Header ── */}
       <div className="pt-4 space-y-1 animate-fade-up">
-        <span className="font-label text-primary-fixed-dim text-xs tracking-[0.2em] font-bold">PORTFOLIO</span>
-        <h1 className="font-headline text-4xl font-bold tracking-tight uppercase">אנליטיקה</h1>
+        <span className="text-[#CCFF00] text-[10px] tracking-[0.25em] font-black uppercase block">PERFORMANCE ANALYTICS</span>
+        <h1 className="text-white font-black text-5xl tracking-tighter uppercase leading-none">אנליטיקה</h1>
+        <p className="text-white/50 text-xs mt-2">נתוני הביצועים שלך — מדויקים, ישירים</p>
       </div>
 
       {/* ── 0. DNA של האימון ── */}
       {dna && <WorkoutDna dna={dna} navigate={navigate} />}
 
       {/* ── 1. ריבית דריבית ── */}
-      <section className="bg-surface-container-low rounded-xl p-6 space-y-4 animate-fade-up-delay-1">
-        <div className="flex items-start justify-between">
-          <div>
-            <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block">ריבית דריבית</span>
-            <h2 className="font-headline text-3xl font-bold text-primary-container">
-              {(compound?.totalLifted || 0).toLocaleString()}
-              <span className="text-lg text-on-surface-variant font-normal ml-1">kg</span>
-            </h2>
-            <p className="font-body text-xs text-on-surface-variant mt-1">סה"כ הורם אי פעם</p>
-          </div>
-          <div className="bg-primary-container/10 rounded-xl px-4 py-3 text-center">
-            <span className="font-label text-[9px] text-on-surface-variant uppercase block">תחזית חודשית</span>
-            <span className="font-headline font-bold text-lg text-primary-fixed-dim">
-              ~{(compound?.projectedMonthly || 0).toLocaleString()}kg
-            </span>
+      <section className="bg-[#1A1A1A] rounded-2xl overflow-hidden animate-fade-up-delay-1">
+        {/* Section eyebrow */}
+        <div className="px-6 pt-6 pb-0">
+          <span className="text-[#CCFF00] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">TOTAL VOLUME</span>
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <h2 className="text-white font-black text-5xl tracking-tighter leading-none">
+                {(compound?.totalLifted || 0).toLocaleString()}
+                <span className="text-white/50 text-xl font-normal ml-2">kg</span>
+              </h2>
+              <p className="text-white/50 text-xs mt-1">סה"כ הורם אי פעם</p>
+            </div>
+            <div className="bg-[#CCFF00]/10 border border-[#CCFF00]/20 rounded-xl px-4 py-3 text-center shrink-0">
+              <span className="text-white/50 text-[9px] uppercase tracking-widest block">תחזית חודשית</span>
+              <span className="text-[#CCFF00] font-black text-xl">
+                ~{(compound?.projectedMonthly || 0).toLocaleString()}kg
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Cumulative volume graph */}
-        {compound?.cumulativeVolume?.length >= 2 ? (
-          <div className="space-y-1">
-            <span className="font-label text-[9px] text-on-surface-variant uppercase">נפח מצטבר לאורך זמן</span>
-            <CumulativeGraph data={compound.cumulativeVolume} />
-          </div>
-        ) : (
-          <EmptyGraph label="השלם אימונים כדי לראות את הגרף" />
-        )}
+        <div className="px-6 pt-5 pb-2">
+          {compound?.cumulativeVolume?.length >= 2 ? (
+            <div className="space-y-1">
+              <span className="text-white/50 text-[9px] uppercase tracking-widest">נפח מצטבר לאורך זמן</span>
+              <CumulativeGraph data={compound.cumulativeVolume} />
+            </div>
+          ) : (
+            <EmptyGraph label="השלם אימונים כדי לראות את הגרף" />
+          )}
+        </div>
 
         {/* Projection cards */}
         {compound?.projection && (
-          <div className="space-y-2">
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">בקצב הנוכחי עד סוף השנה:</span>
+          <div className="px-6 pb-5 space-y-2">
+            <span className="text-white/50 text-[9px] uppercase tracking-widest">בקצב הנוכחי עד סוף השנה:</span>
             <div className="grid grid-cols-3 gap-2">
               {[
                 { label: '3 חודשים', val: compound.projection.months3 },
                 { label: '6 חודשים', val: compound.projection.months6 },
                 { label: '12 חודשים', val: compound.projection.months12 },
               ].map(({ label, val }) => (
-                <div key={label} className="bg-surface-container rounded-xl p-3 text-center">
-                  <span className="font-label text-[9px] text-on-surface-variant block">{label}</span>
-                  <span className="font-headline font-bold text-sm text-primary-fixed-dim">+{((val || 0) - (compound.totalLifted || 0)).toLocaleString()}kg</span>
+                <div key={label} className="bg-[#111] rounded-xl p-3 text-center border border-white/5">
+                  <span className="text-white/50 text-[9px] block">{label}</span>
+                  <span className="text-[#CCFF00] font-black text-sm">+{((val || 0) - (compound.totalLifted || 0)).toLocaleString()}kg</span>
                 </div>
               ))}
             </div>
@@ -147,36 +153,36 @@ export default function Analytics() {
 
         {/* Milestone banner */}
         {compound?.milestone && compound.milestone.daysLeft <= 60 && (
-          <div className="flex items-center gap-3 bg-primary-container/10 rounded-xl px-4 py-3 border border-primary-fixed-dim/20">
-            <span className="material-symbols-outlined text-primary-fixed-dim text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>flag</span>
-            <p className="font-body text-sm flex-1">
-              עוד <span className="font-bold text-primary-fixed-dim">{compound.milestone.daysLeft} ימים</span> תגיע ל-{compound.milestone.name}
+          <div className="mx-6 mb-5 flex items-center gap-3 bg-[#CCFF00]/10 rounded-xl px-4 py-3 border border-[#CCFF00]/20">
+            <span className="material-symbols-outlined text-[#CCFF00] text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>flag</span>
+            <p className="text-white text-sm flex-1">
+              עוד <span className="font-black text-[#CCFF00]">{compound.milestone.daysLeft} ימים</span> תגיע ל-{compound.milestone.name}
             </p>
           </div>
         )}
 
         {/* Einstein quote */}
-        <div className="border-r-2 border-primary-fixed-dim pr-4 py-1">
-          <p className="font-body text-xs text-on-surface-variant italic">"ריבית דריבית היא הפלא השמיני של העולם"</p>
-          <span className="font-label text-[9px] text-on-surface-variant/60 mt-1 block">— Albert Einstein</span>
+        <div className="mx-6 mb-6 border-r-2 border-[#CCFF00] pr-4 py-1">
+          <p className="text-white/50 text-xs italic">"ריבית דריבית היא הפלא השמיני של העולם"</p>
+          <span className="text-white/30 text-[9px] mt-1 block">— Albert Einstein</span>
         </div>
       </section>
 
       {/* ── 2. זיהוי תקיעות ── */}
       <section className="space-y-3 animate-fade-up-delay-2">
-        <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-secondary-dim text-lg">warning</span>
-          <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-on-surface-variant">זיהוי תקיעות</h2>
+        <div className="space-y-0.5">
+          <span className="text-[#CCFF00] text-[10px] tracking-[0.25em] font-black uppercase block">PLATEAU DETECTION</span>
+          <h2 className="text-white font-black text-2xl tracking-tighter uppercase">זיהוי תקיעות</h2>
         </div>
 
         {(!plateaus?.plateaus?.length) ? (
-          <div className="bg-surface-container-low rounded-xl p-5 flex items-center gap-3">
-            <span className="material-symbols-outlined text-2xl text-primary-fixed-dim" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <div className="bg-[#1A1A1A] rounded-2xl p-5 flex items-center gap-3 border border-[#CCFF00]/20">
+            <span className="material-symbols-outlined text-2xl text-[#CCFF00]" style={{ fontVariationSettings: "'FILL' 1" }}>
               check_circle
             </span>
             <div>
-              <p className="font-headline font-bold text-base">אתה מתקדם בכל התרגילים</p>
-              <p className="font-body text-xs text-on-surface-variant">המשך כך — אין תקיעות שזוהו</p>
+              <p className="text-white font-black text-base">אתה מתקדם בכל התרגילים</p>
+              <p className="text-white/50 text-xs">המשך כך — אין תקיעות שזוהו</p>
             </div>
           </div>
         ) : (
@@ -189,17 +195,17 @@ export default function Analytics() {
       </section>
 
       {/* ── 3. ממוצעים נעים ── */}
-      <section className="bg-surface-container-low rounded-xl p-6 space-y-4 animate-fade-up-delay-3">
-        <div className="flex items-center justify-between">
+      <section className="bg-[#1A1A1A] rounded-2xl p-6 space-y-4 animate-fade-up-delay-3">
+        <div className="flex items-start justify-between gap-3">
           <div>
-            <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block">ממוצעים נעים</span>
-            <h2 className="font-headline font-bold text-lg">Moving Average — MA3</h2>
+            <span className="text-[#CCFF00] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">MOVING AVERAGE</span>
+            <h2 className="text-white font-black text-2xl tracking-tighter uppercase leading-none">ממוצעים נעים — MA3</h2>
           </div>
           {exList.length > 0 && (
             <select
               value={selectedExercise}
               onChange={e => setSelectedExercise(e.target.value)}
-              className="bg-surface-container-highest rounded-lg px-3 py-2 font-label text-xs text-on-surface outline-none focus:ring-1 focus:ring-primary-container max-w-[140px]"
+              className="bg-[#111] border border-white/10 rounded-xl px-3 py-2 text-white text-xs outline-none focus:border-[#CCFF00]/40 max-w-[140px] shrink-0"
             >
               {exList.map(ex => (
                 <option key={ex} value={ex}>{ex}</option>
@@ -211,14 +217,14 @@ export default function Analytics() {
         {maData.length >= 2 ? (
           <>
             <MovingAvgGraph data={maData} />
-            <div className="flex items-center gap-4 text-xs font-label">
+            <div className="flex items-center gap-4 text-xs">
               <div className="flex items-center gap-1.5">
-                <span className="w-4 border-t-2 border-dashed border-white/40 inline-block"></span>
-                <span className="text-on-surface-variant">משקל בפועל</span>
+                <span className="w-4 border-t-2 border-dashed border-white/30 inline-block"></span>
+                <span className="text-white/50">משקל בפועל</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-4 border-t-2 border-[#CCFF00] inline-block"></span>
-                <span className="text-primary-fixed-dim">MA3</span>
+                <span className="text-[#CCFF00] font-black">MA3</span>
               </div>
             </div>
           </>
@@ -229,7 +235,10 @@ export default function Analytics() {
 
       {/* ── 4. סטטיסטיקות כלליות ── */}
       <section className="space-y-3">
-        <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">סטטיסטיקות כלליות</span>
+        <div className="space-y-0.5">
+          <span className="text-[#CCFF00] text-[10px] tracking-[0.25em] font-black uppercase block">BY THE NUMBERS</span>
+          <h2 className="text-white font-black text-2xl tracking-tighter uppercase leading-none">סטטיסטיקות</h2>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           <StatCard
             icon="emoji_events"
@@ -262,36 +271,39 @@ export default function Analytics() {
         </div>
       </section>
 
-      {/* War Room link */}
-      <button
-        onClick={() => navigate('/war-room')}
-        className="w-full bg-surface-container-low rounded-xl p-4 flex items-center justify-between active:scale-[0.98] duration-200 border border-primary-fixed-dim/20"
-      >
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary-fixed-dim" style={{ fontVariationSettings: "'FILL' 1" }}>analytics</span>
-          <div>
-            <span className="font-headline font-bold text-sm block">War Room השבועי</span>
-            <span className="font-label text-[10px] text-on-surface-variant">ניתוח שבועי מלא עם ציון</span>
+      {/* ── Quick links ── */}
+      <div className="space-y-3">
+        {/* War Room link */}
+        <button
+          onClick={() => navigate('/war-room')}
+          className="w-full bg-[#1A1A1A] rounded-2xl p-5 flex items-center justify-between active:scale-[0.98] duration-200 border border-[#CCFF00]/20"
+        >
+          <div className="flex items-center gap-3">
+            <span className="material-symbols-outlined text-[#CCFF00]" style={{ fontVariationSettings: "'FILL' 1" }}>analytics</span>
+            <div className="text-right">
+              <span className="text-white font-black text-sm block">War Room השבועי</span>
+              <span className="text-white/50 text-[10px]">ניתוח שבועי מלא עם ציון</span>
+            </div>
           </div>
-        </div>
-        <span className="font-label text-xs text-primary-fixed-dim flex items-center gap-1 font-bold">
-          כנס <span className="material-symbols-outlined text-base">arrow_forward</span>
-        </span>
-      </button>
+          <span className="text-[#CCFF00] text-xs flex items-center gap-1 font-black">
+            כנס <span className="material-symbols-outlined text-base">arrow_forward</span>
+          </span>
+        </button>
 
-      {/* Exercise History Link */}
-      <button
-        onClick={() => navigate('/exercises')}
-        className="w-full bg-surface-container-low rounded-xl p-4 flex items-center justify-between active:scale-[0.98] duration-200"
-      >
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary-fixed-dim">history</span>
-          <span className="font-headline font-bold text-sm">היסטוריית תרגילים</span>
-        </div>
-        <span className="font-label text-xs text-on-surface-variant flex items-center gap-1">
-          צפה בכל התרגילים <span className="material-symbols-outlined text-base">arrow_forward</span>
-        </span>
-      </button>
+        {/* Exercise History Link */}
+        <button
+          onClick={() => navigate('/exercises')}
+          className="w-full bg-[#1A1A1A] rounded-2xl p-5 flex items-center justify-between active:scale-[0.98] duration-200 border border-white/5"
+        >
+          <div className="flex items-center gap-3">
+            <span className="material-symbols-outlined text-[#CCFF00]">history</span>
+            <span className="text-white font-black text-sm">היסטוריית תרגילים</span>
+          </div>
+          <span className="text-white/50 text-xs flex items-center gap-1">
+            צפה בכל התרגילים <span className="material-symbols-outlined text-base">arrow_forward</span>
+          </span>
+        </button>
+      </div>
 
     </main>
   )
@@ -301,24 +313,24 @@ export default function Analytics() {
 
 function PlateauCard({ plateau, onAsk }) {
   return (
-    <div className="bg-surface-container-low rounded-xl p-5 border-l-4 border-[#ffa500] space-y-3">
+    <div className="bg-[#1A1A1A] rounded-2xl p-5 border-l-4 border-[#CCFF00] space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="font-headline font-bold text-base">{plateau.exercise}</h3>
+          <h3 className="text-white font-black text-base tracking-tight">{plateau.exercise}</h3>
           <div className="flex gap-3 mt-1">
-            <span className="font-label text-xs text-on-surface-variant">{plateau.currentWeight}kg נוכחי</span>
-            <span className="font-label text-xs text-[#ffa500] font-bold">{plateau.sessionsStuck} אימונים תקוע</span>
+            <span className="text-white/50 text-xs">{plateau.currentWeight}kg נוכחי</span>
+            <span className="text-[#CCFF00] text-xs font-black">{plateau.sessionsStuck} אימונים תקוע</span>
           </div>
         </div>
-        <span className="material-symbols-outlined text-[#ffa500] text-2xl shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>
+        <span className="material-symbols-outlined text-[#CCFF00] text-2xl shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>
           warning
         </span>
       </div>
-      <div className="flex items-center justify-between">
-        <span className="font-body text-sm text-on-surface-variant">{plateau.suggestion}</span>
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-white/50 text-sm flex-1">{plateau.suggestion}</span>
         <button
           onClick={() => onAsk(`אני תקוע ב-${plateau.exercise} על ${plateau.currentWeight}kg כבר ${plateau.sessionsStuck} אימונים. מה לעשות?`)}
-          className="flex items-center gap-1.5 bg-surface-container-highest px-3 py-2 rounded-lg font-label text-xs font-bold active:scale-95 duration-200 hover:text-primary-fixed-dim shrink-0"
+          className="flex items-center gap-1.5 bg-[#CCFF00]/10 border border-[#CCFF00]/30 text-[#CCFF00] px-3 py-2 rounded-xl text-xs font-black active:scale-95 duration-200 shrink-0"
         >
           <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
           שאל את ה-AI
@@ -330,23 +342,23 @@ function PlateauCard({ plateau, onAsk }) {
 
 function StatCard({ icon, label, value, sub, accent }) {
   return (
-    <div className="bg-surface-container-low rounded-xl p-5">
+    <div className={`bg-[#1A1A1A] rounded-2xl p-5 ${accent ? 'border-l-4 border-[#CCFF00]' : 'border border-white/5'}`}>
       <div className="flex items-center gap-2 mb-2">
-        <span className={`material-symbols-outlined text-base ${accent ? 'text-primary-fixed-dim' : 'text-on-surface-variant'}`}>
+        <span className={`material-symbols-outlined text-base ${accent ? 'text-[#CCFF00]' : 'text-white/50'}`}>
           {icon}
         </span>
-        <span className="font-label text-[10px] text-on-surface-variant uppercase">{label}</span>
+        <span className="text-white/50 text-[10px] uppercase tracking-widest">{label}</span>
       </div>
-      <span className={`font-headline font-bold text-2xl block ${accent ? 'text-primary-fixed-dim' : ''}`}>{value}</span>
-      <span className="font-label text-[10px] text-on-surface-variant mt-0.5 block">{sub}</span>
+      <span className={`font-black text-3xl tracking-tighter block ${accent ? 'text-[#CCFF00]' : 'text-white'}`}>{value}</span>
+      <span className="text-white/50 text-[10px] mt-1 block">{sub}</span>
     </div>
   )
 }
 
 function EmptyGraph({ label }) {
   return (
-    <div className="w-full h-20 rounded-lg bg-surface-container flex items-center justify-center">
-      <span className="font-label text-xs text-on-surface-variant">{label}</span>
+    <div className="w-full h-20 rounded-xl bg-[#111] border border-white/5 flex items-center justify-center">
+      <span className="text-white/30 text-xs">{label}</span>
     </div>
   )
 }
@@ -386,14 +398,14 @@ function WorkoutDna({ dna, navigate }) {
   const { dominantType, sessionCount, typeBreakdown, pushPullBalance, weaknesses, strengths, recommendations } = dna
 
   return (
-    <section className="bg-surface-container-low rounded-xl overflow-hidden animate-fade-up space-y-0">
+    <section className="bg-[#1A1A1A] rounded-2xl overflow-hidden animate-fade-up">
       {/* Identity header */}
       <div className="p-6 pb-4" style={{ background: `linear-gradient(135deg, ${TYPE_COLORS[dominantType] || '#CCFF00'}18 0%, transparent 70%)` }}>
-        <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block mb-1">ה-DNA של האימון שלך</span>
-        <h2 className="font-headline font-bold text-2xl" style={{ color: TYPE_COLORS[dominantType] || '#CCFF00' }}>
+        <span className="text-[#CCFF00] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">WORKOUT DNA</span>
+        <h2 className="text-white font-black text-2xl tracking-tighter" style={{ color: TYPE_COLORS[dominantType] || '#CCFF00' }}>
           {DNA_LABELS[dominantType] || dominantType}
         </h2>
-        <p className="font-body text-xs text-on-surface-variant mt-1">מבוסס על {sessionCount} אימונים</p>
+        <p className="text-white/50 text-xs mt-1">מבוסס על {sessionCount} אימונים</p>
       </div>
 
       {/* Donut + breakdown */}
@@ -404,58 +416,58 @@ function WorkoutDna({ dna, navigate }) {
             {Object.entries(typeBreakdown).sort((a, b) => b[1] - a[1]).map(([type, pct]) => (
               <div key={type} className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: TYPE_COLORS[type] || '#666' }} />
-                <span className="font-label text-xs text-on-surface-variant flex-1">{TYPE_LABELS[type] || type}</span>
-                <span className="font-headline font-bold text-xs" style={{ color: TYPE_COLORS[type] || '#aaa' }}>{pct}%</span>
+                <span className="text-white/50 text-xs flex-1">{TYPE_LABELS[type] || type}</span>
+                <span className="font-black text-xs" style={{ color: TYPE_COLORS[type] || '#aaa' }}>{pct}%</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      <div className="border-t border-outline-variant/10 mx-6" />
+      <div className="border-t border-white/5 mx-6" />
 
       {/* Push/Pull balance */}
       {pushPullBalance && (
         <div className="px-6 py-4 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">איזון Push / Pull</span>
+            <span className="text-white/50 text-[10px] uppercase tracking-widest">איזון Push / Pull</span>
             {!pushPullBalance.balanced && (
-              <span className="font-label text-[9px] text-[#FF6B35] font-bold uppercase flex items-center gap-1">
+              <span className="text-[#FF6B35] text-[9px] font-black uppercase flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">warning</span>חוסר איזון
               </span>
             )}
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-label text-[10px] text-on-surface-variant w-8 text-right">Push</span>
-            <div className="flex-1 h-3 bg-surface-container rounded-full overflow-hidden flex">
+            <span className="text-white/50 text-[10px] w-8 text-right">Push</span>
+            <div className="flex-1 h-3 bg-[#111] rounded-full overflow-hidden flex">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{ width: `${pushPullBalance.push + pushPullBalance.pull > 0 ? (pushPullBalance.push / (pushPullBalance.push + pushPullBalance.pull)) * 100 : 50}%`, backgroundColor: '#CCFF00' }}
               />
               <div className="h-full flex-1 rounded-full" style={{ backgroundColor: '#00D4FF' }} />
             </div>
-            <span className="font-label text-[10px] text-on-surface-variant w-8">Pull</span>
+            <span className="text-white/50 text-[10px] w-8">Pull</span>
           </div>
           <div className="flex justify-between">
-            <span className="font-headline font-bold text-sm" style={{ color: '#CCFF00' }}>{pushPullBalance.push} תרגילי Push</span>
-            <span className="font-headline font-bold text-sm" style={{ color: '#00D4FF' }}>{pushPullBalance.pull} תרגילי Pull</span>
+            <span className="font-black text-sm" style={{ color: '#CCFF00' }}>{pushPullBalance.push} תרגילי Push</span>
+            <span className="font-black text-sm" style={{ color: '#00D4FF' }}>{pushPullBalance.pull} תרגילי Pull</span>
           </div>
         </div>
       )}
 
-      <div className="border-t border-outline-variant/10 mx-6" />
+      <div className="border-t border-white/5 mx-6" />
 
       {/* Strengths + Weaknesses */}
       {((strengths?.length > 0) || (weaknesses?.length > 0)) && (
         <div className="px-6 py-4 grid grid-cols-2 gap-4">
           {strengths?.length > 0 && (
             <div className="space-y-2">
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
+              <span className="text-white/50 text-[9px] uppercase tracking-widest flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs text-[#CCFF00]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>חוזקות
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {strengths.map((s, i) => (
-                  <span key={i} className="font-label text-[10px] px-2 py-1 rounded-full font-bold" style={{ backgroundColor: '#CCFF0020', color: '#CCFF00', border: '1px solid #CCFF0040' }}>
+                  <span key={i} className="text-[10px] px-2 py-1 rounded-full font-black" style={{ backgroundColor: '#CCFF0020', color: '#CCFF00', border: '1px solid #CCFF0040' }}>
                     {s}
                   </span>
                 ))}
@@ -464,12 +476,12 @@ function WorkoutDna({ dna, navigate }) {
           )}
           {weaknesses?.length > 0 && (
             <div className="space-y-2">
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
+              <span className="text-white/50 text-[9px] uppercase tracking-widest flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs text-[#FF6B35]" style={{ fontVariationSettings: "'FILL' 1" }}>fitness_center</span>לשיפור
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {weaknesses.map((w, i) => (
-                  <span key={i} className="font-label text-[10px] px-2 py-1 rounded-full font-bold" style={{ backgroundColor: '#FF6B3520', color: '#FF6B35', border: '1px solid #FF6B3540' }}>
+                  <span key={i} className="text-[10px] px-2 py-1 rounded-full font-black" style={{ backgroundColor: '#FF6B3520', color: '#FF6B35', border: '1px solid #FF6B3540' }}>
                     {w}
                   </span>
                 ))}
@@ -482,20 +494,20 @@ function WorkoutDna({ dna, navigate }) {
       {/* Recommendations */}
       {recommendations?.length > 0 && (
         <>
-          <div className="border-t border-outline-variant/10 mx-6" />
+          <div className="border-t border-white/5 mx-6" />
           <div className="px-6 py-4 space-y-2">
-            <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">המלצות אימון</span>
+            <span className="text-[#CCFF00] text-[10px] uppercase tracking-[0.25em] font-black">המלצות אימון</span>
             <div className="space-y-2">
               {recommendations.slice(0, 3).map((rec, i) => (
-                <div key={i} className="bg-surface-container rounded-xl p-4 flex items-center gap-3">
+                <div key={i} className="bg-[#111] rounded-xl p-4 flex items-center gap-3 border border-white/5">
                   <div className="flex-1 min-w-0">
-                    <p className="font-headline font-bold text-sm truncate">{rec.title}</p>
-                    <p className="font-body text-xs text-on-surface-variant mt-0.5">{rec.desc}</p>
+                    <p className="text-white font-black text-sm truncate">{rec.title}</p>
+                    <p className="text-white/50 text-xs mt-0.5">{rec.desc}</p>
                   </div>
                   {rec.workoutId && (
                     <button
                       onClick={() => navigate('/plans')}
-                      className="shrink-0 px-3 py-1.5 rounded-lg font-headline font-bold text-xs active:scale-95 duration-200"
+                      className="shrink-0 px-3 py-1.5 rounded-lg font-black text-xs active:scale-95 duration-200"
                       style={{ backgroundColor: '#CCFF00', color: '#0e0e0e' }}
                     >
                       לתוכנית
@@ -541,7 +553,7 @@ function DonutChart({ breakdown }) {
         <path key={arc.type} d={arc.d} fill={TYPE_COLORS[arc.type] || '#666'} opacity={arc.type === dominant ? 1 : 0.6} />
       ))}
       {/* Center hole */}
-      <circle cx={CX} cy={CY} r={R - STROKE} fill="#1e1e1e" />
+      <circle cx={CX} cy={CY} r={R - STROKE} fill="#1A1A1A" />
       <text x={CX} y={CY - 4} textAnchor="middle" fontSize="8" fill="white" fontWeight="bold" fontFamily="sans-serif">
         {TYPE_LABELS[dominant] || dominant}
       </text>
@@ -574,7 +586,4 @@ function MovingAvgGraph({ data }) {
         <circle key={i} cx={toX(i)} cy={toY(d.weight)} r="2.5" fill="rgba(255,255,255,0.45)" />
       ))}
       {/* MA3 line — lime */}
-      <path d={maPath} fill="none" stroke="#CCFF00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
+      <path d={maPath} fill="none" stroke="#CCF

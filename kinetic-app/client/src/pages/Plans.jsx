@@ -9,6 +9,18 @@ const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
 const ACTIVE_KEY = 'kinetic_active_plan'
 
+// Badge labels per plan name keywords
+function getPlanBadge(name = '') {
+  const n = name.toUpperCase()
+  if (n.includes('AB') || n.includes('בטן')) return 'AB SPLIT'
+  if (n.includes('FULL') || n.includes('כל הגוף')) return 'FULL BODY'
+  if (n.includes('ABC') || n.includes('מתקדם')) return 'ABC ADVANCED'
+  if (n.includes('PUSH') || n.includes('דחיפה')) return 'PUSH'
+  if (n.includes('PULL') || n.includes('משיכה')) return 'PULL'
+  if (n.includes('LEG') || n.includes('רגליים')) return 'LEGS'
+  return 'PROTOCOL'
+}
+
 export default function Plans() {
   const navigate = useNavigate()
   const { t } = useLang()
@@ -93,22 +105,31 @@ export default function Plans() {
     : null
 
   if (loading) return (
-    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto min-h-screen flex items-center justify-center">
-      <span className="font-headline text-2xl font-bold animate-pulse text-primary-fixed-dim">LOADING...</span>
+    <main className="min-h-screen bg-[#0e0e0e] flex items-center justify-center">
+      <span
+        className="text-2xl font-black tracking-widest animate-pulse"
+        style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#CCFF00' }}
+      >
+        LOADING...
+      </span>
     </main>
   )
 
   return (
-    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-6 min-h-screen">
-      {/* Video Modal */}
+    <main className="min-h-screen bg-[#0e0e0e] text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+
+      {/* Exercise Infographic Modal */}
       {videoExercise && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 overflow-y-auto"
-             onClick={() => setVideoExercise(null)}>
-          <div className="w-full max-w-md my-4"
-               onClick={e => e.stopPropagation()}>
-            <div className="flex justify-end mb-2">
-              <button onClick={() => setVideoExercise(null)}
-                      className="text-white bg-surface-container rounded-full p-1">
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setVideoExercise(null)}
+        >
+          <div className="w-full max-w-md my-4" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-end mb-3">
+              <button
+                onClick={() => setVideoExercise(null)}
+                className="text-white/70 hover:text-white bg-[#1A1A1A] rounded-full p-2 transition-colors"
+              >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
@@ -117,213 +138,235 @@ export default function Plans() {
         </div>
       )}
 
+      {/* Toast */}
       {toast && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-primary-container text-on-primary-fixed px-6 py-3 rounded-xl font-headline font-bold text-sm shadow-xl">
+        <div
+          className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl font-black text-sm shadow-2xl tracking-wider"
+          style={{ background: '#CCFF00', color: '#000' }}
+        >
           {toast}
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex justify-between items-end pt-4">
-        <div>
-          <span className="font-label text-primary-fixed-dim text-xs tracking-[0.2em] font-bold block">TRAINING</span>
-          <h1 className="font-headline text-4xl font-bold tracking-tight uppercase">{t('plans.title')}</h1>
-        </div>
-        <button
-          onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 bg-primary-container text-on-primary-fixed px-4 py-2 rounded-xl font-headline font-bold text-sm active:scale-95 duration-200"
-        >
-          <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
-          {t('plans.create')}
-        </button>
-      </div>
-
-      {/* Active plan banner */}
-      {activePlan && todayDay && (
-        <div className="bg-primary-container rounded-xl p-5 space-y-3">
+      {/* ── HERO HEADER ── */}
+      <section className="pt-24 pb-12 px-6 border-b border-white/10">
+        <div className="max-w-6xl mx-auto flex items-end justify-between gap-6">
           <div>
-            <span className="font-label text-[10px] text-on-primary-fixed/70 uppercase tracking-widest block">{t('plans.activePlan')}</span>
-            <p className="font-headline font-bold text-xl text-on-primary-fixed">{activePlan.name}</p>
-            <p className="font-label text-sm text-on-primary-fixed/80 mt-0.5">{t('plans.todayWorkout')}: {todayDay.name}</p>
-          </div>
-          <button
-            onClick={() => navigate(`/plans`)}
-            className="w-full bg-on-primary-fixed text-primary-container py-3 rounded-xl font-headline font-bold text-sm uppercase tracking-widest active:scale-[0.98] duration-200"
-          >
-            {t('plans.startToday')}
-          </button>
-        </div>
-      )}
-
-      {/* Plan detail view */}
-      {selected && (
-        <div className="bg-surface-container-low rounded-xl overflow-hidden">
-          <div className="p-5 flex items-start justify-between">
-            <div>
-              <h2 className="font-headline font-bold text-xl">{selected.name}</h2>
-              <p className="font-body text-sm text-on-surface-variant mt-1">{selected.description}</p>
-              <span className="font-label text-xs text-on-surface-variant mt-1 block">{selected.days?.length} {t('plans.days')}</span>
-            </div>
-            <button onClick={() => setSelected(null)} className="text-on-surface-variant">
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
-          <div className="divide-y divide-surface-container">
-            {selected.days?.map(day => (
-              <div key={day.id} className="px-5 py-4 space-y-2">
-                <p className="font-headline font-bold text-sm">{day.name}</p>
-                <div className="space-y-1">
-                  {day.exercises?.map((ex, i) => {
-                    const vid = EXERCISE_VIDEOS[ex.exercise_name]
-                    const displayName = vid?.hebrewName || ex.exercise_name
-                    return (
-                      <div key={i} className="flex justify-between items-center text-sm">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-body text-on-surface">{displayName}</span>
-                          {vid && (
-                            <button
-                              onClick={() => setVideoExercise(ex.exercise_name)}
-                              className="text-primary-fixed-dim hover:opacity-80 mr-2"
-                            >
-                              <span className="material-symbols-outlined text-sm">play_circle</span>
-                            </button>
-                          )}
-                        </div>
-                        <span className="font-label text-xs text-on-surface-variant">{ex.sets}×{ex.reps}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="p-5 flex gap-3">
-            <button
-              onClick={() => activatePlan(selected)}
-              className="flex-1 bg-primary-container text-on-primary-fixed py-3 rounded-xl font-headline font-bold text-sm uppercase active:scale-[0.98] duration-200"
+            <span
+              className="block text-xs font-black tracking-[0.3em] mb-3"
+              style={{ color: '#CCFF00' }}
             >
-              {t('plans.activate')}
-            </button>
-            {selected.is_custom === 1 && (
-              <button
-                onClick={() => deletePlan(selected.id)}
-                className="px-4 py-3 rounded-xl bg-surface-container text-on-surface-variant font-headline font-bold text-sm active:scale-[0.98] duration-200"
-              >
-                <span className="material-symbols-outlined text-base">delete</span>
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Plans grid */}
-      <div className="space-y-3">
-        {plans.map(plan => (
-          <button
-            key={plan.id}
-            onClick={() => openPlan(plan.id)}
-            className={`w-full text-right bg-surface-container-low rounded-xl p-5 flex items-center gap-4 active:scale-[0.98] duration-200 transition-all ${
-              activePlan?.id === plan.id ? 'border-l-4 border-primary-container' : ''
-            }`}
-          >
-            <span className="material-symbols-outlined text-3xl text-primary-fixed-dim" style={{ fontVariationSettings: "'FILL' 1" }}>
-              event_note
+              TRAINING PROTOCOLS
             </span>
-            <div className="flex-1 min-w-0">
-              <p className="font-headline font-bold text-base">{plan.name}</p>
-              <p className="font-body text-xs text-on-surface-variant truncate mt-0.5">{plan.description}</p>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="font-label text-[10px] text-on-surface-variant">{plan.days?.length} {t('plans.days')}</span>
-                {plan.is_custom ? (
-                  <span className="font-label text-[10px] bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant">{t('plans.custom')}</span>
-                ) : (
-                  <span className="font-label text-[10px] bg-primary-container/20 text-primary-fixed-dim px-2 py-0.5 rounded-full">{t('plans.builtin')}</span>
-                )}
-                {activePlan?.id === plan.id && (
-                  <span className="font-label text-[10px] bg-primary-container text-on-primary-fixed px-2 py-0.5 rounded-full">{t('plans.activePlan')}</span>
-                )}
-              </div>
-            </div>
-            <span className="material-symbols-outlined text-on-surface-variant">chevron_left</span>
+            <h1
+              className="text-5xl md:text-7xl font-black tracking-tight leading-none uppercase"
+              dir="rtl"
+            >
+              תוכניות אימון
+            </h1>
+          </div>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl font-black text-sm uppercase tracking-widest transition-all duration-200 active:scale-95 hover:opacity-90"
+            style={{ background: '#CCFF00', color: '#000' }}
+          >
+            <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
+            {t('plans.create')}
           </button>
-        ))}
-      </div>
+        </div>
+      </section>
 
-      {/* Create plan modal */}
-      {showCreate && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center px-4 pb-8">
-          <div className="bg-surface-container-low rounded-2xl p-6 w-full max-w-lg space-y-5 max-h-[85vh] overflow-y-auto">
-            <div className="flex justify-between items-center">
-              <h2 className="font-headline font-bold text-xl uppercase">{t('plans.createNew')}</h2>
-              <button onClick={() => setShowCreate(false)}>
-                <span className="material-symbols-outlined text-on-surface-variant">close</span>
+      <div className="max-w-6xl mx-auto px-6 py-10 space-y-12">
+
+        {/* ── ACTIVE PLAN BANNER ── */}
+        {activePlan && todayDay && (
+          <section
+            className="rounded-2xl p-8 flex flex-col md:flex-row md:items-center justify-between gap-6"
+            style={{ background: '#141414', border: '1px solid #CCFF00' }}
+          >
+            <div>
+              <span
+                className="block text-[10px] font-black tracking-[0.3em] uppercase mb-2"
+                style={{ color: '#CCFF00' }}
+              >
+                {t('plans.activePlan')}
+              </span>
+              <p className="text-2xl font-black uppercase" dir="rtl">{activePlan.name}</p>
+              <p className="text-white/50 text-sm mt-1 font-medium" dir="rtl">
+                {t('plans.todayWorkout')}: <span className="text-white font-bold">{todayDay.name}</span>
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/plans')}
+              className="px-8 py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+              style={{ background: '#CCFF00', color: '#000' }}
+            >
+              {t('plans.startToday')}
+            </button>
+          </section>
+        )}
+
+        {/* ── PLAN DETAIL PANEL ── */}
+        {selected && (
+          <section
+            className="rounded-2xl overflow-hidden"
+            style={{ background: '#141414', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            {/* Panel header */}
+            <div className="flex items-start justify-between p-6 border-b border-white/10">
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  <span
+                    className="text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase"
+                    style={{ background: '#CCFF00', color: '#000' }}
+                  >
+                    {getPlanBadge(selected.name)}
+                  </span>
+                  {selected.is_custom === 1 && (
+                    <span
+                      className="text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase border"
+                      style={{ borderColor: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.5)' }}
+                    >
+                      {t('plans.custom')}
+                    </span>
+                  )}
+                </div>
+                <h2 className="text-2xl font-black uppercase mt-2" dir="rtl">{selected.name}</h2>
+                {selected.description && (
+                  <p className="text-white/50 text-sm mt-1" dir="rtl">{selected.description}</p>
+                )}
+                <span className="text-white/40 text-xs font-bold tracking-widest mt-1 block">
+                  {selected.days?.length} {t('plans.days')}
+                </span>
+              </div>
+              <button
+                onClick={() => setSelected(null)}
+                className="text-white/40 hover:text-white transition-colors p-1"
+              >
+                <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
-            <input
-              className="w-full bg-surface-container-highest rounded-lg px-4 py-3 font-body text-sm outline-none"
-              placeholder={t('plans.planName')}
-              value={newName}
-              onChange={e => setNewName(e.target.value)}
-              dir="rtl"
-            />
-            <input
-              className="w-full bg-surface-container-highest rounded-lg px-4 py-3 font-body text-sm outline-none"
-              placeholder={t('plans.description')}
-              value={newDesc}
-              onChange={e => setNewDesc(e.target.value)}
-              dir="rtl"
-            />
-
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="font-label text-xs text-on-surface-variant uppercase">{t('plans.days')}</span>
-                <button
-                  onClick={() => setNewDays(d => [...d, { name: '', exercises: '' }])}
-                  className="font-label text-xs text-primary-fixed-dim font-bold"
-                >
-                  + {t('plans.addExercise')}
-                </button>
-              </div>
-              {newDays.map((day, i) => (
-                <div key={i} className="bg-surface-container rounded-xl p-4 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="font-label text-xs text-on-surface-variant">יום {i + 1}</span>
-                    {newDays.length > 1 && (
-                      <button onClick={() => setNewDays(d => d.filter((_, j) => j !== i))} className="text-on-surface-variant">
-                        <span className="material-symbols-outlined text-base">remove_circle</span>
-                      </button>
-                    )}
+            {/* Days + exercises */}
+            <div className="divide-y divide-white/5">
+              {selected.days?.map(day => (
+                <div key={day.id} className="px-6 py-5">
+                  <p
+                    className="text-xs font-black tracking-widest uppercase mb-3"
+                    style={{ color: '#CCFF00' }}
+                    dir="rtl"
+                  >
+                    {day.name}
+                  </p>
+                  <div className="space-y-2">
+                    {day.exercises?.map((ex, i) => {
+                      const vid = EXERCISE_VIDEOS[ex.exercise_name]
+                      const displayName = vid?.hebrewName || ex.exercise_name
+                      return (
+                        <div key={i} className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-white/80 font-medium" dir="rtl">{displayName}</span>
+                            {vid && (
+                              <button
+                                onClick={() => setVideoExercise(ex.exercise_name)}
+                                className="transition-colors hover:opacity-80"
+                                style={{ color: '#CCFF00' }}
+                              >
+                                <span className="material-symbols-outlined text-base">play_circle</span>
+                              </button>
+                            )}
+                          </div>
+                          <span className="text-xs font-black text-white/40 tracking-widest">
+                            {ex.sets}×{ex.reps}
+                          </span>
+                        </div>
+                      )
+                    })}
                   </div>
-                  <input
-                    className="w-full bg-surface-container-highest rounded-lg px-3 py-2 font-body text-sm outline-none"
-                    placeholder="שם היום — למשל: PUSH — חזה + כתפיים"
-                    value={day.name}
-                    onChange={e => setNewDays(d => d.map((x, j) => j === i ? { ...x, name: e.target.value } : x))}
-                    dir="rtl"
-                  />
-                  <textarea
-                    className="w-full bg-surface-container-highest rounded-lg px-3 py-2 font-body text-sm outline-none resize-none"
-                    placeholder={'תרגילים — שורה לכל תרגיל:\nBench Press\nPull-ups\nSquat'}
-                    rows={4}
-                    value={day.exercises}
-                    onChange={e => setNewDays(d => d.map((x, j) => j === i ? { ...x, exercises: e.target.value } : x))}
-                    dir="rtl"
-                  />
                 </div>
               ))}
             </div>
 
-            <button
-              onClick={createPlan}
-              disabled={saving || !newName.trim()}
-              className="w-full bg-primary-container text-on-primary-fixed py-4 rounded-xl font-headline font-bold text-sm uppercase tracking-widest active:scale-[0.98] duration-200 disabled:opacity-50"
+            {/* Panel actions */}
+            <div className="p-6 flex gap-3 border-t border-white/10">
+              <button
+                onClick={() => activatePlan(selected)}
+                className="flex-1 py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+                style={{ background: '#CCFF00', color: '#000' }}
+              >
+                {t('plans.activate')}
+              </button>
+              {selected.is_custom === 1 && (
+                <button
+                  onClick={() => deletePlan(selected.id)}
+                  className="px-5 py-4 rounded-xl font-black text-sm transition-all duration-200 hover:bg-red-900/40 active:scale-[0.98]"
+                  style={{ background: '#1A1A1A', color: 'rgba(255,255,255,0.4)' }}
+                >
+                  <span className="material-symbols-outlined text-base">delete</span>
+                </button>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* ── PREMIUM CATALOG GRID ── */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <span
+              className="text-xs font-black tracking-[0.3em] uppercase"
+              style={{ color: '#CCFF00' }}
             >
-              {saving ? t('common.loading') : t('plans.createNew')}
-            </button>
+              PREMIUM CATALOG
+            </span>
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-xs font-bold text-white/30">{plans.length} PROTOCOLS</span>
           </div>
-        </div>
-      )}
-    </main>
-  )
-}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {plans.map(plan => {
+              const isActive = activePlan?.id === plan.id
+              const badge = getPlanBadge(plan.name)
+              return (
+                <button
+                  key={plan.id}
+                  onClick={() => openPlan(plan.id)}
+                  className="group text-right rounded-2xl p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 active:scale-[0.98]"
+                  style={{
+                    background: '#1A1A1A',
+                    border: isActive ? '2px solid #CCFF00' : '2px solid transparent',
+                    outline: 'none',
+                  }}
+                >
+                  {/* Top row: badge + active indicator */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-col items-start gap-2">
+                      <span
+                        className="text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase transition-colors duration-300"
+                        style={
+                          isActive
+                            ? { background: '#CCFF00', color: '#000' }
+                            : { background: 'rgba(204,255,0,0.12)', color: '#CCFF00' }
+                        }
+                      >
+                        {badge}
+                      </span>
+                      {isActive && (
+                        <span
+                          className="text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase"
+                          style={{ background: '#CCFF00', color: '#000' }}
+                        >
+                          {t('plans.activePlan')}
+                        </span>
+                      )}
+                    </div>
+                    <span
+                      className="text-white/20 group-hover:text-white/60 transition-colors duration-200 material-symbols-outlined mt-1"
+                    >
+                      chevron_left
+                    </span>
+                  </div>
+
+                  {/* Plan name */}
+                  <div className="flex-1">
+                    <p
+                      cl
