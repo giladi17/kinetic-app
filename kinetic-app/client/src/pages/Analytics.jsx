@@ -494,11 +494,11 @@ function WorkoutDna({ dna, navigate }) {
                   </div>
                   {rec.workoutId && (
                     <button
-                      onClick={() => navigate(`/workout/${rec.workoutId}`)}
+                      onClick={() => navigate('/plans')}
                       className="shrink-0 px-3 py-1.5 rounded-lg font-headline font-bold text-xs active:scale-95 duration-200"
                       style={{ backgroundColor: '#CCFF00', color: '#0e0e0e' }}
                     >
-                      התחל
+                      לתוכנית
                     </button>
                   )}
                 </div>

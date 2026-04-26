@@ -7,8 +7,6 @@ import { authFetch } from './api'
 import AuthGuard from './components/AuthGuard'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
-import WorkoutLibrary from './pages/WorkoutLibrary'
-import ActiveWorkout from './pages/ActiveWorkout'
 import Progress from './pages/Progress'
 import Profile from './pages/Profile'
 import Nutrition from './pages/Nutrition'
@@ -83,7 +81,7 @@ function AppRoutes() {
 
   const showBanner = notifToast &&
     location.pathname !== '/onboarding' &&
-    !location.pathname.startsWith('/workout')
+    location.pathname !== '/onboarding'
 
   function dismissBanner() {
     localStorage.setItem(DISMISSED_KEY, '1')
@@ -113,9 +111,6 @@ function AppRoutes() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="workouts" element={<WorkoutLibrary />} />
-          <Route path="workout/:id" element={<ActiveWorkout />} />
-          <Route path="active-workout" element={<ActiveWorkout />} />
           <Route path="progress" element={<Progress />} />
           <Route path="nutrition" element={<Nutrition />} />
           <Route path="supplements" element={<Supplements />} />

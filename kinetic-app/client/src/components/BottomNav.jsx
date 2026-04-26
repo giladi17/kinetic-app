@@ -6,7 +6,6 @@ export default function BottomNav() {
 
   const NAV_ITEMS = [
     { to: '/dashboard', icon: 'home_max', label: t('nav.home') },
-    { to: '/workouts', icon: 'fitness_center', label: t('nav.workouts') },
     { to: '/nutrition', icon: 'restaurant', label: t('nav.nutrition') },
     { to: '/supplements', icon: 'medication', label: t('nav.supplements') },
     { to: '/plans', icon: 'event_note', label: t('nav.plans') },

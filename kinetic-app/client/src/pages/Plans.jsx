@@ -147,7 +147,7 @@ export default function Plans() {
             <p className="font-label text-sm text-on-primary-fixed/80 mt-0.5">{t('plans.todayWorkout')}: {todayDay.name}</p>
           </div>
           <button
-            onClick={() => navigate(`/workouts`)}
+            onClick={() => navigate(`/plans`)}
             className="w-full bg-on-primary-fixed text-primary-container py-3 rounded-xl font-headline font-bold text-sm uppercase tracking-widest active:scale-[0.98] duration-200"
           >
             {t('plans.startToday')}

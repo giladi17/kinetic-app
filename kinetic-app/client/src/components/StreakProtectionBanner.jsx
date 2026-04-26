@@ -38,7 +38,7 @@ export default function StreakProtectionBanner() {
         </p>
       </div>
       <button
-        onClick={() => navigate(`/workout/${status.quickWorkout?.id}`)}
+        onClick={() => navigate(`/plans`)}
         className="bg-on-secondary text-secondary px-4 py-2 rounded-lg
                    font-headline font-bold text-xs uppercase active:scale-95"
       >
