@@ -586,4 +586,7 @@ function MovingAvgGraph({ data }) {
         <circle key={i} cx={toX(i)} cy={toY(d.weight)} r="2.5" fill="rgba(255,255,255,0.45)" />
       ))}
       {/* MA3 line — lime */}
-      <path d={maPath} fill="none" stroke="#CCF
+      <path d={maPath} fill="none" stroke="#CCFF00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}

@@ -369,4 +369,171 @@ export default function Plans() {
                   {/* Plan name */}
                   <div className="flex-1">
                     <p
-                      cl
+                      className="text-lg font-black uppercase leading-tight group-hover:text-white transition-colors"
+                      dir="rtl"
+                    >
+                      {plan.name}
+                    </p>
+                    {plan.description && (
+                      <p className="text-white/40 text-xs mt-1 font-medium line-clamp-2" dir="rtl">
+                        {plan.description}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Footer: days + type */}
+                  <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                    <div className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-white/30">calendar_today</span>
+                      <span className="text-xs font-black text-white/40 tracking-widest">
+                        {plan.days?.length} {t('plans.days')}
+                      </span>
+                    </div>
+                    {plan.is_custom ? (
+                      <span
+                        className="text-[10px] font-black tracking-widest px-2 py-0.5 rounded-full uppercase border"
+                        style={{ borderColor: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.3)' }}
+                      >
+                        {t('plans.custom')}
+                      </span>
+                    ) : (
+                      <span
+                        className="text-[10px] font-black tracking-widest px-2 py-0.5 rounded-full uppercase"
+                        style={{ background: 'rgba(204,255,0,0.08)', color: '#CCFF00' }}
+                      >
+                        {t('plans.builtin')}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* ── AI COACH DARK SECTION ── */}
+        <section
+          className="rounded-2xl p-8 md:p-12 text-center"
+          style={{ background: '#141414', border: '1px solid rgba(255,255,255,0.06)' }}
+        >
+          <span
+            className="block text-xs font-black tracking-[0.3em] uppercase mb-4"
+            style={{ color: '#CCFF00' }}
+          >
+            AI COACH
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black uppercase mb-3" dir="rtl">
+            רוצה תוכנית מותאמת אישית?
+          </h2>
+          <p className="text-white/40 text-sm font-medium mb-8 max-w-md mx-auto" dir="rtl">
+            צור תוכנית חדשה בהתאם למטרות שלך, ימי האימון וציוד זמין.
+          </p>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+            style={{ background: '#CCFF00', color: '#000' }}
+          >
+            <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
+            {t('plans.create')}
+          </button>
+        </section>
+
+      </div>
+
+      {/* ── CREATE PLAN MODAL ── */}
+      {showCreate && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end md:items-center justify-center px-4 pb-4 md:pb-0">
+          <div
+            className="w-full max-w-lg rounded-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto"
+            style={{ background: '#141414', border: '1px solid rgba(255,255,255,0.1)' }}
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-black uppercase tracking-tight">{t('plans.createNew')}</h2>
+              <button
+                onClick={() => setShowCreate(false)}
+                className="text-white/40 hover:text-white transition-colors p-1"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <input
+              className="w-full rounded-xl px-4 py-3 font-bold text-sm outline-none transition-colors placeholder:text-white/30"
+              style={{ background: '#1A1A1A', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' }}
+              placeholder={t('plans.planName')}
+              value={newName}
+              onChange={e => setNewName(e.target.value)}
+              dir="rtl"
+            />
+            <input
+              className="w-full rounded-xl px-4 py-3 font-bold text-sm outline-none transition-colors placeholder:text-white/30"
+              style={{ background: '#1A1A1A', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' }}
+              placeholder={t('plans.description')}
+              value={newDesc}
+              onChange={e => setNewDesc(e.target.value)}
+              dir="rtl"
+            />
+
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-black text-white/40 uppercase tracking-widest">{t('plans.days')}</span>
+                <button
+                  onClick={() => setNewDays(d => [...d, { name: '', exercises: '' }])}
+                  className="text-xs font-black uppercase tracking-widest transition-colors hover:opacity-80"
+                  style={{ color: '#CCFF00' }}
+                >
+                  + {t('plans.addExercise')}
+                </button>
+              </div>
+              {newDays.map((day, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl p-4 space-y-3"
+                  style={{ background: '#1A1A1A', border: '1px solid rgba(255,255,255,0.06)' }}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-black text-white/30 tracking-widest">יום {i + 1}</span>
+                    {newDays.length > 1 && (
+                      <button
+                        onClick={() => setNewDays(d => d.filter((_, j) => j !== i))}
+                        className="text-white/30 hover:text-white/60 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-base">remove_circle</span>
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    className="w-full rounded-lg px-3 py-2 font-bold text-sm outline-none placeholder:text-white/20"
+                    style={{ background: '#0e0e0e', border: '1px solid rgba(255,255,255,0.08)', color: '#fff' }}
+                    placeholder="שם היום — למשל: PUSH — חזה + כתפיים"
+                    value={day.name}
+                    onChange={e => setNewDays(d => d.map((x, j) => j === i ? { ...x, name: e.target.value } : x))}
+                    dir="rtl"
+                  />
+                  <textarea
+                    className="w-full rounded-lg px-3 py-2 font-bold text-sm outline-none resize-none placeholder:text-white/20"
+                    style={{ background: '#0e0e0e', border: '1px solid rgba(255,255,255,0.08)', color: '#fff' }}
+                    placeholder={'תרגילים — שורה לכל תרגיל:\nBench Press\nPull-ups\nSquat'}
+                    rows={4}
+                    value={day.exercises}
+                    onChange={e => setNewDays(d => d.map((x, j) => j === i ? { ...x, exercises: e.target.value } : x))}
+                    dir="rtl"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={createPlan}
+              disabled={saving || !newName.trim()}
+              className="w-full py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{ background: '#CCFF00', color: '#000' }}
+            >
+              {saving ? t('common.loading') : t('plans.createNew')}
+            </button>
+          </div>
+        </div>
+      )}
+    </main>
+  )
+}
