@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
@@ -25,7 +25,7 @@ export default function Admin() {
     setLoading(true); setError(null)
     try {
       const res = await fetch(`${API}/api/admin/stats`, { headers: { 'x-admin-secret': secret } })
-      if (\!res.ok) { setError('סיסמה שגויה או שגיאת שרת'); return }
+      if (!res.ok) { setError('סיסמה שגויה או שגיאת שרת'); return }
       setData(await res.json())
       localStorage.setItem('admin_secret', secret)
     } catch { setError('שגיאת רשת') } finally { setLoading(false) }
@@ -43,7 +43,7 @@ export default function Admin() {
     setSetTierMsg(d.ok ? `✅ עודכן — user #${d.userId} → ${d.tier}` : `❌ ${d.error}`)
   }
 
-  if (\!data) {
+  if (!data) {
     return (
       <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-6">
         <div className="w-full max-w-sm space-y-4">

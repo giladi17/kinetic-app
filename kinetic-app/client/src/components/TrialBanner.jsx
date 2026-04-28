@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useUser } from '../context/UserContext'
 
 export default function TrialBanner() {
@@ -7,7 +7,7 @@ export default function TrialBanner() {
     () => localStorage.getItem('trial_banner_dismissed') === new Date().toDateString()
   )
 
-  if (\!user || dismissed) return null
+  if (!user || dismissed) return null
 
   const daysLeft = user.daysLeft ?? 0
   const tier = user.tier || 'free'
@@ -15,9 +15,9 @@ export default function TrialBanner() {
 
   // Only show for trial users (premium tier + days left) or expired free users
   const isTrialActive = isPremium && daysLeft > 0 && daysLeft <= 7
-  const isExpired = \!isPremium && tier \!== 'premium'
+  const isExpired = !isPremium && tier !== 'premium'
 
-  if (\!isTrialActive && \!isExpired) return null
+  if (!isTrialActive && !isExpired) return null
 
   function dismiss() {
     localStorage.setItem('trial_banner_dismissed', new Date().toDateString())
@@ -71,7 +71,7 @@ export default function TrialBanner() {
         </span>
         <p className={`font-body text-xs ${c.text} truncate`}>
           {daysLeft === 1
-            ? 'יום אחד נשאר לניסיון\! שדרג כדי לא לאבד גישה'
+            ? 'יום אחד נשאר לניסיון! שדרג כדי לא לאבד גישה'
             : `${daysLeft} ימים נשארו לניסיון Premium`}
         </p>
       </div>

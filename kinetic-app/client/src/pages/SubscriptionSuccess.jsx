@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useUser } from '../context/UserContext'
 
@@ -32,7 +32,7 @@ export default function SubscriptionSuccess() {
         </div>
 
         <div className="space-y-2">
-          <h1 className="font-headline text-3xl font-bold uppercase">ברוך הבא Premium\!</h1>
+          <h1 className="font-headline text-3xl font-bold uppercase">ברוך הבא Premium!</h1>
           <p className="font-body text-on-surface-variant leading-relaxed">
             המנוי שלך פעיל. כל הפיצ'רים של KINETIC פתוחים בפניך עכשיו.
           </p>
@@ -55,7 +55,7 @@ export default function SubscriptionSuccess() {
 
         <button
           onClick={() => navigate('/dashboard')}
-          disabled={\!ready}
+          disabled={!ready}
           className="w-full bg-primary-container text-on-primary-fixed py-4 rounded-xl font-headline font-bold text-sm tracking-widest shadow-[0_0_20px_rgba(202,253,0,0.3)] disabled:opacity-50 active:scale-95 duration-200"
         >
           {ready ? 'בוא נתחיל ✦' : 'מפעיל...'}

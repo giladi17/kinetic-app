@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+﻿import { useEffect, useState, useRef } from 'react'
 import { premiumFetch, authFetch } from '../api'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
@@ -30,7 +30,7 @@ function BarcodeScanner({ onAdd }) {
   const [scanning, setScanning] = useState(false)
   const [notFound, setNotFound] = useState(false)
   async function scan() {
-    if (\!barcode.trim()) return
+    if (!barcode.trim()) return
     setScanning(true); setNotFound(false); setProduct(null)
     try {
       const res = await fetch(`${API}/nutrition/scan/${barcode.trim()}`)
@@ -43,7 +43,7 @@ function BarcodeScanner({ onAdd }) {
     <div className="mt-4 space-y-4">
       <div className="flex gap-2">
         <input className="flex-1 bg-[#262626] rounded-lg px-4 py-3 text-white text-sm outline-none focus:ring-2 focus:ring-[#CCFF00]" placeholder="הזן מספר ברקוד..." value={barcode} onChange={e => setBarcode(e.target.value)} onKeyDown={e => e.key === 'Enter' && scan()} type="tel" />
-        <button onClick={scan} disabled={scanning || \!barcode.trim()} className="bg-[#CCFF00] text-black px-4 py-3 rounded-lg font-black text-sm active:scale-95 disabled:opacity-50">{scanning ? '...' : 'חפש'}</button>
+        <button onClick={scan} disabled={scanning || !barcode.trim()} className="bg-[#CCFF00] text-black px-4 py-3 rounded-lg font-black text-sm active:scale-95 disabled:opacity-50">{scanning ? '...' : 'חפש'}</button>
       </div>
       {notFound && <p className="text-white/40 text-sm text-center">המוצר לא נמצא</p>}
       {product && (
@@ -101,7 +101,7 @@ export default function Nutrition() {
   }
 
   useEffect(() => {
-    if (\!addModal) return
+    if (!addModal) return
     function onKey(e) { if (e.key === 'Escape') setAddModal(null) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -109,7 +109,7 @@ export default function Nutrition() {
 
   async function fetchGapFiller() {
     const res = await premiumFetch(`${API}/nutrition/gap-filler`)
-    if (\!res) return
+    if (!res) return
     const g = await res.json()
     setGapFiller(g)
   }
@@ -117,7 +117,7 @@ export default function Nutrition() {
   function handleSearchChange(q) {
     setAddSearch(q); setSelectedFood(null)
     clearTimeout(searchTimerRef.current)
-    if (\!q.trim()) { setSearchResults([]); return }
+    if (!q.trim()) { setSearchResults([]); return }
     searchTimerRef.current = setTimeout(async () => {
       const res = await authFetch(`${API}/nutrition/search?q=${encodeURIComponent(q)}`)
       const d = await res.json()
@@ -184,7 +184,7 @@ export default function Nutrition() {
               <h3 className="font-black text-white text-lg uppercase tracking-tight leading-none">סריקת ברקוד</h3>
               <p className="text-white/40 text-xs mt-1">הוסף מוצר לפי מספר ברקוד</p>
             </div>
-            <button onClick={() => setShowBarcode(s => \!s)} className="bg-[#CCFF00] text-black px-4 py-2 rounded-lg font-black text-xs tracking-widest active:scale-95 hover:-translate-y-0.5 transition-all duration-300">סרוק</button>
+            <button onClick={() => setShowBarcode(s => !s)} className="bg-[#CCFF00] text-black px-4 py-2 rounded-lg font-black text-xs tracking-widest active:scale-95 hover:-translate-y-0.5 transition-all duration-300">סרוק</button>
           </div>
           {showBarcode && (
             <BarcodeScanner onAdd={async (meal) => {
@@ -390,7 +390,7 @@ export default function Nutrition() {
                 >הוסף {grams}g</button>
               </div>
             )}
-            {\!selectedFood && addSearch && (
+            {!selectedFood && addSearch && (
               <div className="space-y-2">
                 <span className="text-white/40 text-[9px] uppercase tracking-widest font-black">תוצאות</span>
                 {searchResults.length === 0
@@ -414,9 +414,9 @@ export default function Nutrition() {
                 }
               </div>
             )}
-            {\!selectedFood && (
+            {!selectedFood && (
               <button
-                onClick={() => setAddBarcode(v => \!v)}
+                onClick={() => setAddBarcode(v => !v)}
                 className="w-full flex items-center justify-center gap-2 bg-[#262626] rounded-lg px-4 py-3 font-black text-white text-sm active:scale-[0.98] hover:-translate-y-0.5 transition-all duration-300"
               >📷 סריקת ברקוד</button>
             )}
@@ -428,7 +428,7 @@ export default function Nutrition() {
                 setData(updated); setAddModal(null); setAddBarcode(false)
               }} />
             )}
-            {\!addSearch && \!selectedFood && recentMeals.length > 0 && (
+            {!addSearch && !selectedFood && recentMeals.length > 0 && (
               <div className="space-y-2">
                 <span className="text-white/40 text-[9px] uppercase tracking-widest font-black">ארוחות אחרונות</span>
                 {recentMeals.map((m, i) => (
