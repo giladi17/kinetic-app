@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🚀 Open Production (Vercel)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://kinetic-app-lovat.vercel.app",
+      "webRoot": "${workspaceFolder}/kinetic-app/client/src"
+    },
+    {
+      "name": "🛠️ Dev Local (localhost)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/kinetic-app/client/src"
+    }
+  ]
+}

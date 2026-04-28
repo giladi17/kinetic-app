@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "📤 Push to Vercel (main)",
+      "type": "shell",
+      "command": "git add kinetic-app/client/src/ kinetic-app/client/tailwind.config.js kinetic-app/client/index.html kinetic-app/client/package.json kinetic-app/client/vite.config.js vercel.json && git commit -m \"update: deploy latest changes\" && git push origin main",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🌐 Open Production Site",
+      "type": "shell",
+      "command": "start https://kinetic-app-lovat.vercel.app",
+      "windows": {
+        "command": "start https://kinetic-app-lovat.vercel.app"
+      },
+      "group": "none",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "git.defaultBranchName": "main",
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "livePreview.serverRoot": "/kinetic-app/client/dist",
+  "editor.formatOnSave": true
+}
