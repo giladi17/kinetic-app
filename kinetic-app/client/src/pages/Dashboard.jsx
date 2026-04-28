@@ -272,7 +272,10 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
 
         {/* ① Recovery Index — 8 cols */}
-        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_60px_rgba(21,28,37,0.08)] transition-all duration-500">
+        <div
+          className="md:col-span-8 p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_60px_rgba(21,28,37,0.08)] transition-all duration-500 relative overflow-hidden"
+          style={{ backgroundImage: 'linear-gradient(135deg,rgba(248,249,255,0.97) 60%,rgba(204,255,0,0.08) 100%)' }}
+        >
           <div className="flex justify-between items-end mb-8">
             <div>
               <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">מדד התאוששות</h2>
@@ -301,52 +304,63 @@ export default function Dashboard() {
         </div>
 
         {/* ② Daily Steps — 4 cols */}
-        <div className="md:col-span-4 bg-on-background p-6 md:p-8 rounded-xl text-white flex flex-col justify-between min-h-[280px]">
-          <div className="flex justify-between items-start">
-            <span className="material-symbols-outlined text-primary-container text-4xl">bolt</span>
-            <div className="text-left">
-              <h2 className="text-xs font-black uppercase tracking-widest text-white/50">צעדים היום</h2>
-              <p className="text-3xl md:text-4xl font-black tracking-tighter">
-                {(d.steps ?? 0).toLocaleString()}
-              </p>
-              <p className="text-xs font-bold text-white/40">
-                / {(d.stepGoal ?? 10000).toLocaleString()} יעד
-              </p>
+        <div
+          className="md:col-span-4 p-6 md:p-8 rounded-xl text-white flex flex-col justify-between min-h-[280px] relative overflow-hidden"
+          style={{ backgroundImage: 'url(/images/athlete.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
+          <div className="absolute inset-0 bg-[#151C25]/80 rounded-xl" />
+          <div className="relative z-10 flex flex-col justify-between h-full">
+            <div className="flex justify-between items-start">
+              <span className="material-symbols-outlined text-primary-container text-4xl">bolt</span>
+              <div className="text-left">
+                <h2 className="text-xs font-black uppercase tracking-widest text-white/50">צעדים היום</h2>
+                <p className="text-3xl md:text-4xl font-black tracking-tighter">
+                  {(d.steps ?? 0).toLocaleString()}
+                </p>
+                <p className="text-xs font-bold text-white/40">
+                  / {(d.stepGoal ?? 10000).toLocaleString()} יעד
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* Step progress */}
-          <div className="my-4 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-xs font-black uppercase text-white/50">התקדמות</span>
-              <span className="text-xs font-black text-primary-container">{stepPct}%</span>
+            {/* Step progress */}
+            <div className="my-4 space-y-2">
+              <div className="flex justify-between">
+                <span className="text-xs font-black uppercase text-white/50">התקדמות</span>
+                <span className="text-xs font-black text-primary-container">{stepPct}%</span>
+              </div>
+              <div className="w-full h-2 rounded-full overflow-hidden bg-white/15">
+                <div
+                  className="h-full bg-primary-container rounded-full transition-all duration-700"
+                  style={{ width: `${stepPct}%` }}
+                />
+              </div>
             </div>
-            <div className="w-full h-2 rounded-full overflow-hidden bg-white/15">
-              <div
-                className="h-full bg-primary-container rounded-full transition-all duration-700"
-                style={{ width: `${stepPct}%` }}
-              />
-            </div>
-          </div>
 
-          <div className="space-y-3 pt-3 border-t border-white/10">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase text-white/50">דקות בעצימות גבוהה</span>
-              <span className="text-sm font-black">{d.activeMinutes || 0}ד'</span>
+            <div className="space-y-3 pt-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase text-white/50">דקות בעצימות גבוהה</span>
+                <span className="text-sm font-black">{d.activeMinutes || 0}ד'</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase text-white/50">רצף אימונים</span>
+                <span className="text-sm font-black text-primary-container">{d.streak ?? 0} ימים 🔥</span>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase text-white/50">רצף אימונים</span>
-              <span className="text-sm font-black text-primary-container">{d.streak ?? 0} ימים 🔥</span>
-            </div>
-          </div>
 
-          <p className="text-[10px] font-black uppercase tracking-widest mt-4 text-primary-container">
-            אין מקום לתירוצים
-          </p>
+            <p className="text-[10px] font-black uppercase tracking-widest mt-4 text-primary-container">
+              אין מקום לתירוצים
+            </p>
+          </div>
         </div>
 
         {/* ③ Nutrition Circular — 4 cols */}
-        <div className="md:col-span-4 bg-white p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_60px_rgba(21,28,37,0.08)] transition-all duration-500">
+        <div
+          className="md:col-span-4 p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_60px_rgba(21,28,37,0.08)] transition-all duration-500 relative overflow-hidden"
+          style={{ backgroundImage: 'url(/images/nutrition.jpg)', backgroundSize: 'cover', backgroundPosition: 'center top' }}
+        >
+          <div className="absolute inset-0 bg-white/92 rounded-xl" />
+          <div className="relative z-10">
           <h2 className="text-xl font-black uppercase tracking-tight mb-1">תזונה לביצועים</h2>
           <p className="text-on-secondary-container font-bold text-xs mb-5">הדלק שלך לניצחון</p>
 
@@ -379,6 +393,7 @@ export default function Dashboard() {
               <p className="text-[10px] text-on-secondary-container">/ {calTarget}</p>
             </div>
           </div>
+          </div>{/* z-10 wrapper */}
         </div>
 
         {/* ④ Metabolic Analysis — 8 cols */}
