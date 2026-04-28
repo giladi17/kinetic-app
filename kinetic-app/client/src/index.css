@@ -10,15 +10,7 @@ body {
   @apply transition-colors duration-300;
 }
 
-/* ── Tonal Layering Rule ──────────────────────────────────────────────────────
-   במקום קווים לבנים, שינוי גוון עדין בין שכבות. bg-white בdark mode → #151C25 */
-.dark .bg-white {
-  background-color: #151C25 !important;
-}
-
-.dark .text-landing-on-surface {
-  color: #ffffff !important;
-}
+/* Light-first design — no dark overrides */
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
@@ -30,11 +22,11 @@ body {
 .animate-fade-up-delay-3 { animation: fadeUp 0.35s ease 0.15s forwards; opacity: 0; }
 
 :root {
-  --accent-color: #beee00;
-  --accent-bright: #cafd00;
-  --accent-dim: #beee00;
-  --bg-primary: #0e0e0e;
-  --text-primary: #ffffff;
+  --accent-color: #CCFF00;
+  --accent-bright: #CCFF00;
+  --accent-dim: #a8d400;
+  --bg-primary: #F8F9FF;
+  --text-primary: #151C25;
 }
 
 body.theme-blue {
