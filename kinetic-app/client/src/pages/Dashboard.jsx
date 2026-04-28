@@ -92,7 +92,7 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const { user }            = useUser()
   const { user: authUser }  = useAuth()
-  const { t }               = useLang()
+  useLang()
   const {
     dashboard: appDashboard,
     todayNutrition: appMacros,
@@ -243,7 +243,7 @@ export default function Dashboard() {
 
       {/* ── Daily Challenge ── */}
       {challenge && (
-        <div className="mb-8 bg-surface-container-low border border-surface-container-high rounded-xl p-4 flex items-center gap-4">
+        <div className="mb-8 bg-surface-container-low rounded-xl p-4 flex items-center gap-4 shadow-[0_4px_40px_rgba(21,28,37,0.05)]">
           <div className="text-3xl shrink-0">{challenge.text.split(' ').pop()}</div>
           <div className="flex-1 min-w-0">
             <span className="text-[10px] text-on-secondary-container uppercase font-black tracking-widest block mb-0.5">
@@ -272,7 +272,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
 
         {/* ① Recovery Index — 8 cols */}
-        <div className="md:col-span-8 bg-white border border-surface-container-high p-6 md:p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-500">
+        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_60px_rgba(21,28,37,0.08)] transition-all duration-500">
           <div className="flex justify-between items-end mb-8">
             <div>
               <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">מדד התאוששות</h2>
@@ -346,7 +346,7 @@ export default function Dashboard() {
         </div>
 
         {/* ③ Nutrition Circular — 4 cols */}
-        <div className="md:col-span-4 bg-white p-6 md:p-8 rounded-xl border border-surface-container-high hover:shadow-xl transition-all duration-500">
+        <div className="md:col-span-4 bg-white p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_60px_rgba(21,28,37,0.08)] transition-all duration-500">
           <h2 className="text-xl font-black uppercase tracking-tight mb-1">תזונה לביצועים</h2>
           <p className="text-on-secondary-container font-bold text-xs mb-5">הדלק שלך לניצחון</p>
 
@@ -362,7 +362,7 @@ export default function Dashboard() {
           </div>
 
           {/* Macros row */}
-          <div className="mt-5 pt-4 border-t border-surface-container-high flex justify-around text-center">
+          <div className="mt-5 pt-4 flex justify-around text-center">
             <div>
               <p className="text-[10px] font-black uppercase text-on-secondary-container">פחמימות</p>
               <p className="text-lg font-black">{carbs}ג'</p>
@@ -382,7 +382,7 @@ export default function Dashboard() {
         </div>
 
         {/* ④ Metabolic Analysis — 8 cols */}
-        <div className="md:col-span-8 bg-white border border-surface-container-high p-6 md:p-8 rounded-xl">
+        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)]">
           <div className="flex justify-between items-center mb-7">
             <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">ניתוח מטבולי</h2>
             <span className="px-3 py-1 bg-on-background text-primary-container text-[10px] font-black rounded-full uppercase">
@@ -441,7 +441,7 @@ export default function Dashboard() {
           </div>
 
           {/* Water quick-add */}
-          <div className="mt-7 pt-5 border-t border-surface-container-high">
+          <div className="mt-7 pt-5">
             <p className="text-xs font-black uppercase tracking-widest text-on-secondary-container mb-3">
               הוסף מים מהיר
             </p>
@@ -525,7 +525,7 @@ export default function Dashboard() {
           ].map((m, i) => (
             <div
               key={i}
-              className="bg-white border border-surface-container-high p-5 rounded-xl space-y-2 hover:shadow-md transition-all duration-300"
+              className="bg-white p-5 rounded-xl space-y-2 shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_60px_rgba(21,28,37,0.08)] transition-all duration-300"
             >
               <span
                 className="material-symbols-outlined"
