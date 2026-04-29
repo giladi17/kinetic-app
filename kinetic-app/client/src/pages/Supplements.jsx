@@ -131,39 +131,45 @@ export default function Supplements() {
       )}
 
       {/* Hero */}
-      <section className="pt-24 px-6 max-w-4xl mx-auto border-b-2 border-[#CCFF00] pb-12">
-        <div className="flex justify-between items-start gap-4 mb-4">
+      <section className="pt-28 pb-16 px-8 max-w-5xl mx-auto">
+        <div className="flex justify-between items-end gap-6 border-b-4 border-[#CCFF00] pb-12">
           <div>
-            <span className="block text-xs font-black tracking-[0.3em] text-[#506600] mb-3 uppercase">KINETIC PERFORMANCE</span>
-            <h1 className="font-black text-6xl md:text-8xl leading-none tracking-tighter text-[#151C25]">תוספים</h1>
-            <p className="text-[#656464] text-lg mt-3">הדלק המדעי לביצועי שיא</p>
+            <span className="block text-[10px] font-black tracking-[0.5em] text-[#506600] mb-6 uppercase">KINETIC PERFORMANCE</span>
+            <h1 className="font-black text-7xl md:text-9xl leading-[0.85] tracking-tighter text-[#151C25]">תוספים</h1>
+            <p className="text-[#656464] text-base mt-5 tracking-widest uppercase font-medium">הדלק המדעי לביצועי שיא</p>
           </div>
           <button
             onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
-            className="flex items-center gap-2 bg-[#CCFF00] text-black px-5 py-3 font-black text-sm active:scale-95 duration-200 hover:bg-black hover:text-[#CCFF00] transition-all shrink-0 mt-4"
+            className="flex items-center gap-2 bg-[#CCFF00] text-black px-6 py-4 font-black text-xs tracking-widest active:scale-95 duration-200 hover:bg-black hover:text-[#CCFF00] transition-all shrink-0 uppercase"
           >
-            <span className="material-symbols-outlined text-lg">add</span>
-            הוסף
+            <span className="material-symbols-outlined text-base">add</span>
+            הוסף תוסף
           </button>
         </div>
       </section>
 
       {/* Supplement Cards */}
-      <section className="px-6 max-w-4xl mx-auto mt-10">
+      <section className="px-8 max-w-5xl mx-auto mt-6">
         {(supps || []).length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {(supps || []).map((s, idx) => (
-              <SupplementCard key={s.id} supp={s} info={SUPPLEMENT_INFO[s.name] || null} onTake={() => takeDose(s.id)} featured={idx === 0} />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-5">
-            <div className="flex items-center gap-4 mb-2">
-              <span className="text-xs font-black tracking-[0.3em] uppercase text-[#506600]">CURATED SELECTION</span>
-              <div className="flex-1 h-0.5 bg-black/10" />
+          <>
+            <div className="flex items-center gap-4 mb-10">
+              <span className="text-[10px] font-black tracking-[0.5em] uppercase text-[#506600]">MY SUPPLEMENTS</span>
+              <div className="flex-1 h-px bg-black/10" />
             </div>
-            <h2 className="text-3xl font-black tracking-tighter text-[#151C25] mb-6">תוספים מומלצים</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {(supps || []).map((s, idx) => (
+                <SupplementCard key={s.id} supp={s} info={SUPPLEMENT_INFO[s.name] || null} onTake={() => takeDose(s.id)} featured={idx === 0} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div>
+            <div className="flex items-center gap-4 mb-10">
+              <span className="text-[10px] font-black tracking-[0.5em] uppercase text-[#506600]">CURATED SELECTION</span>
+              <div className="flex-1 h-px bg-black/10" />
+            </div>
+            <h2 className="text-5xl font-black tracking-tighter text-[#151C25] mb-12">תוספים מומלצים</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {DEFAULT_CATALOG.map(preset => (
                 <CatalogCard key={preset.name} preset={preset} info={SUPPLEMENT_INFO[preset.name] || null}
                   onAdd={() => { setNewName(preset.name); setNewServings(String(preset.servings)); setShowModal(true) }} />
@@ -174,40 +180,38 @@ export default function Supplements() {
       </section>
 
       {/* Why Supplements */}
-      <section className="px-6 max-w-4xl mx-auto mt-20 bg-[#EEF4FF] py-16">
-        <div className="flex items-center gap-4 mb-8">
-          <span className="text-xs font-black tracking-[0.3em] uppercase text-[#506600]">THE SCIENCE</span>
-          <div className="flex-1 h-0.5 bg-black/10" />
-        </div>
-        <h2 className="text-4xl font-black tracking-tighter text-[#151C25] mb-10">למה תוספים?</h2>
-        <div className="space-y-6">
-          {WHY_FEATURES.map((f, i) => (
-            <div key={i} className="flex items-start gap-5 bg-white p-6 border-r-4 border-[#CCFF00]">
-              <div className="w-12 h-12 bg-[#CCFF00] flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-black text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
+      <section className="mt-28 bg-[#EEF4FF] py-24 px-8">
+        <div className="max-w-5xl mx-auto">
+          <span className="text-[10px] font-black tracking-[0.5em] uppercase text-[#506600] block mb-6">THE SCIENCE OF ELITE PERFORMANCE</span>
+          <h2 className="text-6xl font-black tracking-tighter text-[#151C25] mb-16">למה תוספים?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {WHY_FEATURES.map((f, i) => (
+              <div key={i} className="bg-white p-8 border-b-4 border-[#CCFF00] space-y-4">
+                <div className="w-14 h-14 bg-[#CCFF00] flex items-center justify-center">
+                  <span className="material-symbols-outlined text-black text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
+                </div>
+                <h3 className="text-[#151C25] font-black text-xl tracking-tight">{f.heading}</h3>
+                <p className="text-[#656464] text-sm leading-relaxed tracking-wide">{f.text}</p>
               </div>
-              <div>
-                <h3 className="text-[#151C25] font-black text-lg mb-1">{f.heading}</h3>
-                <p className="text-[#656464] text-sm leading-relaxed">{f.text}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="px-6 max-w-4xl mx-auto mt-12">
-        <div className="bg-[#151C25] p-12 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 opacity-10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" style={{ background: '#CCFF00' }} />
-          <div className="relative z-10 space-y-4">
-            <span className="inline-block bg-[#CCFF00] text-black text-xs font-black tracking-widest px-4 py-1.5">KINETIC PERFORMANCE</span>
-            <h2 className="text-white font-black text-4xl tracking-tighter">מוכן להתחיל?</h2>
-            <p className="text-white/50 text-sm max-w-sm mx-auto">הוסף את התוספים שלך ועקוב אחר ההתקדמות שלך יום אחר יום.</p>
+      <section className="px-8 max-w-5xl mx-auto mt-16 mb-8">
+        <div className="bg-[#151C25] p-16 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 opacity-10 rounded-full -translate-y-1/2 translate-x-1/2 blur-[80px]" style={{ background: '#CCFF00' }} />
+          <div className="absolute bottom-0 left-0 w-96 h-96 opacity-10 rounded-full translate-y-1/2 -translate-x-1/2 blur-[80px]" style={{ background: '#506600' }} />
+          <div className="relative z-10 max-w-xl mx-auto space-y-6">
+            <span className="inline-block bg-[#CCFF00] text-black text-[10px] font-black tracking-[0.4em] px-5 py-2 uppercase">KINETIC PERFORMANCE</span>
+            <h2 className="text-white font-black text-5xl md:text-6xl tracking-tighter leading-tight">בניית תוכנית<br />תוספים אישית</h2>
+            <p className="text-white/40 text-xs tracking-[0.2em] uppercase max-w-xs mx-auto">הוסף את התוספים שלך ועקוב אחר ההתקדמות יום אחר יום</p>
             <button
               onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
-              className="inline-flex items-center gap-2 bg-[#CCFF00] text-black px-8 py-3 font-black text-sm active:scale-95 duration-200 hover:bg-white transition-all"
+              className="inline-flex items-center gap-2 bg-[#CCFF00] text-black px-10 py-4 font-black text-xs tracking-[0.3em] active:scale-95 duration-200 hover:bg-white transition-all uppercase"
             >
-              <span className="material-symbols-outlined text-lg">add</span>
+              <span className="material-symbols-outlined text-base">add</span>
               הוסף תוסף ראשון
             </button>
           </div>
@@ -223,69 +227,74 @@ function SupplementCard({ supp, info, onTake, featured }) {
   const takenToday = supp.last_taken === today
 
   return (
-    <div className={`bg-white transition-all duration-300 hover:-translate-y-1 border-2 ${featured ? 'border-[#CCFF00]' : supp.low_stock ? 'border-orange-400' : 'border-black/10'}`}>
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-5">
+    <div className={`bg-white transition-all duration-500 hover:-translate-y-2 border-2 ${featured ? 'border-[#CCFF00]' : supp.low_stock ? 'border-orange-400' : 'border-black/10'}`}>
+      <div className="p-8">
+        {/* Header row */}
+        <div className="flex justify-between items-start mb-8">
           <div className="flex-1 min-w-0">
-            {info?.category && (
-              <span className="inline-block bg-[#EEF4FF] text-[#506600] text-[10px] font-black tracking-widest px-2 py-0.5 mb-2">{info.category}</span>
+            {info?.category ? (
+              <span className="inline-block bg-[#EEF4FF] text-[#506600] text-[9px] font-black tracking-[0.4em] px-3 py-1 mb-3 uppercase">{info.category}</span>
+            ) : (
+              <span className="inline-block bg-[#EEF4FF] text-[#506600] text-[9px] font-black tracking-[0.4em] px-3 py-1 mb-3 uppercase">SUPPLEMENT</span>
             )}
-            <h3 className="text-[#151C25] font-black text-2xl leading-tight">{supp.name}</h3>
-            {info?.shortDesc && <p className="text-[#656464] text-xs mt-1">{info.shortDesc}</p>}
-            <div className="flex items-center gap-1.5 mt-2">
-              <span className="text-base">🔥</span>
-              <span className="font-black text-sm text-[#506600]">DAY STREAK {supp.current_streak}</span>
+            <h3 className="text-[#151C25] font-black text-3xl leading-none tracking-tight">{supp.name}</h3>
+            {info?.shortDesc && <p className="text-[#656464] text-xs mt-2 tracking-wider">{info.shortDesc}</p>}
+            <div className="flex items-center gap-2 mt-3">
+              <span className="text-sm">🔥</span>
+              <span className="font-black text-xs tracking-[0.3em] text-[#506600] uppercase">Day Streak {supp.current_streak}</span>
             </div>
           </div>
           <button
             onClick={onTake}
             disabled={takenToday}
-            className={`mr-4 px-4 py-2.5 font-black text-sm tracking-widest active:scale-95 duration-200 transition-all shrink-0 ${
-              takenToday ? 'bg-[#EEF4FF] text-[#656464] cursor-default border-2 border-black/10' : 'bg-[#CCFF00] text-black hover:bg-black hover:text-[#CCFF00] border-2 border-transparent'
+            className={`mr-5 px-5 py-3 font-black text-xs tracking-[0.3em] uppercase active:scale-95 duration-200 transition-all shrink-0 ${
+              takenToday ? 'bg-[#EEF4FF] text-[#656464] cursor-default' : 'bg-[#CCFF00] text-black hover:bg-black hover:text-[#CCFF00]'
             }`}
           >
             {takenToday ? 'לקחתי ✓' : 'לקחתי'}
           </button>
         </div>
 
-        <div className="space-y-2 mb-5">
+        {/* Progress */}
+        <div className="space-y-2 mb-8">
           <div className="flex justify-between items-center">
-            <span className="text-[#656464] text-[10px] font-black tracking-widest uppercase">כמות שנשארה</span>
-            <span className="text-xs font-black" style={{ color: supp.low_stock ? '#f97316' : '#506600' }}>
+            <span className="text-[#656464] text-[9px] font-black tracking-[0.4em] uppercase">כמות שנשארה</span>
+            <span className="text-[9px] font-black tracking-widest uppercase" style={{ color: supp.low_stock ? '#f97316' : '#506600' }}>
               {supp.servings_remaining} / {supp.servings_total} מנות
             </span>
           </div>
-          <div className="w-full h-1.5 bg-[#EEF4FF] overflow-hidden">
-            <div className="h-full transition-all duration-500" style={{ width: `${supp.pct_remaining}%`, backgroundColor: supp.low_stock ? '#f97316' : '#CCFF00' }} />
+          <div className="w-full h-1 bg-[#EEF4FF] overflow-hidden">
+            <div className="h-full transition-all duration-700" style={{ width: `${supp.pct_remaining}%`, backgroundColor: supp.low_stock ? '#f97316' : '#CCFF00' }} />
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 mb-4">
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
           {[
             { value: Math.round(supp.servings_remaining), label: 'מנות' },
             { value: Math.round(supp.servings_remaining), label: 'ימים נותרו' },
             { value: `${supp.pct_remaining}%`, label: 'נשאר' },
           ].map((stat, i) => (
-            <div key={i} className="text-center bg-[#F8F9FF] border border-black/10 py-3">
-              <span className={`block font-black text-xl ${supp.low_stock && i === 0 ? 'text-orange-500' : 'text-[#151C25]'}`}>{stat.value}</span>
-              <span className="text-[#656464] text-[9px] font-black tracking-widest uppercase">{stat.label}</span>
+            <div key={i} className="text-center bg-[#F8F9FF] py-4 space-y-1">
+              <span className={`block font-black text-2xl ${supp.low_stock && i === 0 ? 'text-orange-500' : 'text-[#151C25]'}`}>{stat.value}</span>
+              <span className="text-[#656464] text-[8px] font-black tracking-[0.4em] uppercase block">{stat.label}</span>
             </div>
           ))}
         </div>
 
         {supp.low_stock && (
-          <div className="flex items-center gap-2 px-3 py-2 bg-orange-50 border border-orange-200 mb-4">
+          <div className="flex items-center gap-2 px-4 py-3 bg-orange-50 border-r-4 border-orange-400 mb-6">
             <span className="material-symbols-outlined text-orange-500 text-sm">warning</span>
-            <span className="text-orange-600 text-xs font-black">מלאי נמוך — הזמן מחדש!</span>
+            <span className="text-orange-600 text-[10px] font-black tracking-widest uppercase">מלאי נמוך — הזמן מחדש</span>
           </div>
         )}
 
         {info && (
           <button
             onClick={() => setExpanded(v => !v)}
-            className="w-full flex items-center justify-center gap-1.5 py-2.5 border-2 border-black/10 text-[#656464] text-xs font-black hover:text-[#151C25] hover:border-black/30 active:scale-[0.98] duration-200 transition-all"
+            className="w-full flex items-center justify-center gap-2 py-3 border border-black/10 text-[#656464] text-[10px] font-black tracking-[0.3em] uppercase hover:border-black/30 hover:text-[#151C25] active:scale-[0.98] duration-200 transition-all"
           >
-            {expanded ? 'סגור ↑' : 'פרטים ↓'}
+            {expanded ? 'סגור ↑' : 'פרטים נוספים ↓'}
           </button>
         )}
       </div>
