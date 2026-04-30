@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { authFetch } from '../api'
 import { SkeletonCard } from '../components/Skeleton'
 import { SUPPLEMENT_INFO } from '../data/supplementsInfo'
+import heroImg from '../assets/hero.png'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
@@ -136,9 +137,9 @@ export default function Supplements() {
       {/* Hero */}
       <section className="relative h-[50vh] min-h-[380px] flex items-end overflow-hidden">
         <img
-          src="/images/workout.jpg"
-          className="absolute inset-0 w-full h-full object-cover"
-          alt="workout"
+          src={heroImg}
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          alt="supplements hero"
         />
         <div className="absolute inset-0 bg-[#121212]/90" />
         <div className="relative z-10 w-full max-w-5xl mx-auto px-8 pb-14">
