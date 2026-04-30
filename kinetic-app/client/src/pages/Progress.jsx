@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchProgress, addWeightLog } from '../api'
 import { SkeletonCard, SkeletonText } from '../components/Skeleton'
+import progressHeroImg from '../assets/progress-hero.jpg'
 
 const SEEN_BADGES_KEY = 'kinetic_seen_badges'
 
@@ -59,7 +60,7 @@ export default function Progress() {
   const badges     = d.badgeProgress || []
 
   return (
-    <main className="pt-24 pb-32 px-6 max-w-7xl mx-auto min-h-screen space-y-8 bg-[#FBFBFA]">
+    <main className="pb-32 min-h-screen space-y-8 bg-[#FBFBFA]">
 
       {/* Badge unlock toast */}
       {newBadgeToast && (
@@ -81,13 +82,22 @@ export default function Progress() {
         />
       )}
 
-      {/* ── Page Header ── */}
-      <div className="flex items-end justify-between pt-2">
-        <div>
-          <p className="text-[#CCFF00] text-[10px] font-black tracking-[0.3em] uppercase mb-2">PERFORMANCE TRACKER</p>
-          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none text-[#121212]">Progress</h1>
-          <p className="text-[#656464] text-sm mt-1 font-bold">מעקב התקדמות אישי</p>
+      {/* ── Hero ── */}
+      <div className="relative overflow-hidden" style={{ height: '320px' }}>
+        <img src={progressHeroImg} alt="progress" className="absolute inset-0 w-full h-full object-cover object-top" />
+        <div className="absolute inset-0 bg-[#121212]/85" />
+        <div className="relative z-10 h-full flex flex-col justify-end px-6 pb-10 pt-24 max-w-7xl mx-auto">
+          <p className="text-[#CCFF00] text-[10px] font-black tracking-[0.4em] uppercase mb-3">PERFORMANCE TRACKER</p>
+          <h1 className="text-7xl md:text-[9rem] font-black uppercase tracking-[-0.04em] leading-none text-white">Progress</h1>
+          <p className="text-white/50 text-sm mt-2 uppercase tracking-widest font-bold">מעקב התקדמות אישי</p>
         </div>
+      </div>
+
+      {/* ── Content ── */}
+      <div className="px-6 max-w-7xl mx-auto space-y-8">
+
+      {/* ── Add Measurement Button ── */}
+      <div className="flex justify-end">
         <button
           onClick={() => setShowModal(true)}
           className="flex items-center gap-2 bg-[#CCFF00] text-black font-black text-sm px-5 py-3 rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200"
@@ -254,6 +264,7 @@ export default function Progress() {
           </div>
         </section>
       )}
+      </div>{/* content wrapper */}
     </main>
   )
 }

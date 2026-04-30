@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { authFetch } from '../api'
 import { SkeletonCard } from '../components/Skeleton'
 import { SUPPLEMENT_INFO } from '../data/supplementsInfo'
-import heroImg from '../assets/hero.png'
+import heroImg from '../assets/supplements-bg.jpg'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 

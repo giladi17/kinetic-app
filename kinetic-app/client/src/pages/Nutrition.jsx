@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { premiumFetch, authFetch } from '../api'
+import saladImg from '../assets/salad.jpg'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
@@ -174,8 +175,8 @@ export default function Nutrition() {
 
       {/* ── Hero ── */}
       <div className="relative overflow-hidden" style={{ height: '340px' }}>
-        <img src="/images/nutrition.jpg" alt="nutrition" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-[#121212]/65" />
+        <img src={saladImg} alt="nutrition" className="absolute inset-0 w-full h-full object-cover object-center" />
+        <div className="absolute inset-0 bg-[#121212]/82" />
         <div className="relative z-10 h-full flex flex-col justify-end px-6 pb-10 pt-24">
           <span className="text-[#CCFF00] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
           <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-white">תזונה</h1>
