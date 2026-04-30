@@ -140,13 +140,13 @@ export default function Supplements() {
           className="absolute inset-0 w-full h-full object-cover"
           alt="workout"
         />
-        <div className="absolute inset-0 bg-[#121212]/75" />
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-8 pb-12">
-          <span className="block text-[10px] font-black tracking-[0.5em] text-[#CCFF00] mb-4 uppercase">KINETIC PERFORMANCE</span>
+        <div className="absolute inset-0 bg-[#121212]/90" />
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-8 pb-14">
+          <span className="block text-[10px] font-black tracking-[0.5em] text-[#CCFF00] mb-6 uppercase">KINETIC PERFORMANCE</span>
           <div className="flex justify-between items-end gap-6">
             <div>
-              <h1 className="font-black text-7xl md:text-9xl leading-[0.85] tracking-tighter text-white">תוספים</h1>
-              <p className="text-[#CCFF00] text-base mt-3 tracking-[0.2em] uppercase font-black">הדלק המדעי לביצועי שיא</p>
+              <h1 className="font-black text-[6rem] md:text-[11rem] leading-[0.82] tracking-[-0.04em] text-white">תוספים</h1>
+              <p className="text-[#CCFF00] text-sm mt-4 tracking-[0.4em] uppercase font-black">הדלק המדעי לביצועי שיא</p>
             </div>
             <button
               onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
@@ -195,11 +195,11 @@ export default function Supplements() {
           <h2 className="text-6xl font-black tracking-tighter text-white mb-16">למה תוספים?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {WHY_FEATURES.map((f, i) => (
-              <div key={i} className="bg-[#1a1a1a] rounded-xl shadow-lg p-8 space-y-4">
+              <div key={i} className="bg-[#1a1a1a] rounded-xl p-10 space-y-5 border-b-4 border-[#CCFF00] hover:-translate-y-1 transition-all duration-300">
                 <div className="w-14 h-14 bg-[#CCFF00] rounded-xl flex items-center justify-center">
                   <span className="material-symbols-outlined text-black text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
                 </div>
-                <h3 className="text-white font-black text-xl tracking-tight">{f.heading}</h3>
+                <h3 className="text-white font-black text-2xl tracking-tighter">{f.heading}</h3>
                 <p className="text-white/50 text-sm leading-relaxed tracking-wide">{f.text}</p>
               </div>
             ))}
@@ -214,8 +214,8 @@ export default function Supplements() {
           <div className="absolute bottom-0 left-0 w-96 h-96 opacity-20 rounded-full translate-y-1/2 -translate-x-1/2 blur-[80px]" style={{ background: '#000000' }} />
           <div className="relative z-10 max-w-xl mx-auto space-y-6">
             <span className="inline-block bg-[#121212] text-[#CCFF00] text-[10px] font-black tracking-[0.4em] px-5 py-2 uppercase rounded-xl">KINETIC PERFORMANCE</span>
-            <h2 className="text-[#121212] font-black text-5xl md:text-6xl tracking-tighter leading-tight">בניית תוכנית<br />תוספים אישית</h2>
-            <p className="text-[#121212]/60 text-xs tracking-[0.2em] uppercase max-w-xs mx-auto">הוסף את התוספים שלך ועקוב אחר ההתקדמות יום אחר יום</p>
+            <h2 className="text-[#121212] font-black text-6xl md:text-7xl tracking-[-0.04em] leading-[0.88]">בניית תוכנית<br />תוספים אישית</h2>
+            <p className="text-[#121212]/60 text-xs tracking-[0.35em] uppercase max-w-xs mx-auto">הוסף את התוספים שלך ועקוב אחר ההתקדמות יום אחר יום</p>
             <button
               onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
               className="inline-flex items-center gap-2 bg-[#121212] text-[#CCFF00] px-10 py-4 font-black text-xs tracking-[0.3em] rounded-xl shadow-xl hover:-translate-y-0.5 active:scale-95 duration-200 transition-all uppercase"
@@ -236,18 +236,16 @@ function SupplementCard({ supp, info, onTake, featured }) {
   const takenToday = supp.last_taken === today
 
   return (
-    <div className="bg-[#121212] rounded-2xl shadow-2xl text-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
-      <div className="p-8">
+    <div className="bg-[#121212] rounded-2xl shadow-2xl text-white transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
+      <div className="p-10">
         {/* Header row */}
         <div className="flex justify-between items-start mb-8">
           <div className="flex-1 min-w-0">
-            {info?.category ? (
-              <span className="inline-block bg-[#CCFF00]/10 text-[#CCFF00] text-[9px] font-black tracking-[0.4em] px-3 py-1 mb-3 uppercase rounded-lg">{info.category}</span>
-            ) : (
-              <span className="inline-block bg-[#CCFF00]/10 text-[#CCFF00] text-[9px] font-black tracking-[0.4em] px-3 py-1 mb-3 uppercase rounded-lg">SUPPLEMENT</span>
-            )}
-            <h3 className="text-white font-black text-3xl leading-none tracking-tight">{supp.name}</h3>
-            {info?.shortDesc && <p className="text-white/40 text-xs mt-2 tracking-wider">{info.shortDesc}</p>}
+            <span className="inline-block bg-[#CCFF00]/10 text-[#CCFF00] text-[9px] font-black tracking-[0.5em] px-3 py-1 mb-4 uppercase rounded-lg">
+              {info?.category || 'SUPPLEMENT'}
+            </span>
+            <h3 className="text-white font-black text-4xl md:text-5xl leading-none tracking-tighter">{supp.name}</h3>
+            {info?.shortDesc && <p className="text-white/40 text-xs mt-3 tracking-widest uppercase">{info.shortDesc}</p>}
             <div className="flex items-center gap-2 mt-3">
               <span className="text-sm">🔥</span>
               <span className="font-black text-xs tracking-[0.3em] text-[#CCFF00] uppercase">Day Streak {supp.current_streak}</span>
@@ -280,14 +278,14 @@ function SupplementCard({ supp, info, onTake, featured }) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           {[
             { value: Math.round(supp.servings_remaining), label: 'מנות' },
             { value: Math.round(supp.servings_remaining), label: 'ימים נותרו' },
             { value: `${supp.pct_remaining}%`, label: 'נשאר' },
           ].map((stat, i) => (
-            <div key={i} className="text-center bg-[#1a1a1a] rounded-xl py-4 space-y-1">
-              <span className={`block font-black text-2xl ${supp.low_stock && i === 0 ? 'text-orange-500' : 'text-white'}`}>{stat.value}</span>
+            <div key={i} className="text-right bg-[#1a1a1a] rounded-xl py-5 px-4 space-y-1">
+              <span className={`block font-black text-3xl tracking-tighter ${supp.low_stock && i === 0 ? 'text-orange-500' : 'text-white'}`}>{stat.value}</span>
               <span className="text-white/30 text-[8px] font-black tracking-[0.4em] uppercase block">{stat.label}</span>
             </div>
           ))}
@@ -317,30 +315,30 @@ function SupplementCard({ supp, info, onTake, featured }) {
 function CatalogCard({ preset, info, onAdd }) {
   const [expanded, setExpanded] = useState(false)
   return (
-    <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-      <div className="p-5">
-        <span className="inline-block bg-[#CCFF00] text-black text-[10px] font-black tracking-[0.2em] px-2 py-0.5 mb-3 rounded-md">{preset.category}</span>
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-[#FBFBFA] rounded-xl flex items-center justify-center shrink-0">
-            <span className="material-symbols-outlined text-[#121212] text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>{preset.icon}</span>
+    <div className="bg-[#121212] rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+      <div className="p-8">
+        <span className="inline-block bg-[#CCFF00]/10 text-[#CCFF00] text-[9px] font-black tracking-[0.5em] px-3 py-1 mb-5 uppercase rounded-lg">{preset.category}</span>
+        <div className="flex items-start gap-4 mb-5">
+          <div className="w-12 h-12 bg-[#1a1a1a] rounded-xl flex items-center justify-center shrink-0">
+            <span className="material-symbols-outlined text-[#CCFF00] text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>{preset.icon}</span>
           </div>
-          <div className="text-right flex-1 min-w-0">
-            <span className="text-[#121212] font-black text-base block">{preset.name}</span>
-            <span className="text-[#121212]/50 text-xs">{info?.shortDesc || `${preset.desc} · ${preset.servings} מנות`}</span>
+          <div className="flex-1 min-w-0">
+            <span className="text-white font-black text-2xl tracking-tighter block leading-tight">{preset.name}</span>
+            <span className="text-white/40 text-xs tracking-widest uppercase mt-1 block">{info?.shortDesc || preset.desc}</span>
           </div>
         </div>
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-3 mt-5">
           {info && (
             <button
               onClick={() => setExpanded(v => !v)}
-              className="flex-1 py-2 bg-[#121212] text-[#CCFF00] text-xs font-black rounded-xl shadow-xl hover:-translate-y-0.5 active:scale-90 duration-200 transition-all"
+              className="flex-1 py-3 bg-white/10 text-white/60 text-xs font-black rounded-xl hover:bg-white/15 hover:text-white active:scale-90 duration-200 transition-all tracking-widest uppercase"
             >
               {expanded ? 'סגור ↑' : 'פרטים ↓'}
             </button>
           )}
           <button
             onClick={onAdd}
-            className="flex-[2] flex items-center justify-center gap-1 bg-[#CCFF00] text-black px-3 py-2 font-black text-xs rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-90 duration-200 transition-all"
+            className="flex-[2] flex items-center justify-center gap-1 bg-[#CCFF00] text-black px-3 py-3 font-black text-xs rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-90 duration-200 transition-all tracking-widest uppercase"
           >
             <span className="material-symbols-outlined text-base">add</span>
             הוסף
@@ -354,7 +352,7 @@ function CatalogCard({ preset, info, onAdd }) {
 
 function InfoPanel({ info }) {
   return (
-    <div className="px-5 pb-5 space-y-4 border-t border-white/10 pt-4 bg-[#1a1a1a] rounded-b-2xl">
+    <div className="px-8 pb-8 space-y-4 border-t border-white/10 pt-5 bg-[#1a1a1a] rounded-b-2xl">
       <p className="text-white/60 text-sm leading-relaxed">{info.description}</p>
       <ul className="space-y-2">
         {info.benefits.map((b, i) => (
