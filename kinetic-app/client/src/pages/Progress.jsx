@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchProgress, addWeightLog } from '../api'
 import { SkeletonCard, SkeletonText } from '../components/Skeleton'
-import progressHeroImg from '../assets/progress-hero.jpg'
+const progressHeroImg = 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1XNtCO471NxM1P0UqG22ft25JvCI72IbymXeqK5fILJxb02ZZq0kQs4eCedCpo7BaMbU-r62b9x9IZngPtozoZvOAb0q7no2fctVkgArBxJYl3-2IElB-osf_qp27t75ffg4f7Vsxm1t0LxYZN0nuGT5U3eisD0smtpQUidj-S8gnPcD-3KPBWy3Zpq8JWYPcOgSvL3ydTjDQrYr1DFUg22-3Jj1fLztqp6hC204oDNykW8ji71_kKizDfPNAO8qOeW0wpdARDuU'
 
 const LIME = '#CCFF00'
 const SEEN_BADGES_KEY = 'kinetic_seen_badges'
