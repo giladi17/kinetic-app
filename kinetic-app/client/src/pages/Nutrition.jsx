@@ -361,7 +361,7 @@ export default function Nutrition() {
           onClick={e => { if (e.target === e.currentTarget) { setAddModal(null); setAddSearch(''); setAddBarcode(false); setSelectedFood(null); setSearchResults([]) } }}
         >
           <div className="bg-[#121212] rounded-2xl w-full max-w-lg space-y-4 max-h-[85vh] overflow-y-auto shadow-2xl p-6">
-            <div className="flex justify-between items-center pb-4" style={{ borderBottom: '1px solid rgba(204,255,0,0.15)' }}>
+            <div className="flex justify-between items-center pb-4 mb-2">
               <div>
                 <span className="text-[#CCFF00] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">ADD FOOD</span>
                 <h3 className="font-black text-white text-xl uppercase tracking-tight leading-none">הוסף ל{addModal}</h3>

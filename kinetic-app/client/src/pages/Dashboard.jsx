@@ -366,7 +366,7 @@ export default function Dashboard() {
         </div>
 
         {/* ④ Metabolic Analysis — 8 cols — WHITE (contrast card) */}
-        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-xl border border-[#E0E0E0] shadow-sm">
+        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)]">
           <div className="flex justify-between items-center mb-7">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">נתוני גוף</p>
@@ -408,9 +408,8 @@ export default function Dashboard() {
                   key={ml}
                   onClick={() => addWater(ml / 1000)}
                   className="py-2 rounded-lg font-black text-xs active:scale-90 duration-200 bg-[#F5F5F5] text-[#151C25] hover:text-[#121212] transition-all"
-                  style={{ border: '1px solid #E0E0E0' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = LIME; e.currentTarget.style.borderColor = LIME }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.borderColor = '#E0E0E0' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = LIME }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5' }}
                 >
                   +{ml}ml
                 </button>

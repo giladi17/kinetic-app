@@ -89,7 +89,7 @@ export default function Supplements() {
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-6">
           <div className="bg-[#121212] rounded-2xl shadow-2xl p-8 w-full max-w-sm space-y-6">
-            <div className="space-y-1 border-b border-[#CCFF00]/30 pb-4">
+            <div className="space-y-1 pb-4 mb-2">
               <span className="text-[#CCFF00] text-xs font-black tracking-[0.2em]">NEW SUPPLEMENT</span>
               <h2 className="text-white font-black text-2xl">תוסף חדש</h2>
             </div>
@@ -293,7 +293,7 @@ function SupplementCard({ supp, info, onTake, featured }) {
         </div>
 
         {supp.low_stock && (
-          <div className="flex items-center gap-2 px-4 py-3 bg-orange-500/10 border-r-4 border-orange-400 rounded-lg mb-6">
+          <div className="flex items-center gap-2 px-4 py-3 bg-orange-500/15 rounded-lg mb-6">
             <span className="material-symbols-outlined text-orange-500 text-sm">warning</span>
             <span className="text-orange-400 text-[10px] font-black tracking-widest uppercase">מלאי נמוך — הזמן מחדש</span>
           </div>
@@ -302,7 +302,7 @@ function SupplementCard({ supp, info, onTake, featured }) {
         {info && (
           <button
             onClick={() => setExpanded(v => !v)}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 text-white/40 text-[10px] font-black tracking-[0.3em] uppercase hover:border-[#CCFF00]/30 hover:text-[#CCFF00] active:scale-[0.98] duration-200 transition-all"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white/5 text-white/40 text-[10px] font-black tracking-[0.3em] uppercase hover:bg-[#CCFF00]/10 hover:text-[#CCFF00] active:scale-[0.98] duration-200 transition-all"
           >
             {expanded ? 'סגור ↑' : 'פרטים נוספים ↓'}
           </button>
@@ -374,7 +374,7 @@ function InfoPanel({ info }) {
         </div>
       </div>
       {info.warnings && (
-        <div className="flex items-start gap-2 px-3 py-2.5 bg-orange-500/10 border border-orange-400/20 rounded-lg">
+        <div className="flex items-start gap-2 px-3 py-2.5 bg-orange-500/10 rounded-lg">
           <span className="material-symbols-outlined text-orange-500 text-base shrink-0 mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>warning</span>
           <span className="text-orange-400 text-xs font-black">{info.warnings}</span>
         </div>
@@ -385,7 +385,7 @@ function InfoPanel({ info }) {
           <div className="flex flex-wrap gap-2">
             {info.buyLinks.map(link => (
               <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 bg-[#CCFF00]/10 border border-[#CCFF00]/20 text-[#CCFF00] px-3 py-2 text-xs font-black rounded-lg hover:bg-[#CCFF00] hover:text-black active:scale-95 duration-200 transition-all">
+                className="flex items-center gap-1.5 bg-[#CCFF00]/10 text-[#CCFF00] px-3 py-2 text-xs font-black rounded-lg hover:bg-[#CCFF00] hover:text-black active:scale-95 duration-200 transition-all">
                 <span>{link.flag}</span>{link.name}
               </a>
             ))}

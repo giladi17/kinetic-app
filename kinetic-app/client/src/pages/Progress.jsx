@@ -94,40 +94,42 @@ export default function Progress() {
       )}
 
       {/* ══════════════════════════════════════
-          HERO — Asymmetric two-column (screen.png)
-          Text right · Photo left · No overlay
+          HERO — Full-width bleeding asymmetric (screen.png)
+          Photo bleeds left edge · Text right with container padding
       ══════════════════════════════════════ */}
-      <section className="pt-32 pb-24 px-6 md:px-16 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row-reverse items-center gap-12">
+      <section className="pt-24 pb-0 overflow-hidden">
+        <div className="flex flex-col md:flex-row-reverse min-h-[580px]">
 
-          {/* Text block — right column */}
-          <div className="w-full md:w-1/2 text-right">
-            <span className="text-[10px] uppercase tracking-[0.4em] font-black block mb-4"
+          {/* Text block — right side, padded in container */}
+          <div className="md:w-[52%] px-6 md:px-16 py-20 text-right flex flex-col justify-center">
+            <span className="text-[10px] uppercase tracking-[0.4em] font-black block mb-5"
               style={{ color: '#656464' }}>PERFORMANCE DATA</span>
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-[#151C25]">
               הגבולות שלך<br />נמצאים מאחוריך
             </h1>
-            <p className="text-lg text-[#656464] max-w-md mr-auto leading-relaxed mb-8">
+            <p className="text-lg text-[#656464] max-w-md mr-auto leading-relaxed mb-10">
               ניתוח נתונים בזמן אמת המבוסס על ביצועי העבר שלך כדי להבטיח עתיד חזק יותר.
             </p>
-            <button
-              onClick={openModal}
-              className="inline-flex items-center gap-2 font-black text-sm px-6 py-3 rounded-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] text-[#151C25]"
-              style={{ backgroundColor: LIME }}
-            >
-              <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
-              הוסף מדידה
-            </button>
+            <div className="flex items-center gap-4 justify-end">
+              <button
+                onClick={openModal}
+                className="inline-flex items-center gap-2 font-black text-sm px-6 py-3 rounded-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] text-[#151C25]"
+                style={{ backgroundColor: LIME }}
+              >
+                <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
+                הוסף מדידה
+              </button>
+            </div>
           </div>
 
-          {/* Photo — left column (floats, no overlay) */}
-          <div className="w-full md:w-1/2 relative">
-            <div className="absolute -top-4 -left-4 w-24 h-24 rounded-full opacity-20" style={{ backgroundColor: LIME }} />
+          {/* Photo — left side, BLEEDS to viewport edge (no container padding) */}
+          <div className="md:w-[48%] relative overflow-hidden" style={{ minHeight: '420px' }}>
+            <div className="absolute top-8 right-8 w-20 h-20 rounded-full z-10 opacity-20 pointer-events-none"
+              style={{ backgroundColor: LIME }} />
             <img
               src={progressHeroImg}
               alt="athlete"
-              className="rounded-xl shadow-2xl relative z-10 w-full object-cover"
-              style={{ aspectRatio: '4/3' }}
+              className="absolute inset-0 w-full h-full object-cover object-center"
             />
           </div>
         </div>
@@ -140,7 +142,7 @@ export default function Progress() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
           {/* Weekly Progress Circle — 4 cols */}
-          <div className="lg:col-span-4 bg-white rounded-xl p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_40px_rgba(21,28,37,0.05)]">
+          <div className="lg:col-span-4 bg-white/80 backdrop-blur-[24px] rounded-xl p-8 flex flex-col items-center justify-center text-center shadow-[0_8px_48px_rgba(21,28,37,0.07)]">
             <span className="text-[10px] uppercase tracking-[0.3em] text-[#656464] font-black mb-8 block">
               מדד התקדמות שבועי
             </span>
@@ -213,20 +215,20 @@ export default function Progress() {
             {
               label: 'Body Fat %',
               value: d.bodyFat ? `${d.bodyFat}%` : (prs[0] ? `${d.bodyFat || 14.2}%` : '14.2%'),
-              trend: '-0.8% החודש', icon: 'trending_down', border: LIME,
+              trend: '-0.8% החודש', icon: 'trending_down',
             },
             {
               label: 'Lean Muscle Mass',
               value: d.currentWeight ? `${d.currentWeight}kg` : '72.4kg',
-              trend: '+1.2kg החודש', icon: 'trending_up', border: '#506600',
+              trend: '+1.2kg החודש', icon: 'trending_up',
             },
             {
               label: 'Strength PRs',
               value: prs[0] ? `${prs[0].weight}kg` : '140kg',
-              trend: prs[0]?.exercise_name || 'Deadlift Peak', icon: 'star', border: LIME,
+              trend: prs[0]?.exercise_name || 'Deadlift Peak', icon: 'star',
             },
           ].map((m, i) => (
-            <div key={i} className="bg-[#EEF4FF] p-8 rounded-xl" style={{ borderRight: `8px solid ${m.border}` }}>
+            <div key={i} className="bg-[#EEF4FF]/80 backdrop-blur-[24px] p-8 rounded-xl hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_32px_rgba(21,28,37,0.05)]">
               <span className="text-[10px] uppercase tracking-widest text-[#656464] font-black block mb-2">{m.label}</span>
               <div className="text-5xl font-black text-[#151C25] tracking-tighter">{m.value}</div>
               <div className="flex items-center gap-2 mt-4 font-black" style={{ color: '#506600' }}>
@@ -243,7 +245,7 @@ export default function Progress() {
       ══════════════════════════════════════ */}
       {logs.length >= 2 && (
         <section className="px-6 md:px-16 max-w-7xl mx-auto mb-24">
-          <div className="bg-white rounded-xl p-8 shadow-[0_4px_40px_rgba(21,28,37,0.05)]">
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-xl p-8 shadow-[0_8px_48px_rgba(21,28,37,0.07)]">
             <div className="flex justify-between items-start mb-6">
               <div className="text-right">
                 <span className="text-[10px] uppercase tracking-[0.3em] text-[#656464] font-black block mb-1">WEIGHT TRENDS</span>
@@ -316,7 +318,7 @@ export default function Progress() {
               <span className="material-symbols-outlined text-base">arrow_back</span>
             </button>
           </div>
-          <div className="bg-white rounded-xl overflow-hidden shadow-[0_4px_40px_rgba(21,28,37,0.05)]">
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-xl overflow-hidden shadow-[0_8px_48px_rgba(21,28,37,0.07)]">
             {prs.map((pr, i) => (
               <div key={i}
                 className="flex items-center justify-between px-8 py-5 hover:bg-[#F8F9FF] transition-colors"
@@ -377,7 +379,7 @@ export default function Progress() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {badges.map((badge, i) => (
               <div key={badge.id || i}
-                className={`bg-white rounded-xl p-5 shadow-[0_4px_40px_rgba(21,28,37,0.05)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3 ${badge.locked ? 'opacity-40 grayscale' : ''}`}
+                className={`bg-white/80 backdrop-blur-[24px] rounded-xl p-5 shadow-[0_8px_48px_rgba(21,28,37,0.07)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3 ${badge.locked ? 'opacity-40 grayscale' : ''}`}
                 style={badge.unlocked ? { boxShadow: `0 4px 20px rgba(204,255,0,0.12)` } : {}}>
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
