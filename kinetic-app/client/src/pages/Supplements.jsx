@@ -73,7 +73,7 @@ export default function Supplements() {
   function toast(msg) { setToastMsg(msg); setTimeout(() => setToastMsg(''), 2500) }
 
   if (loading) return (
-    <main className="pt-24 pb-32 px-6 max-w-4xl mx-auto space-y-4 min-h-screen bg-[#FBFBFA]">
+    <main className="pt-24 pb-32 px-6 max-w-4xl mx-auto space-y-4 min-h-screen bg-[#F8F9FF]">
       <div className="flex justify-between items-end pt-4">
         <SkeletonCard className="h-12 w-32" />
         <SkeletonCard className="h-10 w-20" />
@@ -272,25 +272,38 @@ export default function Supplements() {
   )
 }
 
-function SupplementCard({ supp, info, onTake, featured }) {
+function SupplementCard({ supp, info, onTake }) {
   const [expanded, setExpanded] = useState(false)
   const today = new Date().toISOString().split('T')[0]
   const takenToday = supp.last_taken === today
+  const productImg = STITCH_IMGS[supp.name]
 
   return (
-    <div className="bg-[#121212] rounded-2xl shadow-2xl text-white transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
+    <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_8px_48px_rgba(21,28,37,0.07)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_80px_rgba(21,28,37,0.12)] overflow-hidden">
+
+      {/* Product image — Stitch editorial photo */}
+      {productImg && (
+        <div className="aspect-square overflow-hidden bg-[#EEF4FF]">
+          <img
+            src={productImg}
+            alt={supp.name}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+          />
+        </div>
+      )}
+
       <div className="p-10">
         {/* Header row */}
         <div className="flex justify-between items-start mb-8">
-          <div className="flex-1 min-w-0">
-            <span className="inline-block bg-[#CCFF00]/10 text-[#CCFF00] text-[9px] font-black tracking-[0.5em] px-3 py-1 mb-4 uppercase rounded-lg">
+          <div className="flex-1 min-w-0 text-right">
+            <span className="inline-block bg-[#EEF4FF] text-[#506600] text-[9px] font-black tracking-[0.5em] px-3 py-1 mb-4 uppercase rounded-full">
               {info?.category || 'SUPPLEMENT'}
             </span>
-            <h3 className="text-white font-black text-4xl md:text-5xl leading-none tracking-tighter">{supp.name}</h3>
-            {info?.shortDesc && <p className="text-white/40 text-xs mt-3 tracking-widest uppercase">{info.shortDesc}</p>}
+            <h3 className="text-[#151C25] font-black text-4xl md:text-5xl leading-none tracking-tighter">{supp.name}</h3>
+            {info?.shortDesc && <p className="text-[#656464] text-xs mt-3 tracking-widest uppercase">{info.shortDesc}</p>}
             <div className="flex items-center gap-2 mt-3">
               <span className="text-sm">🔥</span>
-              <span className="font-black text-xs tracking-[0.3em] text-[#CCFF00] uppercase">Day Streak {supp.current_streak}</span>
+              <span className="font-black text-xs tracking-[0.3em] uppercase" style={{ color: '#506600' }}>Day Streak {supp.current_streak}</span>
             </div>
           </div>
           <button
@@ -298,52 +311,55 @@ function SupplementCard({ supp, info, onTake, featured }) {
             disabled={takenToday}
             className={`mr-5 px-5 py-3 font-black text-xs tracking-[0.2em] uppercase rounded-xl active:scale-95 duration-200 transition-all shrink-0 ${
               takenToday
-                ? 'bg-white/10 text-white/40 cursor-default'
-                : 'bg-[#CCFF00] text-black shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)]'
+                ? 'bg-[#EEF4FF] text-[#656464] cursor-default'
+                : 'bg-[#CCFF00] text-[#151C25] shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)]'
             }`}
           >
             {takenToday ? 'לקחתי ✓' : 'לקחתי'}
           </button>
         </div>
 
-        {/* Progress */}
+        {/* Progress bar */}
         <div className="space-y-2 mb-8">
           <div className="flex justify-between items-center">
-            <span className="text-white/40 text-[9px] font-black tracking-[0.4em] uppercase">כמות שנשארה</span>
-            <span className="text-[9px] font-black tracking-widest uppercase" style={{ color: supp.low_stock ? '#f97316' : '#CCFF00' }}>
+            <span className="text-[#656464] text-[9px] font-black tracking-[0.4em] uppercase">כמות שנשארה</span>
+            <span className="text-[9px] font-black tracking-widest uppercase" style={{ color: supp.low_stock ? '#f97316' : '#506600' }}>
               {supp.servings_remaining} / {supp.servings_total} מנות
             </span>
           </div>
-          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full transition-all duration-700 rounded-full" style={{ width: `${supp.pct_remaining}%`, backgroundColor: supp.low_stock ? '#f97316' : '#CCFF00' }} />
+          <div className="w-full h-1.5 bg-[#EEF4FF] rounded-full overflow-hidden">
+            <div className="h-full transition-all duration-700 rounded-full"
+              style={{ width: `${supp.pct_remaining}%`, backgroundColor: supp.low_stock ? '#f97316' : '#CCFF00' }} />
           </div>
         </div>
 
-        {/* Stats */}
+        {/* Stats grid */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           {[
             { value: Math.round(supp.servings_remaining), label: 'מנות' },
             { value: Math.round(supp.servings_remaining), label: 'ימים נותרו' },
             { value: `${supp.pct_remaining}%`, label: 'נשאר' },
           ].map((stat, i) => (
-            <div key={i} className="text-right bg-[#1a1a1a] rounded-xl py-5 px-4 space-y-1">
-              <span className={`block font-black text-3xl tracking-tighter ${supp.low_stock && i === 0 ? 'text-orange-500' : 'text-white'}`}>{stat.value}</span>
-              <span className="text-white/30 text-[8px] font-black tracking-[0.4em] uppercase block">{stat.label}</span>
+            <div key={i} className="text-right bg-[#EEF4FF] rounded-xl py-5 px-4 space-y-1">
+              <span className={`block font-black text-3xl tracking-tighter ${supp.low_stock && i === 0 ? 'text-orange-500' : 'text-[#151C25]'}`}>
+                {stat.value}
+              </span>
+              <span className="text-[#656464] text-[8px] font-black tracking-[0.4em] uppercase block">{stat.label}</span>
             </div>
           ))}
         </div>
 
         {supp.low_stock && (
-          <div className="flex items-center gap-2 px-4 py-3 bg-orange-500/15 rounded-lg mb-6">
+          <div className="flex items-center gap-2 px-4 py-3 bg-orange-500/10 rounded-lg mb-6">
             <span className="material-symbols-outlined text-orange-500 text-sm">warning</span>
-            <span className="text-orange-400 text-[10px] font-black tracking-widest uppercase">מלאי נמוך — הזמן מחדש</span>
+            <span className="text-orange-500 text-[10px] font-black tracking-widest uppercase">מלאי נמוך — הזמן מחדש</span>
           </div>
         )}
 
         {info && (
           <button
             onClick={() => setExpanded(v => !v)}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white/5 text-white/40 text-[10px] font-black tracking-[0.3em] uppercase hover:bg-[#CCFF00]/10 hover:text-[#CCFF00] active:scale-[0.98] duration-200 transition-all"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#EEF4FF] text-[#656464] text-[10px] font-black tracking-[0.3em] uppercase hover:bg-[#DCE3F0] hover:text-[#151C25] active:scale-[0.98] duration-200 transition-all"
           >
             {expanded ? 'סגור ↑' : 'פרטים נוספים ↓'}
           </button>
@@ -399,35 +415,35 @@ function CatalogCard({ preset, info, onAdd }) {
 
 function InfoPanel({ info }) {
   return (
-    <div className="px-8 pb-8 space-y-4 border-t border-white/10 pt-5 bg-[#1a1a1a] rounded-b-2xl">
-      <p className="text-white/60 text-sm leading-relaxed">{info.description}</p>
+    <div className="px-8 pb-8 space-y-4 pt-5 bg-[#F8F9FF] rounded-b-2xl">
+      <p className="text-[#656464] text-sm leading-relaxed">{info.description}</p>
       <ul className="space-y-2">
         {info.benefits.map((b, i) => (
           <li key={i} className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 shrink-0 bg-[#CCFF00] rounded-full" />
-            <span className="text-white/80 text-sm">{b}</span>
+            <span className="text-[#151C25] text-sm">{b}</span>
           </li>
         ))}
       </ul>
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-[#121212] rounded-xl p-3 space-y-0.5">
-          <span className="text-white/30 text-[10px] font-black tracking-[0.2em] uppercase block">מינון</span>
-          <p className="text-white font-black text-sm">{info.dosage}</p>
+        <div className="bg-[#EEF4FF] rounded-xl p-3 space-y-0.5">
+          <span className="text-[#656464] text-[10px] font-black tracking-[0.2em] uppercase block">מינון</span>
+          <p className="text-[#151C25] font-black text-sm">{info.dosage}</p>
         </div>
-        <div className="bg-[#121212] rounded-xl p-3 space-y-0.5">
-          <span className="text-white/30 text-[10px] font-black tracking-[0.2em] uppercase block">תזמון</span>
-          <p className="text-white font-black text-sm">{info.timing}</p>
+        <div className="bg-[#EEF4FF] rounded-xl p-3 space-y-0.5">
+          <span className="text-[#656464] text-[10px] font-black tracking-[0.2em] uppercase block">תזמון</span>
+          <p className="text-[#151C25] font-black text-sm">{info.timing}</p>
         </div>
       </div>
       {info.warnings && (
         <div className="flex items-start gap-2 px-3 py-2.5 bg-orange-500/10 rounded-lg">
           <span className="material-symbols-outlined text-orange-500 text-base shrink-0 mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>warning</span>
-          <span className="text-orange-400 text-xs font-black">{info.warnings}</span>
+          <span className="text-orange-500 text-xs font-black">{info.warnings}</span>
         </div>
       )}
       {info.buyLinks?.length > 0 && (
         <div className="space-y-2">
-          <span className="text-white/30 text-[10px] font-black tracking-[0.2em] uppercase">קנה אצל</span>
+          <span className="text-[#656464] text-[10px] font-black tracking-[0.2em] uppercase">קנה אצל</span>
           <div className="flex flex-wrap gap-2">
             {info.buyLinks.map(link => (
               <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer"
