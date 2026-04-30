@@ -2,20 +2,27 @@ import { useEffect, useState } from 'react'
 import { authFetch } from '../api'
 import { SkeletonCard } from '../components/Skeleton'
 import { SUPPLEMENT_INFO } from '../data/supplementsInfo'
-import heroImg from '../assets/supplements-bg.jpg'
-
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
+// ── Stitch original image URLs (from code.html reference design) ──────────
+const STITCH_BOTTLES_URL = 'https://lh3.googleusercontent.com/aida-public/AB6AXuB3_8LLI97XA8phZo42Gx8Dm-HxEZCglpIxwniu3QLz22SEbB0kOcqQEm1quAL32DDYzuDFTSLeUrS-ge2taj1ZVii-Bju1e58c0Js2vE8w-LuqRt4cBlJAX3Diar3J6ENLIuDZDNlWWo0BIMuPykYwuHBP5UQi3HHNTgQgpDEpnHfyaQquuxc7Vs4UISE1eKKV50JxsP19UEzUGCYn2qD_ysTBetiIRwrNYFTL3UaHInv_RzzcwZ1NosZStnXST3I44uA8dpt3QKA'
+const STITCH_ATHLETE_URL = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBQwI7CSGQZ9fBkHpafxbqhgtRctlB73VLbokVxSfQk6weLaJl0qe8lRc0ve5F57hKaZDSCT342m9kgIGDnnUID5db7_Azz-cuXdGzoyUh9TFtZ3I05W1ofDGdHnLmxXXFkvM6S3UnUoX33UsqwYce2AxyP7v7VKgxhANPwYsHuljkHkWP9jcMLqOX2Va-UymXShyfhk-z55HitTDjfzCLmGxgZMIzqItBMXsak9eGCxg4QHHtGXcsqzCGSpbWgku8l4UrWYBldwnU'
+const STITCH_IMGS = {
+  'Whey Protein': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBgZz_IkFxzjvHf4KCeTq36KA9Fr0kOVm2LAt7KcTulCqV-ClLl8yQFAFCOEcr3x_bED-REuvPQhEA0ZZNP6IWDdx_8iIUtv79m576dTY4RZF-9_Z-hB7FUUSgyRaZ93B7m3_iLZJxlrq6Hw7iocexE9tqK4171YQ4BXM6UO_Yjgv7JF5J5vJdKZU-WUoSpzhvh1f3JgynG-3-nlkNGeBCLYDqfkmcZdRvxqHJHWD7ldqJ-aXuZC_X4M6IXfMF90mKGZn26XHX6CZ0',
+  'Creatine':     'https://lh3.googleusercontent.com/aida-public/AB6AXuDl7Gj3TQQ0THSaHDXKbJ_Ph7FkTnWyznJoysU8BH_YoNkNDu9Wfcxwkx2AoEwp5793eC3XUsje43hvx8brbouwvOsucAxzg84e0JObQHgteZxLrtP4pMy386w7vKM_dZTvysG3ddDJU76deN4FjVn_Nl9udIiEHq-4gCSM2pyo4BYb8Z1sn5IPrT7-oiwlTkUzjCkYN4rtu2pYa2Q4rbNfmG6CJJwoIDy2KaYugvZHuHD9n4t_g0ZUiLGADjUDVT89DbPWedPhND4',
+  'Omega-3':      'https://lh3.googleusercontent.com/aida-public/AB6AXuDuhFgaYmUxH65NffqXjchIz94i8DpjAgpKHr-nYoaDE1S76NuIUByIq1s9p8Fy4h8qfuHi1w23OeTlx3_GzCUX3JOGpMqSAbqu3avsV3a9jSTpRNha60cgzGaBqKeVhuduTPGUcuhcNtrrOV91jXoFqZHQxl4gQwNQYzYUuoFv57FUOEn_wsJfFit45PeyH8zWc5fEF8wSi0NpHVzIl0I7ggqBG02Wo3o9i4r6-RYsBUUSWDpwSPMvOegeEEg1lrXwjh3aSL_k6RA',
+}
+
 const DEFAULT_CATALOG = [
-  { name: 'Whey Protein', desc: 'חלבון מי גבינה', icon: 'fitness_center', servings: 30, category: 'PERFORMANCE' },
-  { name: 'Creatine', desc: 'קריאטין מונוהידראט', icon: 'bolt', servings: 60, category: 'STRENGTH' },
-  { name: 'Omega-3', desc: 'שמן דגים EPA/DHA', icon: 'water_drop', servings: 90, category: 'VITALITY' },
+  { name: 'Whey Protein', desc: 'חלבון מי גבינה', icon: 'fitness_center', servings: 30, category: 'RECOVERY',     img: STITCH_IMGS['Whey Protein'] },
+  { name: 'Creatine',     desc: 'קריאטין מונוהידראט', icon: 'bolt',          servings: 60, category: 'PERFORMANCE', img: STITCH_IMGS['Creatine'] },
+  { name: 'Omega-3',      desc: 'שמן דגים EPA/DHA',   icon: 'water_drop',    servings: 90, category: 'VITALITY',    img: STITCH_IMGS['Omega-3'] },
 ]
 
 const WHY_FEATURES = [
-  { icon: 'science', heading: 'מבוסס מדע', text: 'כל תוסף נבחר על בסיס מחקרים קליניים מוכחים לשיפור ביצועים.' },
-  { icon: 'track_changes', heading: 'מעקב חכם', text: 'KINETIC עוקב אחר המנות שלך, הסטריק היומי והמלאי הנותר אוטומטית.' },
-  { icon: 'trending_up', heading: 'תוצאות אמיתיות', text: 'שגרת תוספות עקבית מביאה לשיפור של עד 20% בביצועים ובהתאוששות.' },
+  { icon: 'bolt',         heading: 'סגירת פערים תזונתיים', text: 'אפילו בתזונה מושלמת, קשה להגיע לכמויות האופטימליות הנדרשות לספורטאים בעצימות גבוהה.' },
+  { icon: 'science',      heading: 'יתרון מבוסס מדע',      text: 'אנחנו משתמשים רק ברכיבים שנבדקו במחקרים קליניים והוכחו כמשפרי ביצועים, כוח וסיבולת.' },
+  { icon: 'speed',        heading: 'האצת התאוששות',         text: 'המפתח לביצועים הוא היכולת להתאושש מהר יותר לאימון הבא. התוספים הנכונים מקצרים את זמן תיקון השריר.' },
 ]
 
 export default function Supplements() {
@@ -76,7 +83,7 @@ export default function Supplements() {
   )
 
   return (
-    <main className="min-h-screen bg-[#FBFBFA] pb-32 text-[#121212]" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <main className="min-h-screen bg-[#F8F9FF] pb-32 text-[#121212]" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* Toast */}
       {toastMsg && (
@@ -134,28 +141,39 @@ export default function Supplements() {
         </div>
       )}
 
-      {/* Hero */}
-      <section className="relative h-[50vh] min-h-[380px] flex items-end overflow-hidden">
-        <img
-          src={heroImg}
-          className="absolute inset-0 w-full h-full object-cover object-center"
-          alt="supplements hero"
-        />
-        <div className="absolute inset-0 bg-[#121212]/90" />
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-8 pb-14">
-          <span className="block text-[10px] font-black tracking-[0.5em] text-[#CCFF00] mb-6 uppercase">KINETIC PERFORMANCE</span>
-          <div className="flex justify-between items-end gap-6">
-            <div>
-              <h1 className="font-black text-[6rem] md:text-[11rem] leading-[0.82] tracking-[-0.04em] text-white">תוספים</h1>
-              <p className="text-[#CCFF00] text-sm mt-4 tracking-[0.4em] uppercase font-black">הדלק המדעי לביצועי שיא</p>
+      {/* ── Hero — Stitch light-mode asymmetric (bottles image right) ── */}
+      <section className="pt-24 min-h-[680px] bg-[#F8F9FF] relative overflow-hidden flex items-center">
+        <div className="w-full mx-auto px-8 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+          {/* Text — right side (RTL) */}
+          <div className="text-right">
+            <span className="inline-block px-4 py-1 bg-[#CCFF00] text-[#5B7300] text-[10px] font-black tracking-widest mb-6 rounded-full uppercase">KINETIC PERFORMANCE</span>
+            <h1 className="text-6xl md:text-8xl font-black text-[#151C25] leading-[0.9] tracking-tighter mb-8">
+              הדלק המדעי<br /><span style={{ color: '#506600' }}>לביצועי שיא</span>
+            </h1>
+            <p className="text-xl text-[#656464] max-w-xl leading-relaxed mb-10">
+              אופטימיזציה של התאוששות וביצועים באמצעות תוספי תזונה מדויקים. המדע שמאחורי היכולות שלך מתחיל כאן.
+            </p>
+            <div className="flex gap-4 justify-end">
+              <button
+                onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
+                className="px-8 py-4 rounded-xl font-black text-base text-white shadow-[0_8px_32px_rgba(80,102,0,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+                style={{ background: 'linear-gradient(135deg, #506600 0%, #CCFF00 100%)' }}
+              >
+                לכל הקטלוג
+              </button>
+              <button className="px-8 py-4 rounded-xl font-black text-base text-[#151C25] bg-[#EEF4FF] hover:bg-[#DCE3F0] transition-colors">
+                קרא את המחקר
+              </button>
             </div>
-            <button
-              onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
-              className="flex items-center gap-2 bg-[#CCFF00] text-black px-6 py-4 font-black text-xs tracking-[0.2em] rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 duration-200 transition-all shrink-0 uppercase"
-            >
-              <span className="material-symbols-outlined text-base">add</span>
-              הוסף תוסף
-            </button>
+          </div>
+          {/* Bottles image — left side (bleeding, object-contain on surface) */}
+          <div className="relative h-[520px] hidden lg:flex items-center justify-center">
+            <div className="absolute inset-0 bg-[#DCE3F0] rounded-full blur-[120px] opacity-30 -z-10" />
+            <img
+              src={STITCH_BOTTLES_URL}
+              alt="Supplements"
+              className="w-full h-full object-contain drop-shadow-2xl"
+            />
           </div>
         </div>
       </section>
@@ -189,21 +207,44 @@ export default function Supplements() {
         )}
       </section>
 
-      {/* Why Supplements */}
-      <section className="mt-28 bg-[#121212] py-24 px-8">
+      {/* ── Why Supplements — Stitch 5-col grid with athlete image ── */}
+      <section className="py-32 px-8 md:px-12 bg-[#F8F9FF] overflow-hidden">
         <div className="max-w-5xl mx-auto">
-          <span className="text-[10px] font-black tracking-[0.5em] uppercase text-[#CCFF00] block mb-6">THE SCIENCE OF ELITE PERFORMANCE</span>
-          <h2 className="text-6xl font-black tracking-tighter text-white mb-16">למה תוספים?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {WHY_FEATURES.map((f, i) => (
-              <div key={i} className="bg-[#1a1a1a] rounded-xl p-10 space-y-5 border-b-4 border-[#CCFF00] hover:-translate-y-1 transition-all duration-300">
-                <div className="w-14 h-14 bg-[#CCFF00] rounded-xl flex items-center justify-center">
-                  <span className="material-symbols-outlined text-black text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
-                </div>
-                <h3 className="text-white font-black text-2xl tracking-tighter">{f.heading}</h3>
-                <p className="text-white/50 text-sm leading-relaxed tracking-wide">{f.text}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
+
+            {/* Athlete image — 2 cols */}
+            <div className="lg:col-span-2 relative">
+              <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none"
+                style={{ backgroundColor: '#CCFF00' }} />
+              <img
+                src={STITCH_ATHLETE_URL}
+                alt="Athlete"
+                className="rounded-xl shadow-[0_24px_80px_rgba(21,28,37,0.15)] relative z-10 w-full object-cover"
+                style={{ aspectRatio: '4/5' }}
+              />
+            </div>
+
+            {/* Features — 3 cols */}
+            <div className="lg:col-span-3 text-right">
+              <span className="text-[#656464] font-black tracking-widest text-[10px] uppercase block mb-4">
+                THE SCIENCE OF ELITE PERFORMANCE
+              </span>
+              <h2 className="text-6xl font-black tracking-tighter text-[#151C25] mb-10">למה תוספים?</h2>
+              <div className="space-y-10">
+                {WHY_FEATURES.map((f, i) => (
+                  <div key={i} className="flex items-start gap-6 flex-row-reverse">
+                    <div className="w-14 h-14 bg-[#CCFF00] rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_16px_rgba(204,255,0,0.4)]">
+                      <span className="material-symbols-outlined text-[#151C25] text-2xl"
+                        style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-black text-[#151C25] mb-2 tracking-tight">{f.heading}</h4>
+                      <p className="text-[#656464] leading-relaxed">{f.text}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
@@ -316,30 +357,35 @@ function SupplementCard({ supp, info, onTake, featured }) {
 function CatalogCard({ preset, info, onAdd }) {
   const [expanded, setExpanded] = useState(false)
   return (
-    <div className="bg-[#121212] rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-      <div className="p-8">
-        <span className="inline-block bg-[#CCFF00]/10 text-[#CCFF00] text-[9px] font-black tracking-[0.5em] px-3 py-1 mb-5 uppercase rounded-lg">{preset.category}</span>
-        <div className="flex items-start gap-4 mb-5">
-          <div className="w-12 h-12 bg-[#1a1a1a] rounded-xl flex items-center justify-center shrink-0">
-            <span className="material-symbols-outlined text-[#CCFF00] text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>{preset.icon}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <span className="text-white font-black text-2xl tracking-tighter block leading-tight">{preset.name}</span>
-            <span className="text-white/40 text-xs tracking-widest uppercase mt-1 block">{info?.shortDesc || preset.desc}</span>
-          </div>
+    <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_8px_48px_rgba(21,28,37,0.07)] hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+      {/* Product image */}
+      {preset.img && (
+        <div className="aspect-square overflow-hidden bg-[#EEF4FF]">
+          <img
+            src={preset.img}
+            alt={preset.name}
+            className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+          />
         </div>
-        <div className="flex gap-3 mt-5">
+      )}
+      <div className="p-8">
+        <span className="inline-block bg-[#EEF4FF] text-[#506600] text-[9px] font-black tracking-[0.5em] px-3 py-1 mb-5 uppercase rounded-full">{preset.category}</span>
+        <div className="text-right mb-5">
+          <span className="text-[#151C25] font-black text-2xl tracking-tighter block leading-tight">{preset.name}</span>
+          <span className="text-[#656464] text-xs tracking-widest uppercase mt-1 block">{info?.shortDesc || preset.desc}</span>
+        </div>
+        <div className="flex gap-3">
           {info && (
             <button
               onClick={() => setExpanded(v => !v)}
-              className="flex-1 py-3 bg-white/10 text-white/60 text-xs font-black rounded-xl hover:bg-white/15 hover:text-white active:scale-90 duration-200 transition-all tracking-widest uppercase"
+              className="flex-1 py-3 bg-[#EEF4FF] text-[#656464] text-xs font-black rounded-xl hover:bg-[#DCE3F0] hover:text-[#151C25] active:scale-90 duration-200 transition-all tracking-widest uppercase"
             >
               {expanded ? 'סגור ↑' : 'פרטים ↓'}
             </button>
           )}
           <button
             onClick={onAdd}
-            className="flex-[2] flex items-center justify-center gap-1 bg-[#CCFF00] text-black px-3 py-3 font-black text-xs rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-90 duration-200 transition-all tracking-widest uppercase"
+            className="flex-[2] flex items-center justify-center gap-1 bg-[#CCFF00] text-[#151C25] px-3 py-3 font-black text-xs rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-90 duration-200 transition-all tracking-widest uppercase"
           >
             <span className="material-symbols-outlined text-base">add</span>
             הוסף
