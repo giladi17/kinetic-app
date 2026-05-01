@@ -20,20 +20,17 @@ class NutritionErrorBoundary extends Component {
   }
 }
 
-/* ── Stitch light-mode macro bar card ── */
+/* ── Stitch macro card — no progress bar, surface hierarchy only ── */
 function MacroBar({ label, current, target, unit, color, pct, large }) {
   return (
-    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3 ${large ? 'p-7' : 'p-5'}`}>
+    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${large ? 'p-7 gap-5' : 'p-5 gap-4'}`}>
       <div className="flex justify-between items-start">
         <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">{label}</span>
         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#EEF4FF]" style={{ color }}>{pct}%</span>
       </div>
       <div>
-        <span className={`text-[#151C25] font-bold leading-none ${large ? 'text-4xl' : 'text-2xl'}`}>{current}</span>
-        <span className="text-[#656464] text-xs ml-1">/{target}{unit}</span>
-      </div>
-      <div className="h-1.5 bg-[#DCE3F0] rounded-full overflow-hidden">
-        <div className="h-full rounded-full transition-all duration-700" style={{ width: `${pct}%`, backgroundColor: color }} />
+        <span className={`text-[#151C25] font-black leading-none ${large ? 'text-4xl' : 'text-2xl'}`}>{current}</span>
+        <span className="text-[#656464] text-xs mr-1">/{target}{unit}</span>
       </div>
     </div>
   )
@@ -101,6 +98,17 @@ function BarcodeScanner({ onAdd }) {
       )}
     </div>
   )
+}
+
+const FOOD_EMOJIS = [
+  ['חזה עוף', '🍗'], ['טונה', '🐟'], ['ביצה', '🥚'], ['בננה', '🍌'],
+  ['אורז', '🍚'], ['גבינה', '🧀'], ['יוגורט', '🥛'], ['שיבולת', '🌾'],
+  ['אגוזים', '🥜'], ['אבוקדו', '🥑'], ['סלמון', '🐟'], ['שוקולד', '🍫'],
+  ['חמאת', '🥜'], ['קוטג', '🥛'], ['שעועית', '🫘'], ['בשר', '🥩'],
+]
+function getFoodEmoji(name) {
+  const match = FOOD_EMOJIS.find(([k]) => name.includes(k))
+  return match ? match[1] : '🥗'
 }
 
 function Nutrition() {
@@ -310,23 +318,33 @@ function Nutrition() {
               </div>
             )}
             {gapFiller.suggestions.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <span className="text-[#656464] text-[10px] uppercase tracking-widest font-black">המלצות</span>
                 {gapFiller.suggestions.map((s, i) => (
-                  <div key={i} className="bg-[#EEF4FF] rounded-xl p-4 flex items-center gap-3 hover:-translate-y-0.5 transition-all duration-300">
-                    <div className="flex-1">
-                      <span className="font-black text-[#151C25] text-sm block">{s.name}</span>
-                      <div className="flex gap-3 mt-0.5">
-                        <span className="text-[#506600] text-xs font-black">{s.protein}g חלבון</span>
-                        <span className="text-[#656464] text-xs">{s.calories} kcal</span>
-                      </div>
+                  <div key={i} className="bg-white/80 backdrop-blur-[24px] rounded-3xl shadow-[0_16px_40px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch hover:-translate-y-0.5 transition-all duration-300">
+                    {/* Bleeding food image — left edge */}
+                    <div className="w-16 bg-[#EEF4FF] flex items-center justify-center text-3xl flex-shrink-0">
+                      {getFoodEmoji(s.name)}
                     </div>
-                    <button onClick={async () => {
-                      await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: s.name, calories: s.calories, protein: s.protein, carbs: 0, fat: 0, date: today, entry_method: 'gap_filler' }) })
-                      toast(`נוסף: ${s.name}`)
-                      const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
-                      setData(updated); fetchGapFiller()
-                    }} className="bg-[#CCFF00] text-black px-4 py-2 rounded-lg font-black text-xs shadow-[0_4px_16px_rgba(204,255,0,0.3)] active:scale-90 hover:-translate-y-0.5 transition-all duration-200">הוסף</button>
+                    {/* Content + round lime button */}
+                    <div className="flex-1 px-4 py-4 flex items-center justify-between">
+                      <div className="flex-1">
+                        <span className="font-black text-[#151C25] text-sm block">{s.name}</span>
+                        <div className="flex gap-3 mt-1">
+                          <span className="text-[#506600] text-xs font-black">{s.protein}g חלבון</span>
+                          <span className="text-[#656464] text-xs">{s.calories} kcal</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: s.name, calories: s.calories, protein: s.protein, carbs: 0, fat: 0, date: today, entry_method: 'gap_filler' }) })
+                          toast(`נוסף: ${s.name}`)
+                          const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+                          setData(updated); fetchGapFiller()
+                        }}
+                        className="w-9 h-9 rounded-full bg-[#CCFF00] text-black font-black text-lg flex items-center justify-center shadow-[0_4px_16px_rgba(204,255,0,0.4)] active:scale-90 hover:-translate-y-0.5 transition-all duration-200 flex-shrink-0"
+                      >+</button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -348,31 +366,31 @@ function Nutrition() {
           { label: 'חטיפים',     eyebrow: 'SNACKS',    items: SNACKS }
         ].map(group => (
           <div key={group.label} className="space-y-3">
-            <div className="flex items-center justify-between pb-3">
+            <div className="flex items-center justify-between">
               <div>
                 <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block">{group.eyebrow}</span>
                 <h3 className="font-black text-[#151C25] text-2xl uppercase tracking-tight leading-none">{group.label}</h3>
               </div>
               <button
                 onClick={() => { setAddModal(group.label); setAddSearch(''); setAddBarcode(false) }}
-                className="bg-[#CCFF00] text-black w-10 h-10 rounded-xl font-black text-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(204,255,0,0.4)] hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(204,255,0,0.5)] active:scale-90 transition-all duration-200"
+                className="w-9 h-9 rounded-full bg-[#CCFF00] text-black font-black text-xl flex items-center justify-center shadow-[0_4px_20px_rgba(204,255,0,0.4)] hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(204,255,0,0.5)] active:scale-90 transition-all duration-200"
               >+</button>
             </div>
-            <div className="grid grid-cols-1 gap-2">
+            <div className="space-y-2">
               {group.items.map(p => (
                 <button
                   key={p.key}
                   onClick={() => quickLog(p.key)}
-                  className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-4 flex justify-between items-center active:scale-[0.98] w-full hover:bg-[#CCFF00] hover:-translate-y-0.5 hover:shadow-xl transition-all duration-300 group"
+                  className="bg-[#EEF4FF]/50 rounded-2xl p-4 flex justify-between items-center active:scale-[0.98] w-full hover:bg-[#EEF4FF] hover:-translate-y-0.5 transition-all duration-300 group"
                 >
                   <div className="text-right">
                     <span className="font-black text-[#151C25] text-sm block">{p.meal_name}</span>
                     <div className="flex gap-3 mt-1">
-                      <span className="text-[#656464] text-[10px] group-hover:text-black/60">{p.calories} kcal</span>
-                      <span className="text-[#506600] text-[10px] font-black group-hover:text-black">{p.protein}g חלבון</span>
+                      <span className="text-[#656464] text-[10px]">{p.calories} kcal</span>
+                      <span className="text-[#506600] text-[10px] font-black">{p.protein}g חלבון</span>
                     </div>
                   </div>
-                  <span className="text-[#CCFF00] group-hover:text-black text-xl font-black transition-colors">+</span>
+                  <div className="w-7 h-7 rounded-full bg-[#CCFF00] text-black font-black text-sm flex items-center justify-center flex-shrink-0 group-hover:shadow-[0_4px_12px_rgba(204,255,0,0.5)] transition-all">+</div>
                 </button>
               ))}
             </div>
@@ -382,24 +400,26 @@ function Nutrition() {
         {/* ── Today's Log ── */}
         {data?.meals?.length > 0 && (
           <div className="space-y-3">
-            <div className="pb-3">
+            <div>
               <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block">TODAY</span>
               <h3 className="font-black text-[#151C25] text-2xl uppercase tracking-tight leading-none">הוזן היום</h3>
             </div>
-            {data.meals.map((m, i) => (
-              <div key={i} className="bg-white/80 backdrop-blur-[24px] rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-4 flex justify-between items-center hover:-translate-y-0.5 transition-all duration-300">
-                <div className="text-right">
-                  <span className="font-black text-[#151C25] text-sm block">{m.meal_name}</span>
-                  <div className="flex gap-3 mt-1">
-                    <span className="text-[#656464] text-[10px]">{m.calories} kcal</span>
-                    <span className="text-[#506600] text-[10px] font-black">{m.protein}g חלבון</span>
+            <div className="space-y-2">
+              {data.meals.map((m, i) => (
+                <div key={i} className="bg-[#EEF4FF]/50 rounded-2xl p-4 flex justify-between items-center hover:-translate-y-0.5 transition-all duration-300">
+                  <div className="text-right">
+                    <span className="font-black text-[#151C25] text-sm block">{m.meal_name}</span>
+                    <div className="flex gap-3 mt-1">
+                      <span className="text-[#656464] text-[10px]">{m.calories} kcal</span>
+                      <span className="text-[#506600] text-[10px] font-black">{m.protein}g חלבון</span>
+                    </div>
                   </div>
+                  <span className={`text-[9px] px-2 py-1 rounded-full font-black uppercase ${m.entry_method === 'one_tap' ? 'bg-[#CCFF00] text-black' : 'bg-[#DCE3F0] text-[#656464]'}`}>
+                    {m.entry_method === 'one_tap' ? 'QUICK' : 'MANUAL'}
+                  </span>
                 </div>
-                <span className={`text-[9px] px-2 py-1 rounded-full font-black uppercase ${m.entry_method === 'one_tap' ? 'bg-[#CCFF00] text-black' : 'bg-[#EEF4FF] text-[#656464]'}`}>
-                  {m.entry_method === 'one_tap' ? 'QUICK' : 'MANUAL'}
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </div>
