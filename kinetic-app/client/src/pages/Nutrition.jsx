@@ -23,9 +23,9 @@ class NutritionErrorBoundary extends Component {
 /* ── Stitch macro card — no progress bar, surface hierarchy only ── */
 function MacroBar({ label, current, target, unit, color, pct, large }) {
   return (
-    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${large ? 'p-7 gap-6 min-h-[180px]' : 'p-5 gap-4 min-h-[130px]'}`}>
+    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${large ? 'p-7 gap-4 min-h-[200px]' : 'p-5 gap-3 min-h-[150px]'}`}>
       <div className="flex justify-between items-start">
-        <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">{label}</span>
+        <span className="text-[#656464] text-lg font-black">{label}</span>
         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#EEF4FF]" style={{ color }}>{pct}%</span>
       </div>
       <div>
@@ -252,10 +252,10 @@ function Nutrition() {
         <div className="grid grid-cols-3 gap-6">
           <MacroBar label="פחמימות" current={Math.round(totals.carbs || 0)} target={targets.carbs || 300} unit="g" color="#00b4d8" pct={carbPct} />
           <MacroBar label="שומן"    current={Math.round(totals.fat   || 0)} target={targets.fat   ||  80} unit="g" color="#c77dff" pct={fatPct} />
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_24px_48px_rgba(0,0,0,0.06)] flex flex-col justify-between min-h-[130px]">
-            <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">ארוחות</span>
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_24px_48px_rgba(0,0,0,0.06)] flex flex-col justify-between min-h-[150px]">
+            <span className="text-[#656464] text-lg font-black">ארוחות</span>
             <span className="text-[#151C25] font-black text-4xl leading-none tracking-tighter">{data?.meals?.length || 0}</span>
-            <span className="text-[#656464] text-[10px] uppercase tracking-wider">היום</span>
+            <span className="text-[#656464] text-xs uppercase tracking-widest font-black">היום</span>
           </div>
         </div>
 

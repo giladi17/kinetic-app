@@ -7,7 +7,11 @@ html {
 }
 
 body {
-  @apply transition-colors duration-300;
+  @apply transition-colors duration-500;
+}
+
+html {
+  transition: background-color 500ms ease, color 500ms ease;
 }
 
 /* Light-first design — no dark overrides */
