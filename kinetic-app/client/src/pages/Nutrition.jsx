@@ -23,13 +23,13 @@ class NutritionErrorBoundary extends Component {
 /* ── Stitch macro card — no progress bar, surface hierarchy only ── */
 function MacroBar({ label, current, target, unit, color, pct, large }) {
   return (
-    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${large ? 'p-7 gap-5' : 'p-5 gap-4'}`}>
+    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${large ? 'p-7 gap-6 min-h-[180px]' : 'p-5 gap-4 min-h-[130px]'}`}>
       <div className="flex justify-between items-start">
         <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">{label}</span>
         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#EEF4FF]" style={{ color }}>{pct}%</span>
       </div>
       <div>
-        <span className={`text-[#151C25] font-black leading-none ${large ? 'text-4xl' : 'text-2xl'}`}>{current}</span>
+        <span className={`text-[#151C25] font-black leading-none tracking-tighter ${large ? 'text-6xl' : 'text-4xl'}`}>{current}</span>
         <span className="text-[#656464] text-xs mr-1">/{target}{unit}</span>
       </div>
     </div>
@@ -238,29 +238,29 @@ function Nutrition() {
       </section>
 
       {/* ── Content (no max-w-3xl container — full editorial width) ── */}
-      <div className="px-5 md:px-10 pt-8 max-w-5xl mx-auto space-y-6">
+      <div className="px-5 md:px-10 pt-10 max-w-5xl mx-auto space-y-8">
 
         {/* ── Macro Bento Grid — asymmetric ── */}
         {/* Row 1: Calories (featured, 2 cols) + Protein (1 col) */}
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-3 gap-6">
           <div className="col-span-2">
             <MacroBar large label="קלוריות" current={Math.round(totals.calories || 0)} target={targets.calories} unit="kcal" color="#CCFF00" pct={calPct} />
           </div>
           <MacroBar label="חלבון" current={Math.round(totals.protein || 0)} target={targets.protein} unit="g" color="#ff734a" pct={protPct} />
         </div>
         {/* Row 2: Carbs + Fat + Meals */}
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-3 gap-6">
           <MacroBar label="פחמימות" current={Math.round(totals.carbs || 0)} target={targets.carbs || 300} unit="g" color="#00b4d8" pct={carbPct} />
           <MacroBar label="שומן"    current={Math.round(totals.fat   || 0)} target={targets.fat   ||  80} unit="g" color="#c77dff" pct={fatPct} />
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex flex-col justify-between">
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_24px_48px_rgba(0,0,0,0.06)] flex flex-col justify-between min-h-[130px]">
             <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">ארוחות</span>
-            <span className="text-[#151C25] font-bold text-2xl leading-none">{data?.meals?.length || 0}</span>
+            <span className="text-[#151C25] font-black text-4xl leading-none tracking-tighter">{data?.meals?.length || 0}</span>
             <span className="text-[#656464] text-[10px] uppercase tracking-wider">היום</span>
           </div>
         </div>
 
         {/* ── Barcode Scanner ── */}
-        <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+        <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
           <div className="flex justify-between items-center">
             <div>
               <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">SCAN</span>
@@ -286,7 +286,7 @@ function Nutrition() {
 
         {/* ── Gap Filler ── */}
         {gapFiller && (
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] space-y-4">
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] space-y-4">
             {gapFiller.postWorkoutWindow && (
               <div className="flex items-center gap-3 bg-orange-50 rounded-xl px-4 py-3">
                 <span className="text-orange-500 text-xl">🔥</span>
@@ -321,7 +321,7 @@ function Nutrition() {
               <div className="space-y-3">
                 <span className="text-[#656464] text-[10px] uppercase tracking-widest font-black">המלצות</span>
                 {gapFiller.suggestions.map((s, i) => (
-                  <div key={i} className="bg-white/80 backdrop-blur-[24px] rounded-3xl shadow-[0_16px_40px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch hover:-translate-y-0.5 transition-all duration-300">
+                  <div key={i} className="bg-white/80 backdrop-blur-[24px] rounded-3xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] overflow-hidden flex items-stretch hover:-translate-y-0.5 transition-all duration-300">
                     {/* Bleeding food image — left edge */}
                     <div className="w-16 bg-[#EEF4FF] flex items-center justify-center text-3xl flex-shrink-0">
                       {getFoodEmoji(s.name)}
