@@ -5,15 +5,15 @@ import saladImg from '../assets/salad.jpg'
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
 /* ── Stitch light-mode macro bar card ── */
-function MacroBar({ label, current, target, unit, color, pct }) {
+function MacroBar({ label, current, target, unit, color, pct, large }) {
   return (
-    <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_8px_48px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3">
+    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3 ${large ? 'p-7' : 'p-5'}`}>
       <div className="flex justify-between items-start">
         <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">{label}</span>
         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#EEF4FF]" style={{ color }}>{pct}%</span>
       </div>
       <div>
-        <span className="text-[#151C25] font-bold text-2xl leading-none">{current}</span>
+        <span className={`text-[#151C25] font-bold leading-none ${large ? 'text-4xl' : 'text-2xl'}`}>{current}</span>
         <span className="text-[#656464] text-xs ml-1">/{target}{unit}</span>
       </div>
       <div className="h-1.5 bg-[#DCE3F0] rounded-full overflow-hidden">
@@ -173,39 +173,57 @@ export default function Nutrition() {
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#CCFF00] text-black px-6 py-3 rounded-xl font-black text-sm shadow-2xl">{toastMsg}</div>
       )}
 
-      {/* ── Hero (asymmetric bleeding) ── */}
-      <section className="pt-24 pb-0 overflow-hidden">
-        <div className="flex flex-col md:flex-row-reverse min-h-[520px]">
-          <div className="md:w-[52%] px-6 md:px-16 py-16 text-right flex flex-col justify-center">
-            <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
-            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-[#151C25]">תזונה</h1>
-            <p className="text-[#656464] text-sm mt-4 uppercase tracking-widest font-bold">הדלק של האלופים</p>
+      {/* ── Hero — full-width bleeding, image slides under fixed header ── */}
+      <section className="overflow-hidden" style={{ minHeight: '600px' }}>
+        <div className="flex flex-col md:flex-row-reverse" style={{ minHeight: '600px' }}>
+
+          {/* Text column — pt-28 clears the fixed header */}
+          <div className="md:w-[55%] px-6 md:px-16 pt-28 md:pt-36 pb-10 text-right flex flex-col justify-between">
+            <div>
+              <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
+              <h1 className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25]">תזונה</h1>
+            </div>
+            {/* Tagline pinned to bottom — text-6xl, overlaps hero bottom */}
+            <p className="text-[#151C25] text-4xl md:text-6xl font-black tracking-tighter leading-tight mt-6">
+              הדלק<br/>של האלופים
+            </p>
           </div>
-          <div className="md:w-[48%] relative overflow-hidden" style={{ minHeight: '420px' }}>
-            <img src={saladImg} alt="nutrition" className="absolute inset-0 w-full h-full object-cover object-center" />
+
+          {/* Image column — no padding-top, bleeds from page top behind header */}
+          <div className="md:w-[45%] relative overflow-hidden" style={{ minHeight: '420px' }}>
+            <img
+              src={saladImg}
+              alt="nutrition hero"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
           </div>
         </div>
       </section>
 
-      <div className="px-5 pt-8 max-w-3xl mx-auto space-y-6">
+      {/* ── Content (no max-w-3xl container — full editorial width) ── */}
+      <div className="px-5 md:px-10 pt-8 max-w-5xl mx-auto space-y-6">
 
-        {/* ── Macro Bento Cards ── */}
-        <div className="grid grid-cols-2 gap-4">
-          <MacroBar label="קלוריות" current={Math.round(totals.calories || 0)} target={targets.calories} unit="kcal" color="#CCFF00" pct={calPct} />
-          <MacroBar label="חלבון"   current={Math.round(totals.protein  || 0)} target={targets.protein}  unit="g"    color="#ff734a" pct={protPct} />
+        {/* ── Macro Bento Grid — asymmetric ── */}
+        {/* Row 1: Calories (featured, 2 cols) + Protein (1 col) */}
+        <div className="grid grid-cols-3 gap-5">
+          <div className="col-span-2">
+            <MacroBar large label="קלוריות" current={Math.round(totals.calories || 0)} target={targets.calories} unit="kcal" color="#CCFF00" pct={calPct} />
+          </div>
+          <MacroBar label="חלבון" current={Math.round(totals.protein || 0)} target={targets.protein} unit="g" color="#ff734a" pct={protPct} />
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        {/* Row 2: Carbs + Fat + Meals */}
+        <div className="grid grid-cols-3 gap-5">
           <MacroBar label="פחמימות" current={Math.round(totals.carbs || 0)} target={targets.carbs || 300} unit="g" color="#00b4d8" pct={carbPct} />
           <MacroBar label="שומן"    current={Math.round(totals.fat   || 0)} target={targets.fat   ||  80} unit="g" color="#c77dff" pct={fatPct} />
-          <div className="bg-[#EEF4FF]/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_8px_48px_rgba(0,0,0,0.08)] flex flex-col justify-between">
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex flex-col justify-between">
             <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">ארוחות</span>
-            <span className="text-[#151C25] font-black text-3xl leading-none">{data?.meals?.length || 0}</span>
+            <span className="text-[#151C25] font-bold text-2xl leading-none">{data?.meals?.length || 0}</span>
             <span className="text-[#656464] text-[10px] uppercase tracking-wider">היום</span>
           </div>
         </div>
 
         {/* ── Barcode Scanner ── */}
-        <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_8px_48px_rgba(0,0,0,0.08)]">
+        <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
           <div className="flex justify-between items-center">
             <div>
               <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">SCAN</span>
@@ -231,7 +249,7 @@ export default function Nutrition() {
 
         {/* ── Gap Filler ── */}
         {gapFiller && (
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_8px_48px_rgba(0,0,0,0.08)] space-y-4">
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] space-y-4">
             {gapFiller.postWorkoutWindow && (
               <div className="flex items-center gap-3 bg-orange-50 rounded-xl px-4 py-3">
                 <span className="text-orange-500 text-xl">🔥</span>
