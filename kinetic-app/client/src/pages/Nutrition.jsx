@@ -7,13 +7,13 @@ const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 /* ── Stitch light-mode macro bar card ── */
 function MacroBar({ label, current, target, unit, color, pct }) {
   return (
-    <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_8px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3">
+    <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_8px_48px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3">
       <div className="flex justify-between items-start">
         <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">{label}</span>
         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#EEF4FF]" style={{ color }}>{pct}%</span>
       </div>
       <div>
-        <span className="text-[#151C25] font-black text-3xl leading-none">{current}</span>
+        <span className="text-[#151C25] font-bold text-2xl leading-none">{current}</span>
         <span className="text-[#656464] text-xs ml-1">/{target}{unit}</span>
       </div>
       <div className="h-1.5 bg-[#DCE3F0] rounded-full overflow-hidden">
@@ -197,7 +197,7 @@ export default function Nutrition() {
         <div className="grid grid-cols-3 gap-4">
           <MacroBar label="פחמימות" current={Math.round(totals.carbs || 0)} target={targets.carbs || 300} unit="g" color="#00b4d8" pct={carbPct} />
           <MacroBar label="שומן"    current={Math.round(totals.fat   || 0)} target={targets.fat   ||  80} unit="g" color="#c77dff" pct={fatPct} />
-          <div className="bg-[#EEF4FF]/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_8px_40px_rgba(0,0,0,0.06)] flex flex-col justify-between">
+          <div className="bg-[#EEF4FF]/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_8px_48px_rgba(0,0,0,0.08)] flex flex-col justify-between">
             <span className="text-[#656464] text-[9px] font-black tracking-[0.25em] uppercase">ארוחות</span>
             <span className="text-[#151C25] font-black text-3xl leading-none">{data?.meals?.length || 0}</span>
             <span className="text-[#656464] text-[10px] uppercase tracking-wider">היום</span>
@@ -205,7 +205,7 @@ export default function Nutrition() {
         </div>
 
         {/* ── Barcode Scanner ── */}
-        <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_8px_40px_rgba(0,0,0,0.06)]">
+        <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_8px_48px_rgba(0,0,0,0.08)]">
           <div className="flex justify-between items-center">
             <div>
               <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">SCAN</span>
@@ -231,7 +231,7 @@ export default function Nutrition() {
 
         {/* ── Gap Filler ── */}
         {gapFiller && (
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_8px_40px_rgba(0,0,0,0.06)] space-y-4">
+          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_8px_48px_rgba(0,0,0,0.08)] space-y-4">
             {gapFiller.postWorkoutWindow && (
               <div className="flex items-center gap-3 bg-orange-50 rounded-xl px-4 py-3">
                 <span className="text-orange-500 text-xl">🔥</span>
