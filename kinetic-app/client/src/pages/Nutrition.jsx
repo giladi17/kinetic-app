@@ -1,8 +1,24 @@
-import { useEffect, useState, useRef } from 'react'
+import { Component, useEffect, useState, useRef } from 'react'
 import { premiumFetch, authFetch } from '../api'
 import saladImg from '../assets/salad.jpg'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
+
+class NutritionErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { hasError: false } }
+  static getDerivedStateFromError() { return { hasError: true } }
+  render() {
+    if (this.state.hasError) return (
+      <main className="pt-24 pb-32 px-6 min-h-screen bg-[#F8F9FF] flex items-center justify-center" dir="rtl">
+        <div className="text-center space-y-2">
+          <span className="text-[#506600] text-2xl font-black uppercase tracking-widest block">KINETIC</span>
+          <p className="text-[#656464] text-sm">שגיאה בטעינת הדף — נסה לרענן</p>
+        </div>
+      </main>
+    )
+    return this.props.children
+  }
+}
 
 /* ── Stitch light-mode macro bar card ── */
 function MacroBar({ label, current, target, unit, color, pct, large }) {
@@ -87,7 +103,7 @@ function BarcodeScanner({ onAdd }) {
   )
 }
 
-export default function Nutrition() {
+function Nutrition() {
   const [data, setData] = useState(null)
   const [presets, setPresets] = useState([])
   const [gapFiller, setGapFiller] = useState(null)
@@ -108,7 +124,10 @@ export default function Nutrition() {
     Promise.all([
       authFetch(`${API}/nutrition?date=${today}`).then(r => r.json()),
       authFetch(`${API}/nutrition/presets`).then(r => r.json()),
-    ]).then(([nutrition, p]) => { setData(nutrition); setPresets(p) }).finally(() => setLoading(false))
+    ])
+      .then(([nutrition, p]) => { setData(nutrition); setPresets(p) })
+      .catch(() => { setData({ totals: {}, targets: { calories: 2500, protein: 160 }, meals: [] }) })
+      .finally(() => setLoading(false))
     fetchGapFiller()
     authFetch(`${API}/nutrition/recent`).then(r => r.json()).then(setRecentMeals).catch(() => {})
   }, [])
@@ -173,30 +192,40 @@ export default function Nutrition() {
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#CCFF00] text-black px-6 py-3 rounded-xl font-black text-sm shadow-2xl">{toastMsg}</div>
       )}
 
-      {/* ── Hero — full-width bleeding, image slides under fixed header ── */}
-      <section className="overflow-hidden" style={{ minHeight: '600px' }}>
-        <div className="flex flex-col md:flex-row-reverse" style={{ minHeight: '600px' }}>
+      {/* ── Hero — image position:absolute top:0, true full-bleed behind fixed header ── */}
+      <section className="relative bg-[#F8F9FF]">
+        {/* Desktop: image pinned absolute left 0→45%, fills full section height from page top */}
+        <div className="hidden md:block absolute top-0 left-0 bottom-0 w-[45%] overflow-hidden">
+          <img
+            src={saladImg}
+            alt="nutrition hero"
+            className="w-full h-full object-cover object-center"
+            style={{ display: 'block' }}
+          />
+        </div>
 
-          {/* Text column — pt-28 clears the fixed header */}
-          <div className="md:w-[55%] px-6 md:px-16 pt-28 md:pt-36 pb-10 text-right flex flex-col justify-between">
-            <div>
-              <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
-              <h1 className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25]">תזונה</h1>
-            </div>
-            {/* Tagline pinned to bottom — text-6xl, overlaps hero bottom */}
-            <p className="text-[#151C25] text-4xl md:text-6xl font-black tracking-tighter leading-tight mt-6">
-              הדלק<br/>של האלופים
-            </p>
+        {/* Text: full-width on mobile, right 55% on desktop */}
+        <div
+          className="relative md:ml-[45%] px-6 md:px-16 pt-28 md:pt-36 pb-10 text-right flex flex-col justify-between"
+          style={{ minHeight: '520px' }}
+        >
+          <div>
+            <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
+            <h1 className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25]">תזונה</h1>
           </div>
+          <p className="text-[#151C25] text-4xl md:text-6xl font-black tracking-tighter leading-tight mt-6">
+            הדלק<br/>של האלופים
+          </p>
+        </div>
 
-          {/* Image column — no padding-top, bleeds from page top behind header */}
-          <div className="md:w-[45%] relative overflow-hidden" style={{ minHeight: '420px' }}>
-            <img
-              src={saladImg}
-              alt="nutrition hero"
-              className="absolute inset-0 w-full h-full object-cover object-center"
-            />
-          </div>
+        {/* Mobile only: image below text */}
+        <div className="md:hidden overflow-hidden" style={{ height: '280px' }}>
+          <img
+            src={saladImg}
+            alt="nutrition hero"
+            className="w-full h-full object-cover object-center"
+            style={{ display: 'block' }}
+          />
         </div>
       </section>
 
@@ -505,4 +534,8 @@ export default function Nutrition() {
       )}
     </main>
   )
+}
+
+export default function NutritionPage() {
+  return <NutritionErrorBoundary><Nutrition /></NutritionErrorBoundary>
 }
