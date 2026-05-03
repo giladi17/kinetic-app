@@ -93,13 +93,19 @@ export default function TopAppBar() {
         <div className="flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl bg-gray-100 dark:bg-[#151C25] transition-all duration-500 hover:scale-110 active:scale-90"
+            className="p-2.5 rounded-xl bg-[#EEF4FF] dark:bg-[#1E2832] transition-all duration-500 hover:scale-110 hover:shadow-[0_4px_20px_rgba(204,255,0,0.25)] active:scale-90"
             aria-label={isDark ? 'עבור למצב בהיר' : 'עבור למצב כהה'}
           >
-            {isDark
-              ? <span className="material-symbols-outlined text-electric-lime" style={{ fontVariationSettings: "'FILL' 1" }}>dark_mode</span>
-              : <span className="material-symbols-outlined text-[#151C25]" style={{ fontVariationSettings: "'FILL' 1" }}>light_mode</span>
-            }
+            <span
+              className="material-symbols-outlined transition-all duration-500 block"
+              style={{
+                fontVariationSettings: "'FILL' 1",
+                color: isDark ? '#CCFF00' : '#506600',
+                transform: isDark ? 'rotate(0deg) scale(1)' : 'rotate(-30deg) scale(0.9)',
+              }}
+            >
+              {isDark ? 'light_mode' : 'dark_mode'}
+            </span>
           </button>
           <div className="relative" ref={themeRef}>
             <button
