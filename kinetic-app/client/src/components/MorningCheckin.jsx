@@ -5,8 +5,8 @@ const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
 export default function MorningCheckin({ onComplete }) {
   const [show, setShow] = useState(false)
-  const [sleepHours, setSleepHours] = useState(7)
-  const [subjectiveScore, setSubjectiveScore] = useState(7)
+  const [sleepHours, setSleepHours] = useState(() => parseFloat(localStorage.getItem('kinetic_checkin_sleep') || '7'))
+  const [subjectiveScore, setSubjectiveScore] = useState(() => parseInt(localStorage.getItem('kinetic_checkin_mood') || '7'))
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
@@ -24,6 +24,8 @@ export default function MorningCheckin({ onComplete }) {
 
   async function submit() {
     setSubmitting(true)
+    localStorage.setItem('kinetic_checkin_sleep', String(sleepHours))
+    localStorage.setItem('kinetic_checkin_mood', String(subjectiveScore))
     try {
       await fetch(`${API}/readiness/morning-checkin`, {
         method: 'POST',

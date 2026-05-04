@@ -89,20 +89,27 @@ export default function AIChat() {
 
   return (
     <>
-      {/* Floating bubble — shows persona avatar */}
-      <button
-        onClick={() => setOpen(o => !o)}
-        aria-label={`${open ? 'סגור' : 'פתח'} צ'אט עם ${persona.name}`}
-        className="fixed bottom-28 right-4 z-40 w-14 h-14 rounded-full shadow-[0_0_20px_rgba(202,253,0,0.4)] flex items-center justify-center active:scale-90 duration-200 hover:scale-105 overflow-hidden"
-        style={{ backgroundColor: open ? '#1a1a1a' : '#1a1a1a', border: `2px solid ${persona.color}` }}
-      >
-        {open
-          ? <span className="material-symbols-outlined text-2xl" style={{ color: persona.color, fontVariationSettings: "'FILL' 1" }}>close</span>
-          : persona.avatarImg
-            ? <img src={persona.avatarImg} alt={persona.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
-            : <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0" dangerouslySetInnerHTML={{ __html: persona.avatar }} />
-        }
-      </button>
+      {/* Floating bubble — shows persona avatar + label */}
+      <div className="fixed bottom-28 right-4 z-40 flex flex-col items-center gap-1">
+        <button
+          onClick={() => setOpen(o => !o)}
+          aria-label={`${open ? 'סגור' : 'פתח'} צ'אט עם ${persona.name}`}
+          className="w-14 h-14 rounded-full shadow-[0_0_20px_rgba(202,253,0,0.4)] flex items-center justify-center active:scale-90 duration-200 hover:scale-105 overflow-hidden"
+          style={{ backgroundColor: '#1a1a1a', border: `2px solid ${persona.color}` }}
+        >
+          {open
+            ? <span className="material-symbols-outlined text-2xl" style={{ color: persona.color, fontVariationSettings: "'FILL' 1" }}>close</span>
+            : persona.avatarImg
+              ? <img src={persona.avatarImg} alt={persona.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+              : <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0" dangerouslySetInnerHTML={{ __html: persona.avatar }} />
+          }
+        </button>
+        {!open && (
+          <span className="text-[9px] font-black tracking-wide whitespace-nowrap" style={{ color: persona.color }}>
+            💬 {persona.name}
+          </span>
+        )}
+      </div>
 
       {/* Chat panel */}
       {open && (

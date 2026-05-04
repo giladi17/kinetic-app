@@ -171,7 +171,7 @@ export default function Dashboard() {
 
   const d            = data || fallback
   const stepPct      = Math.min(100, Math.round(((d.steps ?? 0) / (d.stepGoal || 10000)) * 100))
-  const displayName  = user?.name || authUser?.name || d.userName || 'Athlete'
+  const displayName  = user?.name || authUser?.name || d.userName || 'ארבל'
 
   const readinessScore = readiness?.score ?? d.readinessScore ?? 88
   const readinessLabel =
@@ -320,7 +320,7 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black uppercase text-white/50">רצף אימונים</span>
-                <span className="text-sm font-black" style={{ color: LIME }}>{d.streak ?? 0} ימים 🔥</span>
+                <span className="text-sm font-black" style={{ color: LIME }} title="רצף אימונים רצוף">{d.streak ?? 0} ימים 🔥</span>
               </div>
             </div>
 
@@ -445,7 +445,7 @@ export default function Dashboard() {
                   className="px-8 py-3 rounded-md font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform active:scale-95 shadow-xl text-[#121212]"
                   style={{ backgroundColor: LIME }}
                 >
-                  צפה בתוכנית האימונים
+                  {d.nextWorkout?.name ? `תוכנית: ${d.nextWorkout.name}` : 'צפה בתוכנית האימונים'}
                 </button>
                 <button
                   onClick={() => openAI('תן לי תוכנית מפורטת לאימון היום')}
