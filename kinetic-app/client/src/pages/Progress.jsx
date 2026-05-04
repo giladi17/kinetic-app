@@ -142,7 +142,7 @@ export default function Progress() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
           {/* Weekly Progress Circle — 4 cols */}
-          <div className="lg:col-span-4 bg-white/80 backdrop-blur-[24px] rounded-xl p-8 flex flex-col items-center justify-center text-center shadow-[0_8px_48px_rgba(21,28,37,0.07)]">
+          <div className="lg:col-span-4 bg-white rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
             <span className="text-[10px] uppercase tracking-[0.3em] text-[#656464] font-black mb-8 block">
               מדד התקדמות שבועי
             </span>
@@ -168,7 +168,7 @@ export default function Progress() {
           </div>
 
           {/* Bar Chart — 8 cols */}
-          <div className="lg:col-span-8 bg-[#EEF4FF] rounded-xl p-10">
+          <div className="lg:col-span-8 bg-white rounded-2xl p-10 shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
             <div className="flex justify-between items-end mb-12">
               <div className="text-right">
                 <h3 className="text-2xl font-black text-[#151C25]">נפח אימונים</h3>
@@ -186,22 +186,29 @@ export default function Progress() {
               </div>
             </div>
 
-            <div className="flex flex-row-reverse items-end justify-between gap-4 px-2" style={{ height: '200px' }}>
-              {weeklyBars.map((bar, i) => {
-                const h = Math.max(8, Math.round((bar.pct / maxBar) * 180))
-                return (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-3">
-                    <div className="w-full relative rounded-t-lg" style={{ height: '180px', backgroundColor: '#DCE3F0' }}>
-                      <div
-                        className="absolute bottom-0 w-full rounded-t-lg transition-all duration-700 hover:brightness-110"
-                        style={{ height: `${h}px`, backgroundColor: LIME }}
-                      />
+            {d.weeklyActivity?.length > 0 ? (
+              <div className="flex flex-row-reverse items-end justify-between gap-4 px-2" style={{ height: '200px' }}>
+                {weeklyBars.map((bar, i) => {
+                  const h = Math.max(8, Math.round((bar.pct / maxBar) * 180))
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-3">
+                      <div className="w-full relative rounded-t-lg" style={{ height: '180px', backgroundColor: '#EEF4FF' }}>
+                        <div
+                          className="absolute bottom-0 w-full rounded-t-lg transition-all duration-700 hover:brightness-110"
+                          style={{ height: `${h}px`, backgroundColor: LIME }}
+                        />
+                      </div>
+                      <span className="text-[10px] font-black uppercase text-[#656464]">{dayLabels[i]}</span>
                     </div>
-                    <span className="text-[10px] font-black uppercase text-[#656464]">{dayLabels[i]}</span>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="h-[200px] flex flex-col items-center justify-center gap-3">
+                <span className="material-symbols-outlined text-[#DCE3F0] text-5xl">bar_chart</span>
+                <p className="text-[#B0B0B0] font-black text-sm uppercase tracking-widest">אין נתונים זמינים</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -228,7 +235,7 @@ export default function Progress() {
               trend: prs[0]?.exercise_name || 'Deadlift Peak', icon: 'star',
             },
           ].map((m, i) => (
-            <div key={i} className="bg-[#EEF4FF]/80 backdrop-blur-[24px] p-8 rounded-xl hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_32px_rgba(21,28,37,0.05)]">
+            <div key={i} className="bg-white p-8 rounded-2xl hover:-translate-y-1 transition-all duration-300 shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)]">
               <span className="text-[10px] uppercase tracking-widest text-[#656464] font-black block mb-2">{m.label}</span>
               <div className="text-5xl font-black text-[#151C25] tracking-tighter">{m.value}</div>
               <div className="flex items-center gap-2 mt-4 font-black" style={{ color: '#506600' }}>
@@ -245,7 +252,7 @@ export default function Progress() {
       ══════════════════════════════════════ */}
       {logs.length >= 2 && (
         <section className="px-6 md:px-16 max-w-7xl mx-auto mb-24">
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-xl p-8 shadow-[0_8px_48px_rgba(21,28,37,0.07)]">
+          <div className="bg-white rounded-2xl p-8 shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
             <div className="flex justify-between items-start mb-6">
               <div className="text-right">
                 <span className="text-[10px] uppercase tracking-[0.3em] text-[#656464] font-black block mb-1">WEIGHT TRENDS</span>
@@ -275,7 +282,7 @@ export default function Progress() {
           MILESTONES TIMELINE (from screen.png)
       ══════════════════════════════════════ */}
       <section className="px-6 md:px-16 max-w-7xl mx-auto mb-24">
-        <div className="bg-[#EEF4FF] p-12 rounded-xl text-right">
+        <div className="bg-white p-12 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] text-right">
           <h2 className="text-4xl font-black text-[#151C25] mb-12 tracking-tighter">ציוני דרך</h2>
           <div className="relative">
             <div className="absolute top-4 right-0 w-full h-1 bg-[#DCE3F0]" />
@@ -318,7 +325,7 @@ export default function Progress() {
               <span className="material-symbols-outlined text-base">arrow_back</span>
             </button>
           </div>
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-xl overflow-hidden shadow-[0_8px_48px_rgba(21,28,37,0.07)]">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
             {prs.map((pr, i) => (
               <div key={i}
                 className="flex items-center justify-between px-8 py-5 hover:bg-[#F8F9FF] transition-colors"
@@ -379,7 +386,7 @@ export default function Progress() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {badges.map((badge, i) => (
               <div key={badge.id || i}
-                className={`bg-white/80 backdrop-blur-[24px] rounded-xl p-5 shadow-[0_8px_48px_rgba(21,28,37,0.07)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-3 ${badge.locked ? 'opacity-40 grayscale' : ''}`}
+                className={`bg-white rounded-2xl p-5 shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col gap-3 ${badge.locked ? 'opacity-40 grayscale' : ''}`}
                 style={badge.unlocked ? { boxShadow: `0 4px 20px rgba(204,255,0,0.12)` } : {}}>
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"

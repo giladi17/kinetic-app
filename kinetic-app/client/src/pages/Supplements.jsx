@@ -279,7 +279,7 @@ function SupplementCard({ supp, info, onTake }) {
   const productImg = STITCH_IMGS[supp.name]
 
   return (
-    <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_8px_48px_rgba(21,28,37,0.07)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_80px_rgba(21,28,37,0.12)] overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] overflow-hidden">
 
       {/* Product image — Stitch editorial photo */}
       {productImg && (
@@ -373,7 +373,7 @@ function SupplementCard({ supp, info, onTake }) {
 function CatalogCard({ preset, info, onAdd }) {
   const [expanded, setExpanded] = useState(false)
   return (
-    <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_8px_48px_rgba(21,28,37,0.07)] hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-2 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500 overflow-hidden">
       {/* Product image */}
       {preset.img && (
         <div className="aspect-square overflow-hidden bg-[#EEF4FF]">
