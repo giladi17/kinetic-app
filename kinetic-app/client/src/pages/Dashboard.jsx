@@ -11,15 +11,15 @@ import { registerPushNotifications, isPushSupported } from '../utils/pushNotific
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 const LIME = '#CCFF00'
 
-/* ─── Animated weekly bar chart (dark-card variant) ─── */
+/* ─── Animated weekly bar chart (light-mode variant) ─── */
 const HEB_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳']
 
 function RecoveryBarChart({ data }) {
   if (!data || data.length === 0) {
     return (
       <div className="h-44 flex flex-col items-center justify-center gap-3">
-        <span className="material-symbols-outlined text-white/20 text-5xl">bar_chart</span>
-        <p className="text-white/30 font-black text-sm uppercase tracking-widest">אין נתונים לשבוע זה</p>
+        <span className="material-symbols-outlined text-[#DCE3F0] text-5xl">bar_chart</span>
+        <p className="text-[#B0B0B0] font-black text-sm uppercase tracking-widest">אין נתונים לשבוע זה</p>
       </div>
     )
   }
@@ -34,21 +34,21 @@ function RecoveryBarChart({ data }) {
         return (
           <div key={i} className="flex-1 flex flex-col items-center gap-2">
             <div
-              className="w-full bg-white/10 rounded-t-lg relative overflow-hidden"
+              className="w-full bg-[#EEF4FF] rounded-t-lg relative overflow-hidden"
               style={{ height: '148px' }}
             >
               <div
                 className="absolute bottom-0 w-full rounded-t-lg transition-all duration-1000 ease-out"
                 style={{
                   height: `${height}%`,
-                  backgroundColor: day.today ? LIME : 'rgba(255,255,255,0.25)',
+                  backgroundColor: day.today ? LIME : 'rgba(21,28,37,0.15)',
                   boxShadow: day.today ? `0 0 18px rgba(204,255,0,0.4)` : 'none',
                 }}
               />
             </div>
             <span
               className="text-[10px] font-black"
-              style={{ color: day.today ? LIME : 'rgba(255,255,255,0.35)' }}
+              style={{ color: day.today ? LIME : '#B0B0B0' }}
             >
               {day.label}
             </span>
@@ -60,7 +60,7 @@ function RecoveryBarChart({ data }) {
 }
 
 /* ─── SVG circular macro progress ─── */
-function CircularMacroProgress({ value, target, color = LIME, trackColor = 'rgba(255,255,255,0.1)' }) {
+function CircularMacroProgress({ value, target, color = LIME, trackColor = 'rgba(21,28,37,0.08)' }) {
   const pct    = target > 0 ? Math.min(100, Math.round((value / target) * 100)) : 0
   const r      = 76
   const circ   = 2 * Math.PI * r
@@ -157,7 +157,7 @@ export default function Dashboard() {
   }
 
   if (loading) return (
-    <main className="mt-24 px-4 md:px-8 max-w-7xl mx-auto space-y-8 pb-32 bg-[#FBFBFA] min-h-screen">
+    <main className="mt-24 px-4 md:px-8 max-w-7xl mx-auto space-y-8 pb-32 bg-[#F8F9FF] min-h-screen">
       <div className="space-y-3"><SkeletonText width="w-40" /><SkeletonText width="w-64" /></div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <SkeletonCard className="md:col-span-8 h-72" />
@@ -203,7 +203,7 @@ export default function Dashboard() {
 
   /* ─────────────── RENDER ─────────────── */
   return (
-    <main className="mt-20 md:mt-24 px-4 md:px-8 max-w-7xl mx-auto pb-32 bg-[#FBFBFA] min-h-screen">
+    <main className="mt-20 md:mt-24 px-4 md:px-8 max-w-7xl mx-auto pb-32 bg-[#F8F9FF] min-h-screen">
 
       {/* ── Page Header ── */}
       <header className="mb-8 pt-6">
@@ -220,13 +220,13 @@ export default function Dashboard() {
 
       {/* ── Daily Challenge ── */}
       {challenge && (
-        <div className="mb-8 bg-[#121212] rounded-xl p-4 flex items-center gap-4 shadow-[0_4px_40px_rgba(0,0,0,0.15)]">
+        <div className="mb-8 bg-white rounded-2xl p-4 flex items-center gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
           <div className="text-3xl shrink-0">{challenge.text.split(' ').pop()}</div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] text-white/40 uppercase font-black tracking-widest block mb-0.5">
+            <span className="text-[10px] text-[#656464] uppercase font-black tracking-widest block mb-0.5">
               אתגר יומי
             </span>
-            <p className="font-black text-sm text-white truncate">{challenge.text.split(' ').slice(0, -1).join(' ')}</p>
+            <p className="font-black text-sm text-[#151C25] truncate">{challenge.text.split(' ').slice(0, -1).join(' ')}</p>
             <span className="text-xs font-bold" style={{ color: LIME }}>+{challenge.xp} XP</span>
           </div>
           <button
@@ -237,7 +237,7 @@ export default function Dashboard() {
             className={`shrink-0 px-4 py-2 rounded-lg font-black text-xs uppercase transition-all ${
               challengeDone
                 ? 'text-[#121212] font-black'
-                : 'bg-white/10 text-white hover:bg-white/20'
+                : 'bg-[#F0F0F0] text-[#151C25] hover:bg-[#EEF4FF]'
             }`}
             style={challengeDone ? { backgroundColor: LIME } : {}}
           >
@@ -249,18 +249,18 @@ export default function Dashboard() {
       {/* ══════════════ BENTO GRID ══════════════ */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
 
-        {/* ① Recovery Index — 8 cols — DARK */}
-        <div className="md:col-span-8 bg-[#121212] p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:shadow-[0_12px_60px_rgba(0,0,0,0.3)] transition-all duration-500">
+        {/* ① Recovery Index — 8 cols — LIGHT GLASS */}
+        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500">
           <div className="flex justify-between items-end mb-8">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-black mb-1">ביצועים שבועיים</p>
-              <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white">מדד התאוששות</h2>
-              <p className="text-white/40 font-bold text-sm mt-1">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">ביצועים שבועיים</p>
+              <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-[#151C25]">מדד התאוששות</h2>
+              <p className="text-[#656464] font-bold text-sm mt-1">
                 {readiness?.recommendation || 'כל אימון הוא צעד לקראת הניצחון'}
               </p>
             </div>
             <div className="text-left shrink-0">
-              <span className="text-3xl md:text-4xl font-black text-white">{readinessScore}%</span>
+              <span className="text-3xl md:text-4xl font-black text-[#151C25]">{readinessScore}%</span>
               <p className="text-xs uppercase tracking-widest font-black mt-0.5" style={{ color: readinessColor }}>
                 {readinessLabel}
               </p>
@@ -280,12 +280,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ② Daily Steps — 4 cols — photo + dark overlay */}
+        {/* ② Daily Steps — 4 cols — photo + dark overlay (preserved for readability) */}
         <div
-          className="md:col-span-4 p-6 md:p-8 rounded-xl text-white flex flex-col justify-between min-h-[280px] relative overflow-hidden shadow-[0_4px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-500"
+          className="md:col-span-4 p-6 md:p-8 rounded-2xl text-white flex flex-col justify-between min-h-[280px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500"
           style={{ backgroundImage: 'url(/images/athlete.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-[#151C25] via-[#151C25]/70 to-[#151C25]/30" style={{ opacity: 0.88 }} />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#151C25] via-[#151C25]/70 to-[#151C25]/30" style={{ opacity: 0.88 }} />
           <div className="relative z-10 flex flex-col justify-between h-full">
             <div className="flex justify-between items-start">
               <span className="material-symbols-outlined text-4xl" style={{ color: LIME }}>bolt</span>
@@ -330,17 +330,17 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ③ Nutrition Circular — 4 cols — DARK */}
-        <div className="md:col-span-4 bg-[#121212] p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:shadow-[0_12px_60px_rgba(0,0,0,0.3)] transition-all duration-500">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-black mb-1">מאקרו יומי</p>
-          <h2 className="text-xl font-black uppercase tracking-tight text-white mb-1">תזונה לביצועים</h2>
-          <p className="text-white/40 font-bold text-xs mb-5">הדלק שלך לניצחון</p>
+        {/* ③ Nutrition Circular — 4 cols — LIGHT GLASS */}
+        <div className="md:col-span-4 bg-white p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">מאקרו יומי</p>
+          <h2 className="text-xl font-black uppercase tracking-tight text-[#151C25] mb-1">תזונה לביצועים</h2>
+          <p className="text-[#656464] font-bold text-xs mb-5">הדלק שלך לניצחון</p>
 
           <div className="relative flex justify-center items-center py-2">
-            <CircularMacroProgress value={protein} target={proteinTarget} color={LIME} trackColor="rgba(255,255,255,0.08)" />
+            <CircularMacroProgress value={protein} target={proteinTarget} color={LIME} trackColor="rgba(21,28,37,0.08)" />
             <div className="absolute flex flex-col items-center">
-              <span className="text-3xl font-black text-white">{protein}ג'</span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">
+              <span className="text-3xl font-black text-[#151C25]">{protein}ג'</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#656464]">
                 חלבון נצרך
               </span>
             </div>
@@ -348,25 +348,25 @@ export default function Dashboard() {
 
           <div className="mt-5 pt-4 flex justify-around text-center">
             <div>
-              <p className="text-[10px] font-black uppercase text-white/40">פחמימות</p>
-              <p className="text-lg font-black text-white">{carbs}ג'</p>
-              <p className="text-[10px] text-white/30">/ {carbsTarget}ג'</p>
+              <p className="text-[10px] font-black uppercase text-[#656464]">פחמימות</p>
+              <p className="text-lg font-black text-[#151C25]">{carbs}ג'</p>
+              <p className="text-[10px] text-[#B0B0B0]">/ {carbsTarget}ג'</p>
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase text-white/40">שומנים</p>
-              <p className="text-lg font-black text-white">{fat}ג'</p>
-              <p className="text-[10px] text-white/30">/ {fatTarget}ג'</p>
+              <p className="text-[10px] font-black uppercase text-[#656464]">שומנים</p>
+              <p className="text-lg font-black text-[#151C25]">{fat}ג'</p>
+              <p className="text-[10px] text-[#B0B0B0]">/ {fatTarget}ג'</p>
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase text-white/40">קלוריות</p>
-              <p className="text-lg font-black text-white">{calories}</p>
-              <p className="text-[10px] text-white/30">/ {calTarget}</p>
+              <p className="text-[10px] font-black uppercase text-[#656464]">קלוריות</p>
+              <p className="text-lg font-black text-[#151C25]">{calories}</p>
+              <p className="text-[10px] text-[#B0B0B0]">/ {calTarget}</p>
             </div>
           </div>
         </div>
 
-        {/* ④ Metabolic Analysis — 8 cols — WHITE (contrast card) */}
-        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-xl shadow-[0_4px_40px_rgba(21,28,37,0.05)]">
+        {/* ④ Metabolic Analysis — 8 cols — WHITE */}
+        <div className="md:col-span-8 bg-white p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
           <div className="flex justify-between items-center mb-7">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">נתוני גוף</p>
@@ -418,13 +418,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ⑤ AI Insight — full width — LIME hero */}
+        {/* ⑤ AI Insight — full width — photo hero (dark overlay preserved for readability) */}
         <div className="md:col-span-12">
           <div
-            className="p-8 md:p-12 rounded-xl flex flex-col md:flex-row items-center gap-8 overflow-hidden relative"
+            className="p-8 md:p-12 rounded-2xl flex flex-col md:flex-row items-center gap-8 overflow-hidden relative"
             style={{ backgroundImage: `url(/images/workout.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
           >
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-[#151C25] via-[#151C25]/75 to-transparent opacity-80" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#151C25] via-[#151C25]/75 to-transparent opacity-80" />
             <div className="relative z-10 md:w-2/3">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2 text-white/50">
                 המלצת AI אישית
@@ -478,7 +478,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ⑥ Quick Stats — full width — DARK cards */}
+        {/* ⑥ Quick Stats — full width — LIGHT GLASS */}
         <div className="md:col-span-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { icon: 'favorite',   label: 'דופק מנוחה', value: `${d.restingHR || 62}`, unit: 'bpm',  color: '#FF6B6B' },
@@ -488,7 +488,7 @@ export default function Dashboard() {
           ].map((m, i) => (
             <div
               key={i}
-              className="bg-[#121212] p-5 rounded-xl space-y-2 shadow-[0_4px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:shadow-[0_12px_60px_rgba(0,0,0,0.3)] transition-all duration-300"
+              className="bg-white p-5 rounded-2xl space-y-2 shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-300"
             >
               <span
                 className="material-symbols-outlined"
@@ -496,12 +496,12 @@ export default function Dashboard() {
               >
                 {m.icon}
               </span>
-              <span className="block text-[10px] text-white/40 uppercase font-black tracking-widest">
+              <span className="block text-[10px] text-[#656464] uppercase font-black tracking-widest">
                 {m.label}
               </span>
-              <span className="block font-black text-2xl text-white">
+              <span className="block font-black text-2xl text-[#151C25]">
                 {m.value}{' '}
-                <span className="text-sm font-bold text-white/40">{m.unit}</span>
+                <span className="text-sm font-bold text-[#B0B0B0]">{m.unit}</span>
               </span>
             </div>
           ))}
