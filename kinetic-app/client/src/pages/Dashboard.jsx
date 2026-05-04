@@ -12,19 +12,19 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 const LIME = '#CCFF00'
 
 /* ─── Animated weekly bar chart (dark-card variant) ─── */
+const HEB_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳']
+
 function RecoveryBarChart({ data }) {
-  const days =
-    data && data.length > 0
-      ? data
-      : [
-          { label: 'שני',    pct: 65 },
-          { label: 'שלישי', pct: 45 },
-          { label: 'רביעי', pct: 80 },
-          { label: 'חמישי', pct: 95, today: true },
-          { label: 'שישי',  pct: 70 },
-          { label: 'שבת',   pct: 60 },
-          { label: 'ראשון', pct: 85 },
-        ]
+  if (!data || data.length === 0) {
+    return (
+      <div className="h-44 flex flex-col items-center justify-center gap-3">
+        <span className="material-symbols-outlined text-white/20 text-5xl">bar_chart</span>
+        <p className="text-white/30 font-black text-sm uppercase tracking-widest">אין נתונים לשבוע זה</p>
+      </div>
+    )
+  }
+
+  const days = data.map((d, i) => ({ ...d, label: HEB_DAYS[i] ?? d.label }))
   const maxPct = Math.max(...days.map(d => d.pct || 0), 1)
 
   return (
@@ -47,7 +47,7 @@ function RecoveryBarChart({ data }) {
               />
             </div>
             <span
-              className="text-[9px] font-black uppercase"
+              className="text-[10px] font-black"
               style={{ color: day.today ? LIME : 'rgba(255,255,255,0.35)' }}
             >
               {day.label}
@@ -285,7 +285,7 @@ export default function Dashboard() {
           className="md:col-span-4 p-6 md:p-8 rounded-xl text-white flex flex-col justify-between min-h-[280px] relative overflow-hidden shadow-[0_4px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-500"
           style={{ backgroundImage: 'url(/images/athlete.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
-          <div className="absolute inset-0 bg-[#0a0a0a]/82 rounded-xl" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-[#151C25] via-[#151C25]/70 to-[#151C25]/30" style={{ opacity: 0.88 }} />
           <div className="relative z-10 flex flex-col justify-between h-full">
             <div className="flex justify-between items-start">
               <span className="material-symbols-outlined text-4xl" style={{ color: LIME }}>bolt</span>
@@ -424,7 +424,7 @@ export default function Dashboard() {
             className="p-8 md:p-12 rounded-xl flex flex-col md:flex-row items-center gap-8 overflow-hidden relative"
             style={{ backgroundImage: `url(/images/workout.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
           >
-            <div className="absolute inset-0 bg-[#0a0a0a]/88 rounded-xl" />
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-[#151C25] via-[#151C25]/75 to-transparent opacity-80" />
             <div className="relative z-10 md:w-2/3">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2 text-white/50">
                 המלצת AI אישית

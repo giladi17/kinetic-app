@@ -10,22 +10,31 @@ export default function MorningCheckin({ onComplete }) {
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    // Show if not checked in today
+    const today = new Date().toISOString().split('T')[0]
+    if (localStorage.getItem('kinetic_last_checkin') === today) return
     authFetch(`${API}/readiness/today`)
       .then(r => r.json())
       .then(data => { if (!data) setShow(true) })
       .catch(() => {})
   }, [])
 
+  function markCheckedIn() {
+    localStorage.setItem('kinetic_last_checkin', new Date().toISOString().split('T')[0])
+  }
+
   async function submit() {
     setSubmitting(true)
-    await fetch(`${API}/readiness/morning-checkin`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sleep_hours: sleepHours, subjective_score: subjectiveScore }),
-    })
-    setShow(false)
-    onComplete?.()
+    try {
+      await fetch(`${API}/readiness/morning-checkin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sleep_hours: sleepHours, subjective_score: subjectiveScore }),
+      })
+      markCheckedIn()
+    } finally {
+      setShow(false)
+      onComplete?.()
+    }
   }
 
   if (!show) return null
@@ -72,7 +81,7 @@ export default function MorningCheckin({ onComplete }) {
           {submitting ? 'שומר...' : 'התחל את היום'}
         </button>
 
-        <button onClick={() => setShow(false)} className="w-full text-on-surface-variant text-sm font-label hover:underline">
+        <button onClick={() => { markCheckedIn(); setShow(false) }} className="w-full text-on-surface-variant text-sm font-label hover:underline">
           דלג
         </button>
       </div>

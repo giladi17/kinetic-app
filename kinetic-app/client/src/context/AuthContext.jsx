@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { API_URL } from '../api'
 
 const AuthContext = createContext(null)
@@ -7,41 +7,29 @@ const API = API_URL
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const verified = useRef(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('kinetic_token')
-    console.log('AuthContext checking for saved token...', !!token)
+    if (verified.current) return
+    verified.current = true
 
-    if (token) {
-      fetch(`${API}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then(async (r) => {
-          if (r.ok) return r.json()
-          // אם השרת מחזיר 401 או שגיאה אחרת, אנחנו לא מוחקים ישר, אלא בודקים למה
-          const errorText = await r.text()
-          console.error('Auth verification failed status:', r.status, errorText)
+    const token = localStorage.getItem('kinetic_token')
+    if (!token) { setLoading(false); return }
+
+    fetch(`${API}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(async r => {
+        if (r.ok) return r.json()
+        if (r.status === 401 || r.status === 404) {
+          localStorage.removeItem('kinetic_token')
+          window.location.replace('/login')
           return null
-        })
-        .then(data => {
-          if (data) {
-            console.log('User verified successfully:', data.name)
-            setUser(data)
-          } else {
-            // רק אם השרת אמר בפירוש שהטוקן לא תקין
-            console.warn('Invalid token, removing...')
-            localStorage.removeItem('kinetic_token')
-          }
-        })
-        .catch((err) => {
-          console.error('Network error while verifying token:', err)
-          // במקרה של שגיאת רשת (כמו CORS), אל תמחק את הטוקן!
-          // אולי השרת פשוט למטה זמנית
-        })
-        .finally(() => setLoading(false))
-    } else {
-      setLoading(false)
-    }
+        }
+        // network/server error — keep token, user will retry later
+        return null
+      })
+      .then(data => { if (data) setUser(data) })
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
   const login = async (email, password) => {
