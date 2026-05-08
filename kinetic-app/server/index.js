@@ -1277,6 +1277,37 @@ app.get('/api/nutrition/macros/today', requireAuth, asyncHandler(async (req, res
   })
 }))
 
+// GET /api/nutrition/weekly — 7-day nutrition summary
+app.get('/api/nutrition/weekly', requireAuth, asyncHandler(async (req, res) => {
+  const prismaUserId = await getPrismaUserId(req)
+  const days = []
+  const now = new Date()
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(d.getDate() - i)
+    const dateStr  = d.toISOString().split('T')[0]
+    const dayStart = new Date(dateStr + 'T00:00:00.000Z')
+    const dayEnd   = new Date(dateStr + 'T23:59:59.999Z')
+
+    let cal = 0, prot = 0
+    if (prismaUserId) {
+      const agg = await prisma.nutritionLog.aggregate({
+        where: { userId: prismaUserId, date: { gte: dayStart, lte: dayEnd } },
+        _sum: { calories: true, protein: true },
+      })
+      cal  = Math.round(agg._sum.calories || 0)
+      prot = Math.round(agg._sum.protein  || 0)
+    }
+
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    days.push({ date: `${dd}/${mm}`, calories: cal, protein: prot })
+  }
+
+  res.json(days)
+}))
+
 // GET /api/nutrition/presets
 app.get('/api/nutrition/presets', (req, res) => {
   res.json(Object.entries(MEAL_PRESETS).map(([key, val]) => ({ key, ...val })))
