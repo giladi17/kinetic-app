@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  name           String
+  targetCalories Int             @default(2800)
+  targetProtein  Int             @default(130)
+  createdAt      DateTime        @default(now())
+  recoveryLogs   RecoveryLog[]
+  nutritionLogs  NutritionLog[]
+  supplementLogs SupplementLog[]
+}
+
+model RecoveryLog {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  date          DateTime @default(now())
+  sleepHours    Float
+  recoveryScore Int      // 1-10
+}
+
+model NutritionLog {
+  id       String   @id @default(uuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  date     DateTime @default(now())
+  mealType String
+  itemName String
+  calories Float
+  protein  Float
+  carbs    Float
+  fat      Float
+}
+
+model SupplementLog {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  supplementName String
+  taken          Boolean  @default(false)
+  date           DateTime @default(now())
+}
