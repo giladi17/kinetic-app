@@ -118,7 +118,7 @@ export default function WeightTracker() {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && save()}
-          placeholder="משקל ק"ג"
+          placeholder='משקל (ק"ג)'
           className="flex-1 rounded-xl px-4 py-2.5 text-sm font-black border outline-none transition-all
             bg-[#F8F9FF] dark:bg-[#2C2C2C] text-[#151C25] dark:text-white
             border-[#E8EEF8] dark:border-[#3C3C3C]

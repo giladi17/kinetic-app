@@ -14,7 +14,10 @@ const webpush = require('web-push')
 const cron = require('node-cron')
 const { sendWelcomeEmail, sendReminderEmail, sendProOfferEmail } = require('./emails')
 const prisma = require('./src/db')
+const Anthropic = require('@anthropic-ai/sdk')
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
@@ -1344,11 +1347,39 @@ app.get('/api/nutrition/recent', requireAuth, asyncHandler(async (req, res) => {
   res.json(meals)
 }))
 
-// POST /api/nutrition/parse — free-text meal parser (keyword matching)
+// POST /api/nutrition/parse — Claude AI parser with local keyword fallback
 app.post('/api/nutrition/parse', requireAuth, asyncHandler(async (req, res) => {
   const text = (req.body.text || '').trim()
   if (!text) return res.status(400).json({ error: 'text required' })
 
+  // ── Claude AI path ─────────────────────────────────────────────────────────
+  if (process.env.ANTHROPIC_API_KEY) {
+    try {
+      const message = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1024,
+        system: "אתה תזונאי מומחה. המשתמש יתאר מה הוא אכל. עליך לחלץ את המרכיבים ולחשב קלוריות וחלבון (בגרמים) משוערים לכל מרכיב.\nחובה עליך להחזיר אך ורק מערך JSON חוקי ותקין, ללא שום טקסט לפני או אחרי, וללא סמני Markdown. המבנה הנדרש:\n[{\"name\": \"string\", \"calories\": number, \"protein\": number}]",
+        messages: [{ role: 'user', content: text }],
+      })
+      const rawText = message.content[0].text.trim()
+      const parsed = JSON.parse(rawText)
+      if (!Array.isArray(parsed) || parsed.length === 0) throw new Error('empty array')
+      const items = parsed.map(p => ({
+        name: String(p.name),
+        amount: 'מנה',
+        calories: Math.round(Number(p.calories) || 0),
+        protein: parseFloat((Number(p.protein) || 0).toFixed(1)),
+      }))
+      const totalCalories = items.reduce((t, i) => t + i.calories, 0)
+      const totalProtein  = parseFloat(items.reduce((t, i) => t + i.protein, 0).toFixed(1))
+      const meal_name     = text.length > 50 ? text.slice(0, 50) + '...' : text
+      return res.json({ found: true, items, totalCalories, totalProtein, meal_name, source: 'ai' })
+    } catch (aiErr) {
+      console.error('Claude parse error, using local fallback:', aiErr.message)
+    }
+  }
+
+  // ── Local keyword fallback ─────────────────────────────────────────────────
   // [name, keywords, calU/calG, protU/protG, unit, defQ/defG]
   // Order matters: specific entries must come before their substrings
   const FOODS = [
