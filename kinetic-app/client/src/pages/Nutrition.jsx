@@ -29,7 +29,7 @@ function MacroBar({ label, current, target, unit, color, pct, large }) {
         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#EEF4FF]" style={{ color }}>{pct}%</span>
       </div>
       <div>
-        <span className={`text-[#151C25] font-black leading-none tracking-tighter ${large ? 'text-6xl' : 'text-4xl'}`}>{current}</span>
+        <span className={`text-[#151C25] dark:text-white font-black leading-none tracking-tighter ${large ? 'text-6xl' : 'text-4xl'}`}>{current}</span>
         <span className="text-[#656464] text-xs mr-1">/{target}{unit}</span>
       </div>
     </div>
@@ -56,7 +56,7 @@ function BarcodeScanner({ onAdd }) {
     <div className="mt-4 space-y-4">
       <div className="flex gap-2">
         <input
-          className="flex-1 bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors"
+          className="flex-1 bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] dark:text-white text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors"
           placeholder="הזן מספר ברקוד..."
           value={barcode}
           onChange={e => setBarcode(e.target.value)}
@@ -77,7 +77,7 @@ function BarcodeScanner({ onAdd }) {
           <div className="flex gap-3">
             {product.image_url && <img src={product.image_url} alt={product.name} className="w-14 h-14 object-cover rounded-lg" />}
             <div>
-              <h4 className="font-black text-[#151C25] text-base">{product.name}</h4>
+              <h4 className="font-black text-[#151C25] dark:text-white text-base">{product.name}</h4>
               <p className="text-[#656464] text-xs mt-0.5">{product.calories_per_100g} kcal | {product.protein_per_100g}g חלבון לכל 100g</p>
             </div>
           </div>
@@ -215,7 +215,7 @@ function Nutrition() {
   const SNACKS    = presets.filter(p => p.key.startsWith('snack'))
 
   return (
-    <main className="min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] pb-32 text-[#151C25] dark:text-white" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <main className="min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] pb-32 text-[#151C25] dark:text-white dark:text-white" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* Toast */}
       {toastMsg && (
@@ -223,7 +223,7 @@ function Nutrition() {
       )}
 
       {/* ── Hero — image position:absolute top:0, true full-bleed behind fixed header ── */}
-      <section className="relative bg-[#F8F9FF]">
+      <section className="relative bg-[#F8F9FF] dark:bg-[#0E0E0E]">
         {/* Desktop: image pinned absolute left 0→45%, fills full section height from page top */}
         <div className="hidden md:block absolute top-0 left-0 bottom-0 w-[45%] overflow-hidden">
           <img
@@ -241,9 +241,9 @@ function Nutrition() {
         >
           <div>
             <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
-            <h1 className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25]">תזונה</h1>
+            <h1 className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תזונה</h1>
           </div>
-          <p className="text-[#151C25] text-4xl md:text-6xl font-black tracking-tighter leading-tight mt-6">
+          <p className="text-[#151C25] dark:text-white text-4xl md:text-6xl font-black tracking-tighter leading-tight mt-6">
             הדלק<br/>של האלופים
           </p>
         </div>
@@ -274,19 +274,19 @@ function Nutrition() {
         <div className="grid grid-cols-3 gap-6">
           <MacroBar label="פחמימות" current={Math.round(totals.carbs || 0)} target={targets.carbs || 300} unit="g" color="#00b4d8" pct={carbPct} />
           <MacroBar label="שומן"    current={Math.round(totals.fat   || 0)} target={targets.fat   ||  80} unit="g" color="#c77dff" pct={fatPct} />
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_24px_48px_rgba(0,0,0,0.06)] flex flex-col justify-between min-h-[150px]">
+          <div className="bg-white/80 dark:bg-[#1C1C1E] backdrop-blur-[24px] rounded-2xl p-5 shadow-[0_24px_48px_rgba(0,0,0,0.06)] flex flex-col justify-between min-h-[150px]">
             <span className="text-[#656464] text-lg font-black">ארוחות</span>
-            <span className="text-[#151C25] font-black text-4xl leading-none tracking-tighter">{data?.meals?.length || 0}</span>
+            <span className="text-[#151C25] dark:text-white font-black text-4xl leading-none tracking-tighter">{data?.meals?.length || 0}</span>
             <span className="text-[#656464] text-xs uppercase tracking-widest font-black">היום</span>
           </div>
         </div>
 
         {/* ── Barcode Scanner ── */}
-        <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
+        <div className="bg-white/80 dark:bg-[#1C1C1E] backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
           <div className="flex justify-between items-center">
             <div>
               <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">SCAN</span>
-              <h3 className="font-black text-[#151C25] text-lg uppercase tracking-tight leading-none">סריקת ברקוד</h3>
+              <h3 className="font-black text-[#151C25] dark:text-white text-lg uppercase tracking-tight leading-none">סריקת ברקוד</h3>
               <p className="text-[#656464] text-xs mt-1">הוסף מוצר לפי מספר ברקוד</p>
             </div>
             <button
@@ -310,7 +310,7 @@ function Nutrition() {
 
         {/* ── Gap Filler ── */}
         {gapFiller && (
-          <div className="bg-white/80 backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] space-y-4">
+          <div className="bg-white/80 dark:bg-[#1C1C1E] backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] space-y-4">
             {gapFiller.postWorkoutWindow && (
               <div className="flex items-center gap-3 bg-orange-50 rounded-xl px-4 py-3">
                 <span className="text-orange-500 text-xl">🔥</span>
@@ -324,7 +324,7 @@ function Nutrition() {
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">AI ASSIST</span>
-                <h3 className="font-black text-[#151C25] text-xl uppercase tracking-tight leading-none">GAP FILLER</h3>
+                <h3 className="font-black text-[#151C25] dark:text-white text-xl uppercase tracking-tight leading-none">GAP FILLER</h3>
                 <p className="text-[#656464] text-xs mt-1">נשארו {remainingCalories} קלוריות ו-{remainingProtein}g חלבון להשלמת היעד היומי</p>
               </div>
               <button onClick={fetchGapFiller} className="text-[#656464] hover:text-[#506600] active:scale-90 text-2xl transition-all duration-300">↻</button>
@@ -336,7 +336,7 @@ function Nutrition() {
                   <span className="text-[#656464] text-[10px] uppercase font-black tracking-widest mt-1 block">קאל נותרו</span>
                 </div>
                 <div className="bg-[#EEF4FF] rounded-xl p-4 text-center">
-                  <span className="font-black text-2xl text-[#151C25] block leading-none">{remainingProtein}g</span>
+                  <span className="font-black text-2xl text-[#151C25] dark:text-white block leading-none">{remainingProtein}g</span>
                   <span className="text-[#656464] text-[10px] uppercase font-black tracking-widest mt-1 block">חלבון נותר</span>
                 </div>
               </div>
@@ -353,7 +353,7 @@ function Nutrition() {
                     {/* Content + round lime button */}
                     <div className="flex-1 px-4 py-4 flex items-center justify-between">
                       <div className="flex-1">
-                        <span className="font-black text-[#151C25] text-sm block">{s.name}</span>
+                        <span className="font-black text-[#151C25] dark:text-white text-sm block">{s.name}</span>
                         <div className="flex gap-3 mt-1">
                           <span className="text-[#506600] text-xs font-black">{s.protein}g חלבון</span>
                           <span className="text-[#656464] text-xs">{s.calories} kcal</span>
@@ -405,13 +405,13 @@ function Nutrition() {
                 {(recommendations.options || []).map((opt, i) => (
                   <div key={i} className="bg-[#F8F9FF] dark:bg-[#1A1A1A] rounded-2xl p-5 space-y-3 border border-[#EEF4FF] dark:border-white/10">
                     <div>
-                      <span className="font-black text-[#151C25] dark:text-white text-sm block">{opt.label}</span>
+                      <span className="font-black text-[#151C25] dark:text-white dark:text-white text-sm block">{opt.label}</span>
                       <span className="text-[#656464] text-xs">{opt.desc}</span>
                     </div>
                     <div className="space-y-2">
                       {opt.items.map((item, j) => (
                         <div key={j} className="flex justify-between items-center bg-white dark:bg-[#252525] rounded-xl px-4 py-2.5">
-                          <span className="font-black text-[#151C25] dark:text-white text-sm">{item.emoji} {item.name} <span className="text-[#656464] font-normal">{item.amount}</span></span>
+                          <span className="font-black text-[#151C25] dark:text-white dark:text-white text-sm">{item.emoji} {item.name} <span className="text-[#656464] font-normal">{item.amount}</span></span>
                           <div className="flex gap-3 text-right shrink-0">
                             <span className="text-[#506600] text-xs font-black">{item.protein}g</span>
                             <span className="text-[#656464] text-xs">{item.calories} kcal</span>
@@ -444,7 +444,7 @@ function Nutrition() {
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[#506600] text-[10px] font-black tracking-[0.3em] uppercase block mb-1">{group.eyebrow}</span>
-                <h3 className="font-black text-[#151C25] text-3xl tracking-tighter leading-none">{group.label}</h3>
+                <h3 className="font-black text-[#151C25] dark:text-white text-3xl tracking-tighter leading-none">{group.label}</h3>
               </div>
               <button
                 onClick={() => { setAddModal(group.label); setAddSearch(''); setAddBarcode(false) }}
@@ -456,10 +456,10 @@ function Nutrition() {
                 <button
                   key={p.key}
                   onClick={() => quickLog(p.key)}
-                  className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] px-5 py-4 flex justify-between items-center active:scale-[0.98] w-full hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300 group"
+                  className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] px-5 py-4 flex justify-between items-center active:scale-[0.98] w-full hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300 group"
                 >
                   <div className="text-right">
-                    <span className="font-black text-[#151C25] text-base block">{p.meal_name}</span>
+                    <span className="font-black text-[#151C25] dark:text-white text-base block">{p.meal_name}</span>
                     <div className="flex gap-4 mt-1.5">
                       <span className="text-[#656464] text-xs">{p.calories} kcal</span>
                       <span className="text-[#506600] text-xs font-black">{p.protein}g חלבון</span>
@@ -477,13 +477,13 @@ function Nutrition() {
           <div className="space-y-4">
             <div>
               <span className="text-[#506600] text-[10px] font-black tracking-[0.3em] uppercase block mb-1">TODAY</span>
-              <h3 className="font-black text-[#151C25] text-3xl tracking-tighter leading-none">הוזן היום</h3>
+              <h3 className="font-black text-[#151C25] dark:text-white text-3xl tracking-tighter leading-none">הוזן היום</h3>
             </div>
             <div className="space-y-3">
               {data.meals.map((m, i) => (
-                <div key={i} className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] px-5 py-4 flex justify-between items-center hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300">
+                <div key={i} className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] px-5 py-4 flex justify-between items-center hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300">
                   <div className="text-right">
-                    <span className="font-black text-[#151C25] text-base block">{m.meal_name}</span>
+                    <span className="font-black text-[#151C25] dark:text-white text-base block">{m.meal_name}</span>
                     <div className="flex gap-4 mt-1.5">
                       <span className="text-[#656464] text-xs">{m.calories} kcal</span>
                       <span className="text-[#506600] text-xs font-black">{m.protein}g חלבון</span>
@@ -505,20 +505,20 @@ function Nutrition() {
           className="fixed inset-0 z-50 bg-[#151C25]/50 backdrop-blur-sm flex items-end justify-center px-4 pb-8"
           onClick={e => { if (e.target === e.currentTarget) { setAddModal(null); setAddSearch(''); setAddBarcode(false); setSelectedFood(null); setSearchResults([]) } }}
         >
-          <div className="bg-[#F8F9FF] rounded-2xl w-full max-w-lg space-y-4 max-h-[85vh] overflow-y-auto shadow-2xl p-6">
+          <div className="bg-[#F8F9FF] dark:bg-[#1C1C1E] rounded-2xl w-full max-w-lg space-y-4 max-h-[85vh] overflow-y-auto shadow-2xl p-6">
             <div className="flex justify-between items-center pb-4 mb-2">
               <div>
                 <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">ADD FOOD</span>
-                <h3 className="font-black text-[#151C25] text-xl uppercase tracking-tight leading-none">הוסף ל{addModal}</h3>
+                <h3 className="font-black text-[#151C25] dark:text-white text-xl uppercase tracking-tight leading-none">הוסף ל{addModal}</h3>
               </div>
               <button
                 onClick={() => { setAddModal(null); setAddSearch(''); setAddBarcode(false); setSelectedFood(null); setSearchResults([]) }}
-                className="text-[#656464] hover:text-[#151C25] text-xl font-black w-8 h-8 flex items-center justify-center hover:bg-[#EEF4FF] rounded-lg transition-all"
+                className="text-[#656464] hover:text-[#151C25] dark:text-white text-xl font-black w-8 h-8 flex items-center justify-center hover:bg-[#EEF4FF] rounded-lg transition-all"
               >✕</button>
             </div>
 
             <input
-              className="w-full bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors"
+              className="w-full bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] dark:text-white text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors"
               placeholder="חפש מזון — אורז, עוף, ביצה..."
               value={addSearch}
               onChange={e => handleSearchChange(e.target.value)}
@@ -529,8 +529,8 @@ function Nutrition() {
             {selectedFood && (
               <div className="bg-[#EEF4FF] rounded-xl p-4 space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="font-black text-[#151C25] text-sm">{selectedFood.name}</span>
-                  <button onClick={() => setSelectedFood(null)} className="text-[#656464] hover:text-[#151C25] transition-colors">✕</button>
+                  <span className="font-black text-[#151C25] dark:text-white text-sm">{selectedFood.name}</span>
+                  <button onClick={() => setSelectedFood(null)} className="text-[#656464] hover:text-[#151C25] dark:text-white transition-colors">✕</button>
                 </div>
                 <div>
                   <div className="flex justify-between mb-1">
@@ -576,7 +576,7 @@ function Nutrition() {
                     <button key={i} onClick={() => { setSelectedFood(f); setGrams(100) }}
                       className="w-full bg-white rounded-xl p-3 flex justify-between items-center active:scale-[0.98] text-right hover:bg-[#CCFF00] transition-all duration-300 group">
                       <div>
-                        <span className="font-black text-[#151C25] text-sm block">{f.name}</span>
+                        <span className="font-black text-[#151C25] dark:text-white text-sm block">{f.name}</span>
                         <div className="flex gap-3 mt-0.5">
                           <span className="text-[#656464] text-[10px]">{f.calories} kcal/100g</span>
                           <span className="text-[#506600] text-[10px] font-black">{f.protein}g חלבון</span>
@@ -592,7 +592,7 @@ function Nutrition() {
             {!selectedFood && (
               <button
                 onClick={() => setAddBarcode(v => !v)}
-                className="w-full flex items-center justify-center gap-2 bg-[#EEF4FF] rounded-xl px-4 py-3 font-black text-[#151C25] text-sm active:scale-[0.98] hover:bg-[#DCE3F0] transition-all duration-300"
+                className="w-full flex items-center justify-center gap-2 bg-[#EEF4FF] rounded-xl px-4 py-3 font-black text-[#151C25] dark:text-white text-sm active:scale-[0.98] hover:bg-[#DCE3F0] transition-all duration-300"
               >
                 📷 סריקת ברקוד
               </button>
@@ -617,7 +617,7 @@ function Nutrition() {
                     onClick={() => { setSelectedFood({ name: m.meal_name, calories: m.calories, protein: m.protein, carbs: m.carbs, fat: m.fat, per: 100 }); setGrams(100) }}
                     className="w-full bg-white rounded-xl p-3 flex justify-between items-center active:scale-[0.98] text-right hover:bg-[#CCFF00] transition-all duration-300 group">
                     <div>
-                      <span className="font-black text-[#151C25] text-sm block">{m.meal_name}</span>
+                      <span className="font-black text-[#151C25] dark:text-white text-sm block">{m.meal_name}</span>
                       <div className="flex gap-3 mt-0.5">
                         <span className="text-[#656464] text-[10px]">{m.calories} kcal</span>
                         <span className="text-[#506600] text-[10px] font-black">{m.protein}g חלבון</span>

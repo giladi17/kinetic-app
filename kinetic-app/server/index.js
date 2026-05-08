@@ -135,7 +135,7 @@ function checkPremium(req, res, next) {
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY CHECK (id = 1),
-    name TEXT DEFAULT 'Alex',
+    name TEXT DEFAULT 'ארבל',
     tier TEXT DEFAULT 'free',
     is_pro INTEGER DEFAULT 0,
     premium_trial_ends_at TEXT DEFAULT '',
@@ -503,7 +503,7 @@ const usCols = db.prepare("PRAGMA table_info(user_stats)").all().map(c => c.name
 const usAlters = [
   ['tier',                  "ALTER TABLE user_stats ADD COLUMN tier TEXT DEFAULT 'free'"],
   ['trial_ends_at',         "ALTER TABLE user_stats ADD COLUMN trial_ends_at TEXT DEFAULT ''"],
-  ['name',                  "ALTER TABLE user_stats ADD COLUMN name TEXT DEFAULT 'Alex'"],
+  ['name',                  "ALTER TABLE user_stats ADD COLUMN name TEXT DEFAULT 'ארבל'"],
   ['daily_calorie_target',  "ALTER TABLE user_stats ADD COLUMN daily_calorie_target INTEGER DEFAULT 2500"],
   ['daily_protein_target',  "ALTER TABLE user_stats ADD COLUMN daily_protein_target INTEGER DEFAULT 160"],
   ['onboarding_done',       "ALTER TABLE user_stats ADD COLUMN onboarding_done INTEGER DEFAULT 0"],
@@ -526,7 +526,7 @@ if (!usRow.trial_ends_at) {
 const usersRow = db.prepare('SELECT * FROM users WHERE id = 1').get()
 db.prepare(`
   UPDATE user_stats SET
-    name                 = COALESCE(NULLIF(name, 'Alex'), ?),
+    name                 = COALESCE(NULLIF(name, 'ארבל'), ?),
     daily_calorie_target = COALESCE(NULLIF(daily_calorie_target, 2500), ?),
     daily_protein_target = COALESCE(NULLIF(daily_protein_target, 160), ?),
     onboarding_done      = ?
@@ -588,7 +588,7 @@ db.prepare("UPDATE users_auth SET user_id = 1 WHERE user_id IS NULL").run()
     db.exec(`
       CREATE TABLE users_v2 (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT DEFAULT 'Alex',
+        name TEXT DEFAULT 'ארבל',
         tier TEXT DEFAULT 'free',
         is_pro INTEGER DEFAULT 0,
         premium_trial_ends_at TEXT DEFAULT '',
@@ -620,7 +620,7 @@ db.prepare("UPDATE users_auth SET user_id = 1 WHERE user_id IS NULL").run()
         body_fat REAL DEFAULT 14.2,
         tier TEXT DEFAULT 'free',
         trial_ends_at TEXT DEFAULT '',
-        name TEXT DEFAULT 'Alex',
+        name TEXT DEFAULT 'ארבל',
         daily_calorie_target INTEGER DEFAULT 2500,
         daily_protein_target INTEGER DEFAULT 160,
         onboarding_done INTEGER DEFAULT 0,
@@ -2344,9 +2344,9 @@ app.post('/api/users/onboarding', requireAuth, (req, res) => {
       name=?, current_weight=?, daily_calorie_target=?, daily_protein_target=?,
       onboarding_done=1, tier='premium', trial_ends_at=?, gender=?, age=?
     WHERE id=?
-  `).run(name || 'Alex', w, calories, protein, trialStr, g, a, req.dbUserId)
+  `).run(name || 'ארבל', w, calories, protein, trialStr, g, a, req.dbUserId)
   db.prepare('UPDATE users SET name=?, daily_calorie_target=?, daily_protein_target=?, onboarded=1 WHERE id=?')
-    .run(name || 'Alex', calories, protein, req.dbUserId)
+    .run(name || 'ארבל', calories, protein, req.dbUserId)
 
   // Save to user_profile (new simplified onboarding)
   if (isNewFlow) {
