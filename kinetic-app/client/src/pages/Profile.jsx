@@ -77,7 +77,7 @@ export default function Profile() {
           <span className="material-symbols-outlined text-primary-fixed-dim text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
         </div>
         <div className="space-y-1 flex-1">
-          <h2 className="font-headline font-bold text-xl">{user?.name || 'Alex'}</h2>
+          <h2 className="font-headline font-bold text-xl">{user?.name || 'ארבל'}</h2>
           <p className="font-label text-xs text-on-surface-variant">{user?.email || ''}</p>
           <PremiumBadge />
         </div>

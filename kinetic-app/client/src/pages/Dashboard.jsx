@@ -157,7 +157,7 @@ export default function Dashboard() {
   }
 
   if (loading) return (
-    <main className="mt-24 px-4 md:px-8 max-w-7xl mx-auto space-y-8 pb-32 bg-[#F8F9FF] min-h-screen">
+    <main className="mt-24 px-4 md:px-8 max-w-7xl mx-auto space-y-8 pb-32 bg-[#F8F9FF] dark:bg-[#0e0e0e] text-[#151C25] dark:text-white min-h-screen">
       <div className="space-y-3"><SkeletonText width="w-40" /><SkeletonText width="w-64" /></div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <SkeletonCard className="md:col-span-8 h-72" />
@@ -203,7 +203,7 @@ export default function Dashboard() {
 
   /* ─────────────── RENDER ─────────────── */
   return (
-    <main className="mt-20 md:mt-24 px-4 md:px-8 max-w-7xl mx-auto pb-32 bg-[#F8F9FF] min-h-screen">
+    <main className="mt-20 md:mt-24 px-4 md:px-8 max-w-7xl mx-auto pb-32 bg-[#F8F9FF] dark:bg-[#0e0e0e] text-[#151C25] dark:text-white min-h-screen">
 
       {/* ── Page Header ── */}
       <header className="mb-8 pt-6">
