@@ -141,11 +141,13 @@ function Nutrition() {
   }, [])
 
   async function quickLog(presetKey) {
-    const res = await authFetch(`${API}/nutrition/quick-log/${presetKey}`, { method: 'POST' })
-    const meal = await res.json()
-    toast(`נוסף: ${meal.meal_name}`)
-    const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
-    setData(updated)
+    try {
+      const res = await authFetch(`${API}/nutrition/quick-log/${presetKey}`, { method: 'POST' })
+      const meal = await res.json()
+      toast(`נוסף: ${meal.meal_name}`)
+      const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+      setData(updated)
+    } catch { toast('שגיאה — נסה שוב') }
   }
 
   useEffect(() => {
@@ -167,9 +169,11 @@ function Nutrition() {
     clearTimeout(searchTimerRef.current)
     if (!q.trim()) { setSearchResults([]); return }
     searchTimerRef.current = setTimeout(async () => {
-      const res = await authFetch(`${API}/nutrition/search?q=${encodeURIComponent(q)}`)
-      const d = await res.json()
-      setSearchResults(Array.isArray(d) ? d : [])
+      try {
+        const res = await authFetch(`${API}/nutrition/search?q=${encodeURIComponent(q)}`)
+        const d = await res.json()
+        setSearchResults(Array.isArray(d) ? d : [])
+      } catch { setSearchResults([]) }
     }, 300)
   }
 
@@ -276,10 +280,12 @@ function Nutrition() {
           </div>
           {showBarcode && (
             <BarcodeScanner onAdd={async (meal) => {
-              await authFetch(`${API}/nutrition`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...meal, date: today, entry_method: 'barcode' }) })
-              toast(`נוסף: ${meal.meal_name}`)
-              const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
-              setData(updated); setShowBarcode(false)
+              try {
+                await authFetch(`${API}/nutrition`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...meal, date: today, entry_method: 'barcode' }) })
+                toast(`נוסף: ${meal.meal_name}`)
+                const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+                setData(updated); setShowBarcode(false)
+              } catch { toast('שגיאה — נסה שוב') }
             }} />
           )}
         </div>
@@ -337,10 +343,12 @@ function Nutrition() {
                       </div>
                       <button
                         onClick={async () => {
-                          await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: s.name, calories: s.calories, protein: s.protein, carbs: 0, fat: 0, date: today, entry_method: 'gap_filler' }) })
-                          toast(`נוסף: ${s.name}`)
-                          const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
-                          setData(updated); fetchGapFiller()
+                          try {
+                            await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: s.name, calories: s.calories, protein: s.protein, carbs: 0, fat: 0, date: today, entry_method: 'gap_filler' }) })
+                            toast(`נוסף: ${s.name}`)
+                            const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+                            setData(updated); fetchGapFiller()
+                          } catch { toast('שגיאה — נסה שוב') }
                         }}
                         className="w-9 h-9 rounded-full bg-[#CCFF00] text-black font-black text-lg flex items-center justify-center shadow-[0_4px_16px_rgba(204,255,0,0.4)] active:scale-90 hover:-translate-y-0.5 transition-all duration-200 flex-shrink-0"
                       >+</button>
@@ -482,10 +490,12 @@ function Nutrition() {
                   const prot = Math.round(selectedFood.protein  * grams / 10) / 10
                   const carb = Math.round(selectedFood.carbs    * grams / 10) / 10
                   const fat  = Math.round(selectedFood.fat      * grams / 10) / 10
-                  await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: `${selectedFood.name} (${grams}g)`, calories: cal, protein: prot, carbs: carb, fat, date: today, entry_method: 'search' }) })
-                  toast(`נוסף: ${selectedFood.name}`)
-                  const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
-                  setData(updated); setAddModal(null); setAddSearch(''); setSelectedFood(null); setSearchResults([])
+                  try {
+                    await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: `${selectedFood.name} (${grams}g)`, calories: cal, protein: prot, carbs: carb, fat, date: today, entry_method: 'search' }) })
+                    toast(`נוסף: ${selectedFood.name}`)
+                    const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+                    setData(updated); setAddModal(null); setAddSearch(''); setSelectedFood(null); setSearchResults([])
+                  } catch { toast('שגיאה — נסה שוב') }
                 }} className="w-full bg-[#CCFF00] text-black py-3 rounded-xl font-black text-sm shadow-[0_4px_24px_rgba(204,255,0,0.35)] active:scale-[0.98] hover:-translate-y-0.5 transition-all duration-200">הוסף {grams}g</button>
               </div>
             )}
@@ -523,10 +533,12 @@ function Nutrition() {
 
             {addBarcode && (
               <BarcodeScanner onAdd={async (meal) => {
-                await authFetch(`${API}/nutrition`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...meal, date: today, entry_method: 'barcode' }) })
-                toast(`נוסף: ${meal.meal_name}`)
-                const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
-                setData(updated); setAddModal(null); setAddBarcode(false)
+                try {
+                  await authFetch(`${API}/nutrition`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...meal, date: today, entry_method: 'barcode' }) })
+                  toast(`נוסף: ${meal.meal_name}`)
+                  const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+                  setData(updated); setAddModal(null); setAddBarcode(false)
+                } catch { toast('שגיאה — נסה שוב') }
               }} />
             )}
 

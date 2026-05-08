@@ -35,32 +35,38 @@ export default function Supplements() {
   const [saving, setSaving] = useState(false)
 
   async function load() {
-    const res = await authFetch(`${API}/supplements`)
-    const data = await res.json()
-    const arr = Array.isArray(data) ? data : (data?.supplements || data?.data || [])
-    setSupps(arr)
+    try {
+      const res = await authFetch(`${API}/supplements`)
+      const data = await res.json()
+      const arr = Array.isArray(data) ? data : (data?.supplements || data?.data || [])
+      setSupps(arr)
+    } catch { setSupps([]) }
   }
 
   useEffect(() => { load().finally(() => setLoading(false)) }, [])
 
   async function takeDose(id) {
-    const res = await authFetch(`${API}/supplements/take/${id}`, { method: 'POST' })
-    const data = await res.json()
-    data.already_taken ? toast('כבר נרשמה מנה היום') : toast('מנה נרשמה! ✓')
-    await load()
+    try {
+      const res = await authFetch(`${API}/supplements/take/${id}`, { method: 'POST' })
+      const data = await res.json()
+      data.already_taken ? toast('כבר נרשמה מנה היום') : toast('מנה נרשמה! ✓')
+      await load()
+    } catch { toast('שגיאה — נסה שוב') }
   }
 
   async function addSupplement() {
     if (!newName.trim() || !newServings) return
     setSaving(true)
-    await authFetch(`${API}/supplements`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newName.trim(), servings_remaining: parseFloat(newServings) }),
-    })
-    setNewName(''); setNewServings(''); setShowModal(false); setSaving(false)
-    await load()
-    toast('תוסף נוסף!')
+    try {
+      await authFetch(`${API}/supplements`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName.trim(), servings_remaining: parseFloat(newServings) }),
+      })
+      setNewName(''); setNewServings(''); setShowModal(false)
+      await load()
+      toast('תוסף נוסף!')
+    } catch { toast('שגיאה — נסה שוב') } finally { setSaving(false) }
   }
 
   useEffect(() => {
