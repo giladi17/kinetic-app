@@ -12,7 +12,7 @@ function getResend() {
   return _resend
 }
 
-function getFrom()   { return process.env.EMAIL_FROM || 'Kinetic App <noreply@kinetic-fitness.com>' }
+function getFrom()   { return process.env.EMAIL_FROM || 'onboarding@resend.dev' }
 function getAppUrl() { return process.env.APP_URL || 'https://kinetic-app-lovat.vercel.app' }
 
 // ─── Core sender ─────────────────────────────────────────────────────────────
@@ -26,13 +26,13 @@ async function sendEmail(to, subject, html) {
     const { data, error } = await resend.emails.send({ from: getFrom(), to, subject, html })
     if (error) {
       console.error(`[Email] Failed "${subject}" → ${to}:`, error)
-      return { error }
+      return { skipped: true } // graceful — don't block user flow
     }
     console.log(`[Email] Sent "${subject}" → ${to} (id: ${data.id})`)
     return { id: data.id }
   } catch (err) {
     console.error(`[Email] Exception sending "${subject}" → ${to}:`, err.message)
-    return { error: err.message }
+    return { skipped: true } // graceful — don't block user flow
   }
 }
 

@@ -1653,9 +1653,10 @@ ${userData.latestPR ? `- שיא אחרון (PR): ${userData.latestPR}` : ''}
 כללים: ענה תמיד בעברית. היה ספציפי לנתונים. אל תתן עצות גנריות. דבר כמו חבר, לא כמו בוט.`
 }
 
-const GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash']
+const GEMINI_MODEL = 'gemini-1.5-flash'
 
 async function callGeminiDirectly(prompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`
   const body = JSON.stringify({
     contents: [{ parts: [{ text: prompt }] }],
     safetySettings: [
@@ -1666,25 +1667,17 @@ async function callGeminiDirectly(prompt) {
     ]
   })
 
-  for (const model of GEMINI_MODELS) {
-    const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`
-    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
-    const data = await response.json()
+  const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
+  const data = await response.json()
 
-    if (data.error) {
-      console.error(`GEMINI [${model}] error:`, data.error.message)
-      continue // try next model
-    }
-
-    if (!data.candidates || data.candidates.length === 0) {
-      console.error(`GEMINI [${model}] empty response`)
-      continue
-    }
-
-    return data.candidates[0].content.parts[0].text
+  if (data.error) {
+    console.error(`GEMINI error:`, data.error.message)
+    throw new Error(data.error.message)
   }
 
-  throw new Error('All Gemini models failed')
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+  if (!text) throw new Error('Empty Gemini response')
+  return text
 }
 
 // POST /api/ai/chat
@@ -1812,7 +1805,7 @@ app.post('/api/ai/chat', requireAuth, async (req, res) => {
       ]
     }]
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1822,8 +1815,8 @@ app.post('/api/ai/chat', requireAuth, async (req, res) => {
     const data = await response.json()
 
     if (data.error) {
-      console.error('Google Error:', data.error)
-      return res.json({ content: `שגיאת AI: ${data.error.message}` })
+      console.error('Gemini API error:', data.error)
+      return res.status(500).json({ content: 'ה-AI לא זמין כרגע, נסה שוב.' })
     }
 
     const candidate = data.candidates?.[0]
