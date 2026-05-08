@@ -1608,12 +1608,11 @@ app.get('/api/supplements', requireAuth, (req, res) => {
 })
 
 // POST /api/supplements/take/:id
-app.post('/api/supplements/take/:id', requireAuth, (req, res) => {
+app.post('/api/supplements/take/:id', requireAuth, asyncHandler(async (req, res) => {
   const supp = db.prepare('SELECT * FROM supplements WHERE id = ?').get(req.params.id)
   if (!supp) return res.status(404).json({ error: 'Not found' })
   const today = new Date().toISOString().split('T')[0]
 
-  // Already taken today — no change
   if (supp.last_taken === today) {
     return res.json({ ok: true, already_taken: true, servings_remaining: supp.servings_remaining })
   }
@@ -1628,13 +1627,18 @@ app.post('/api/supplements/take/:id', requireAuth, (req, res) => {
     WHERE id = ?
   `).run(newRemaining, newStreak, today, supp.id)
 
-  res.json({
-    ok: true,
-    servings_remaining: newRemaining,
-    current_streak: newStreak,
-    low_stock: newRemaining < 7,
-  })
-})
+  // Log to Prisma SupplementLog (non-blocking on failure)
+  try {
+    const prismaUserId = await getPrismaUserId(req)
+    if (prismaUserId) {
+      await prisma.supplementLog.create({
+        data: { userId: prismaUserId, supplementName: supp.name, taken: true, date: new Date() },
+      })
+    }
+  } catch (err) { console.error('[Prisma] supplementLog create:', err.message) }
+
+  res.json({ ok: true, servings_remaining: newRemaining, current_streak: newStreak, low_stock: newRemaining < 7 })
+}))
 
 // POST /api/supplements — add new
 app.post('/api/supplements', requireAuth, (req, res) => {

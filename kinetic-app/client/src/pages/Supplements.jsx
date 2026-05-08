@@ -44,16 +44,16 @@ export default function Supplements() {
   useEffect(() => { load().finally(() => setLoading(false)) }, [])
 
   async function takeDose(id) {
-    const res = await fetch(`${API}/supplements/take/${id}`, { method: 'POST' })
+    const res = await authFetch(`${API}/supplements/take/${id}`, { method: 'POST' })
     const data = await res.json()
-    data.already_taken ? toast('כבר נרשמה מנה היום') : toast('מנה נרשמה!')
+    data.already_taken ? toast('כבר נרשמה מנה היום') : toast('מנה נרשמה! ✓')
     await load()
   }
 
   async function addSupplement() {
     if (!newName.trim() || !newServings) return
     setSaving(true)
-    await fetch(`${API}/supplements`, {
+    await authFetch(`${API}/supplements`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: newName.trim(), servings_remaining: parseFloat(newServings) }),
