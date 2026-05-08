@@ -191,6 +191,8 @@ function Nutrition() {
   const protPct = Math.min(100, Math.round(((totals.protein  || 0) / targets.protein)  * 100))
   const carbPct = Math.min(100, Math.round(((totals.carbs    || 0) / (targets.carbs || 300)) * 100))
   const fatPct  = Math.min(100, Math.round(((totals.fat      || 0) / (targets.fat   ||  80)) * 100))
+  const remainingCalories = Math.max(0, 2800 - Math.round(totals.calories || 0))
+  const remainingProtein  = Math.max(0, 130  - Math.round(totals.protein  || 0))
   const BREAKFAST = presets.filter(p => p.key.startsWith('breakfast'))
   const LUNCH     = presets.filter(p => p.key.startsWith('lunch'))
   const DINNER    = presets.filter(p => p.key.startsWith('dinner'))
@@ -307,18 +309,18 @@ function Nutrition() {
               <div>
                 <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">AI ASSIST</span>
                 <h3 className="font-black text-[#151C25] text-xl uppercase tracking-tight leading-none">GAP FILLER</h3>
-                <p className="text-[#656464] text-xs mt-1">{gapFiller.message}</p>
+                <p className="text-[#656464] text-xs mt-1">נשארו {remainingCalories} קלוריות ו-{remainingProtein}g חלבון להשלמת היעד היומי</p>
               </div>
               <button onClick={fetchGapFiller} className="text-[#656464] hover:text-[#506600] active:scale-90 text-2xl transition-all duration-300">↻</button>
             </div>
-            {gapFiller.caloriesGap > 0 && (
+            {remainingCalories > 0 && (
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-[#EEF4FF] rounded-xl p-4 text-center">
-                  <span className="font-black text-2xl text-[#506600] block leading-none">{gapFiller.caloriesGap}</span>
+                  <span className="font-black text-2xl text-[#506600] block leading-none">{remainingCalories}</span>
                   <span className="text-[#656464] text-[10px] uppercase font-black tracking-widest mt-1 block">קאל נותרו</span>
                 </div>
                 <div className="bg-[#EEF4FF] rounded-xl p-4 text-center">
-                  <span className="font-black text-2xl text-[#151C25] block leading-none">{gapFiller.proteinGap > 0 ? gapFiller.proteinGap : 0}g</span>
+                  <span className="font-black text-2xl text-[#151C25] block leading-none">{remainingProtein}g</span>
                   <span className="text-[#656464] text-[10px] uppercase font-black tracking-widest mt-1 block">חלבון נותר</span>
                 </div>
               </div>
@@ -357,10 +359,10 @@ function Nutrition() {
                 ))}
               </div>
             )}
-            {gapFiller.caloriesGap <= 0 && (
+            {remainingCalories <= 0 && (
               <div className="flex items-center gap-2 text-[#506600]">
                 <span className="font-black">✓</span>
-                <span className="font-black text-sm">{gapFiller.message}</span>
+                <span className="font-black text-sm">הגעת ליעד הקלורי היומי — כל הכבוד!</span>
               </div>
             )}
           </div>
