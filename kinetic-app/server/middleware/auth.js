@@ -8,8 +8,10 @@ function requireAuth(req, res, next) {
   if (!token) return res.status(401).json({ error: 'unauthorized' })
   try {
     const decoded = jwt.verify(token, JWT_SECRET)
-    req.userId   = decoded.userId            // users_auth.id
-    req.dbUserId = decoded.dbUserId ?? 1    // users.id — legacy tokens fall back to 1
+    req.userId   = decoded.userId
+    req.dbUserId = decoded.dbUserId ?? 1
+    req.email    = decoded.email    || null
+    req.prismaId = decoded.prismaId || null
     next()
   } catch {
     res.status(401).json({ error: 'invalid token' })

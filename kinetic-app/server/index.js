@@ -13,6 +13,7 @@ const { OAuth2Client } = require('google-auth-library')
 const webpush = require('web-push')
 const cron = require('node-cron')
 const { sendWelcomeEmail, sendReminderEmail, sendProOfferEmail } = require('./emails')
+const prisma = require('./src/db')
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
@@ -82,6 +83,24 @@ const asyncHandler = fn => (req, res, next) =>
 
 const db = new Database(path.join(__dirname, 'kinetic.db'))
 db.pragma('journal_mode = WAL')
+
+// Returns the Prisma User UUID for the current request, creating the user if needed.
+async function getPrismaUserId(req) {
+  if (req.prismaId) return req.prismaId
+  let email = req.email
+  if (!email) {
+    const row = db.prepare('SELECT email FROM users_auth WHERE id = ?').get(req.userId)
+    if (!row) return null
+    email = row.email
+  }
+  const u = await prisma.user.upsert({
+    where: { email },
+    create: { email, name: email.split('@')[0], targetCalories: 2800, targetProtein: 130 },
+    update: {},
+    select: { id: true },
+  })
+  return u.id
+}
 
 // ============================================
 // MIDDLEWARE FUNCTIONS - must be defined before routes
@@ -694,8 +713,19 @@ app.post('/api/auth/register', asyncHandler(async (req, res) => {
   ).run(email, password_hash, displayName, dbUserId)
   const userId = authResult.lastInsertRowid
 
-  // Include dbUserId in JWT so middleware doesn't need a DB lookup
-  const token = jwt.sign({ userId, dbUserId }, JWT_SECRET, { expiresIn: '30d' })
+  // Upsert Prisma User with default mass-gain targets
+  let prismaId = null
+  try {
+    const pu = await prisma.user.upsert({
+      where: { email },
+      create: { email, name: displayName, targetCalories: 2800, targetProtein: 130 },
+      update: {},
+      select: { id: true },
+    })
+    prismaId = pu.id
+  } catch (err) { console.error('[Prisma] register upsert:', err.message) }
+
+  const token = jwt.sign({ userId, dbUserId, email, prismaId }, JWT_SECRET, { expiresIn: '30d' })
 
   // Send welcome email (non-blocking)
   sendWelcomeEmail(email, displayName)
@@ -719,7 +749,19 @@ app.post('/api/auth/login', asyncHandler(async (req, res) => {
   db.prepare('UPDATE users_auth SET last_login_at = ? WHERE id = ?').run(new Date().toISOString(), auth.id)
 
   const dbUserId = auth.user_id ?? 1
-  const token = jwt.sign({ userId: auth.id, dbUserId }, JWT_SECRET, { expiresIn: '30d' })
+
+  let prismaId = null
+  try {
+    const pu = await prisma.user.upsert({
+      where: { email: auth.email },
+      create: { email: auth.email, name: auth.name || auth.email.split('@')[0], targetCalories: 2800, targetProtein: 130 },
+      update: {},
+      select: { id: true },
+    })
+    prismaId = pu.id
+  } catch (err) { console.error('[Prisma] login upsert:', err.message) }
+
+  const token = jwt.sign({ userId: auth.id, dbUserId, email: auth.email, prismaId }, JWT_SECRET, { expiresIn: '30d' })
   res.json({ token, user: { id: auth.id, email: auth.email, name: auth.name } })
 }))
 
@@ -758,7 +800,19 @@ app.post('/api/auth/google', asyncHandler(async (req, res) => {
   db.prepare('UPDATE users_auth SET last_login_at = ? WHERE id = ?').run(new Date().toISOString(), user.id)
 
   const dbUserId = user.user_id ?? 1
-  const token = jwt.sign({ userId: user.id, email: user.email, dbUserId }, JWT_SECRET, { expiresIn: '30d' })
+
+  let prismaId = null
+  try {
+    const pu = await prisma.user.upsert({
+      where: { email: user.email },
+      create: { email: user.email, name: user.name || user.email.split('@')[0], targetCalories: 2800, targetProtein: 130 },
+      update: {},
+      select: { id: true },
+    })
+    prismaId = pu.id
+  } catch (err) { console.error('[Prisma] google upsert:', err.message) }
+
+  const token = jwt.sign({ userId: user.id, email: user.email, dbUserId, prismaId }, JWT_SECRET, { expiresIn: '30d' })
   res.json({ token, user: { id: user.id, email: user.email, name: user.name } })
 }))
 
@@ -1111,70 +1165,117 @@ app.post('/api/sessions', requireAuth, (req, res) => {
 })
 
 // GET /api/nutrition?date=  (history beyond today requires Pro)
-app.get('/api/nutrition', requireAuth, (req, res) => {
+app.get('/api/nutrition', requireAuth, asyncHandler(async (req, res) => {
   const { date } = req.query
   const today = new Date().toISOString().split('T')[0]
   const target = date || today
   if (target !== today && !isUserPro(req.dbUserId)) {
     return res.status(403).json({ error: 'premium_required', message: 'היסטוריית תזונה דורשת מנוי Pro' })
   }
+
   const stats = db.prepare('SELECT daily_calorie_target, daily_protein_target FROM user_stats WHERE id = ?').get(req.dbUserId)
-  const meals = db.prepare('SELECT * FROM nutrition_logs WHERE date = ? AND user_id = ? ORDER BY id ASC').all(target, req.dbUserId)
-  const totals = db.prepare(`
-    SELECT SUM(calories) AS calories, SUM(protein) AS protein,
-           SUM(carbs) AS carbs, SUM(fat) AS fat
-    FROM nutrition_logs WHERE date = ? AND user_id = ?
-  `).get(target, req.dbUserId)
+  const prismaUserId = await getPrismaUserId(req)
+
+  const logs = prismaUserId ? await prisma.nutritionLog.findMany({
+    where: {
+      userId: prismaUserId,
+      date: { gte: new Date(target + 'T00:00:00.000Z'), lte: new Date(target + 'T23:59:59.999Z') },
+    },
+    orderBy: { date: 'asc' },
+  }) : []
+
+  const meals = logs.map(l => ({
+    id: l.id, meal_name: l.itemName, calories: l.calories,
+    protein: l.protein, carbs: l.carbs, fat: l.fat, date: target,
+  }))
+  const totals = {
+    calories: logs.reduce((s, l) => s + l.calories, 0),
+    protein:  logs.reduce((s, l) => s + l.protein,  0),
+    carbs:    logs.reduce((s, l) => s + l.carbs,    0),
+    fat:      logs.reduce((s, l) => s + l.fat,      0),
+  }
+
   res.json({
     meals, totals,
-    targets: { calories: stats?.daily_calorie_target || 2500, protein: stats?.daily_protein_target || 160 },
+    targets: { calories: stats?.daily_calorie_target || 2800, protein: stats?.daily_protein_target || 130 },
   })
-})
+}))
 
 // POST /api/nutrition
-app.post('/api/nutrition', requireAuth, (req, res) => {
+app.post('/api/nutrition', requireAuth, asyncHandler(async (req, res) => {
   const { date, meal_name, calories, protein, carbs, fat, entry_method } = req.body
   const d = date || new Date().toISOString().split('T')[0]
-  const result = db.prepare(
-    'INSERT INTO nutrition_logs (date, meal_name, calories, protein, carbs, fat, entry_method, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-  ).run(d, meal_name, calories || 0, protein || 0, carbs || 0, fat || 0, entry_method || 'manual', req.dbUserId)
-  res.json({ id: result.lastInsertRowid })
-})
+  const prismaUserId = await getPrismaUserId(req)
+  if (!prismaUserId) return res.status(500).json({ error: 'db_error', message: 'Could not resolve user' })
+
+  const log = await prisma.nutritionLog.create({
+    data: {
+      userId:   prismaUserId,
+      date:     new Date(d + 'T12:00:00.000Z'),
+      mealType: entry_method || 'manual',
+      itemName: meal_name || '',
+      calories: calories || 0,
+      protein:  protein  || 0,
+      carbs:    carbs    || 0,
+      fat:      fat      || 0,
+    },
+  })
+  res.json({ id: log.id })
+}))
 
 // POST /api/nutrition/quick-log/:preset
-app.post('/api/nutrition/quick-log/:preset', requireAuth, (req, res) => {
+app.post('/api/nutrition/quick-log/:preset', requireAuth, asyncHandler(async (req, res) => {
   const preset = MEAL_PRESETS[req.params.preset]
   if (!preset) return res.status(404).json({ error: 'Preset not found' })
   const today = new Date().toISOString().split('T')[0]
-  const result = db.prepare(
-    'INSERT INTO nutrition_logs (date, meal_name, calories, protein, carbs, fat, entry_method, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-  ).run(today, preset.meal_name, preset.calories, preset.protein, preset.carbs, preset.fat, 'one_tap', req.dbUserId)
-  res.json({ id: result.lastInsertRowid, ...preset })
-})
+  const prismaUserId = await getPrismaUserId(req)
+  if (!prismaUserId) return res.status(500).json({ error: 'db_error', message: 'Could not resolve user' })
+
+  const log = await prisma.nutritionLog.create({
+    data: {
+      userId:   prismaUserId,
+      date:     new Date(today + 'T12:00:00.000Z'),
+      mealType: 'one_tap',
+      itemName: preset.meal_name,
+      calories: preset.calories,
+      protein:  preset.protein,
+      carbs:    preset.carbs,
+      fat:      preset.fat,
+    },
+  })
+  res.json({ id: log.id, ...preset })
+}))
 
 // GET /api/nutrition/macros/today
-app.get('/api/nutrition/macros/today', requireAuth, (req, res) => {
+app.get('/api/nutrition/macros/today', requireAuth, asyncHandler(async (req, res) => {
   const today = new Date().toISOString().split('T')[0]
   const stats = db.prepare('SELECT daily_calorie_target, daily_protein_target FROM user_stats WHERE id = ?').get(req.dbUserId)
-  const calTarget  = stats?.daily_calorie_target || 2500
-  const protTarget = stats?.daily_protein_target || 160
+  const calTarget  = stats?.daily_calorie_target || 2800
+  const protTarget = stats?.daily_protein_target || 130
   const carbTarget = Math.round(calTarget * 0.45 / 4)
   const fatTarget  = Math.round(calTarget * 0.25 / 9)
-  const row = db.prepare(`
-    SELECT SUM(calories) AS cal, SUM(protein) AS prot, SUM(carbs) AS carb, SUM(fat) AS fat
-    FROM nutrition_logs WHERE date = ? AND user_id = ?
-  `).get(today, req.dbUserId)
-  const cal  = Math.round(row?.cal  || 0)
-  const prot = Math.round(row?.prot || 0)
-  const carb = Math.round(row?.carb || 0)
-  const fat  = Math.round(row?.fat  || 0)
+
+  const prismaUserId = await getPrismaUserId(req)
+  const logs = prismaUserId ? await prisma.nutritionLog.findMany({
+    where: {
+      userId: prismaUserId,
+      date: { gte: new Date(today + 'T00:00:00.000Z'), lte: new Date(today + 'T23:59:59.999Z') },
+    },
+    select: { calories: true, protein: true, carbs: true, fat: true },
+  }) : []
+
+  const cal  = Math.round(logs.reduce((s, l) => s + l.calories, 0))
+  const prot = Math.round(logs.reduce((s, l) => s + l.protein,  0))
+  const carb = Math.round(logs.reduce((s, l) => s + l.carbs,    0))
+  const fat  = Math.round(logs.reduce((s, l) => s + l.fat,      0))
+
   res.json({
     calories: { consumed: cal,  target: calTarget,  pct: Math.min(100, Math.round(cal  / calTarget  * 100)) },
     protein:  { consumed: prot, target: protTarget, pct: Math.min(100, Math.round(prot / protTarget * 100)) },
     carbs:    { consumed: carb, target: carbTarget, pct: Math.min(100, Math.round(carb / carbTarget * 100)) },
     fat:      { consumed: fat,  target: fatTarget,  pct: Math.min(100, Math.round(fat  / fatTarget  * 100)) },
   })
-})
+}))
 
 // GET /api/nutrition/presets
 app.get('/api/nutrition/presets', (req, res) => {
@@ -1182,20 +1283,35 @@ app.get('/api/nutrition/presets', (req, res) => {
 })
 
 // GET /api/nutrition/recent — last 3 distinct meals logged by user
-app.get('/api/nutrition/recent', requireAuth, (req, res) => {
-  const meals = db.prepare(`
-    SELECT meal_name, ROUND(AVG(calories)) AS calories,
-           ROUND(AVG(protein),1) AS protein,
-           ROUND(AVG(carbs),1) AS carbs,
-           ROUND(AVG(fat),1) AS fat
-    FROM nutrition_logs
-    WHERE user_id = ?
-    GROUP BY meal_name
-    ORDER BY MAX(id) DESC
-    LIMIT 3
-  `).all(req.dbUserId)
+app.get('/api/nutrition/recent', requireAuth, asyncHandler(async (req, res) => {
+  const prismaUserId = await getPrismaUserId(req)
+  if (!prismaUserId) return res.json([])
+
+  const raw = await prisma.nutritionLog.findMany({
+    where: { userId: prismaUserId },
+    orderBy: { date: 'desc' },
+    take: 50,
+    select: { itemName: true, calories: true, protein: true, carbs: true, fat: true },
+  })
+
+  // Deduplicate by itemName and average macros, keep last 3 distinct
+  const seen = new Map()
+  for (const l of raw) {
+    if (!seen.has(l.itemName)) seen.set(l.itemName, { count: 0, calories: 0, protein: 0, carbs: 0, fat: 0 })
+    const e = seen.get(l.itemName)
+    e.count++; e.calories += l.calories; e.protein += l.protein; e.carbs += l.carbs; e.fat += l.fat
+    if (seen.size >= 3) break
+  }
+
+  const meals = [...seen.entries()].slice(0, 3).map(([name, e]) => ({
+    meal_name: name,
+    calories: Math.round(e.calories / e.count),
+    protein:  Math.round(e.protein  / e.count * 10) / 10,
+    carbs:    Math.round(e.carbs    / e.count * 10) / 10,
+    fat:      Math.round(e.fat      / e.count * 10) / 10,
+  }))
   res.json(meals)
-})
+}))
 
 // GET /api/nutrition/search?q=...
 // ─── READINESS ───────────────────────────────────────────────────────────────
