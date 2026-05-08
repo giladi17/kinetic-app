@@ -38,7 +38,7 @@ export default function Analytics() {
   function askAI(message) { window.dispatchEvent(new CustomEvent('kinetic:ai-open', { detail: { message } })) }
 
   if (loading) return (
-    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-8 min-h-screen bg-[#F8F9FF]">
+    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-8 min-h-screen bg-[#F8F9FF] dark:bg-[#0e0e0e]">
       <div className="pt-4 space-y-2"><SkeletonText width="w-24" /><SkeletonText width="w-40" /></div>
       <SkeletonCard className="h-48" /><SkeletonCard className="h-32" /><SkeletonCard className="h-40" />
       <div className="grid grid-cols-2 gap-3">{[1,2,3,4].map(i => <SkeletonCard key={i} className="h-24" />)}</div>
@@ -49,7 +49,7 @@ export default function Analytics() {
   const maData = movingAvg?.exercises?.[selectedExercise] || []
 
   return (
-    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-10 min-h-screen bg-[#F8F9FF] text-[#151C25]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-10 min-h-screen bg-[#F8F9FF] dark:bg-[#0e0e0e] text-[#151C25] dark:text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* Header */}
       <div className="pt-4 space-y-1 border-b-2 border-[#CCFF00] pb-8">
@@ -62,7 +62,7 @@ export default function Analytics() {
       {dna && <WorkoutDna dna={dna} navigate={navigate} />}
 
       {/* Compound Volume */}
-      <section className="bg-white border-2 border-black/10 overflow-hidden border-r-4 border-r-[#CCFF00]">
+      <section className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 overflow-hidden border-r-4 border-r-[#CCFF00]">
         <div className="px-6 pt-6 pb-0">
           <span className="text-[#506600] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">TOTAL VOLUME</span>
           <div className="flex items-end justify-between gap-3">
@@ -123,7 +123,7 @@ export default function Analytics() {
           <h2 className="text-[#151C25] font-black text-3xl tracking-tighter uppercase">זיהוי תקיעות</h2>
         </div>
         {(!plateaus?.plateaus?.length) ? (
-          <div className="bg-white border-2 border-black/10 p-5 flex items-center gap-3 border-r-4 border-r-[#CCFF00]">
+          <div className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 flex items-center gap-3 border-r-4 border-r-[#CCFF00]">
             <span className="material-symbols-outlined text-2xl text-[#506600]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
             <div>
               <p className="text-[#151C25] font-black text-base">אתה מתקדם בכל התרגילים</p>
@@ -136,7 +136,7 @@ export default function Analytics() {
       </section>
 
       {/* Moving Average */}
-      <section className="bg-white border-2 border-black/10 p-6 space-y-4">
+      <section className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-6 space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div>
             <span className="text-[#506600] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">MOVING AVERAGE</span>
@@ -182,7 +182,7 @@ export default function Analytics() {
 
       {/* Quick Links */}
       <div className="space-y-3">
-        <button onClick={() => navigate('/war-room')} className="w-full bg-white border-2 border-black/10 p-5 flex items-center justify-between active:scale-[0.98] duration-200 hover:bg-[#CCFF00] transition-all group">
+        <button onClick={() => navigate('/war-room')} className="w-full bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 flex items-center justify-between active:scale-[0.98] duration-200 hover:bg-[#CCFF00] dark:hover:bg-[#CCFF00] transition-all group">
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-[#506600] group-hover:text-black transition-colors" style={{ fontVariationSettings: "'FILL' 1" }}>analytics</span>
             <div className="text-right">
@@ -192,7 +192,7 @@ export default function Analytics() {
           </div>
           <span className="text-[#506600] group-hover:text-black text-xs flex items-center gap-1 font-black transition-colors">כנס <span className="material-symbols-outlined text-base">arrow_forward</span></span>
         </button>
-        <button onClick={() => navigate('/exercises')} className="w-full bg-white border-2 border-black/10 p-5 flex items-center justify-between active:scale-[0.98] duration-200 hover:bg-[#EEF4FF] transition-all">
+        <button onClick={() => navigate('/exercises')} className="w-full bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 flex items-center justify-between active:scale-[0.98] duration-200 hover:bg-[#EEF4FF] dark:hover:bg-[#2C2C2C] transition-all">
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-[#506600]">history</span>
             <span className="text-[#151C25] font-black text-sm">היסטוריית תרגילים</span>
@@ -206,7 +206,7 @@ export default function Analytics() {
 
 function PlateauCard({ plateau, onAsk }) {
   return (
-    <div className="bg-white border-2 border-black/10 p-5 border-r-4 border-r-[#CCFF00] space-y-3">
+    <div className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 border-r-4 border-r-[#CCFF00] space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-[#151C25] font-black text-base tracking-tight">{plateau.exercise}</h3>
@@ -231,7 +231,7 @@ function PlateauCard({ plateau, onAsk }) {
 
 function StatCard({ icon, label, value, sub, accent }) {
   return (
-    <div className={`bg-white border-2 p-5 ${accent ? 'border-[#CCFF00] border-r-4 border-r-[#CCFF00]' : 'border-black/10'}`}>
+    <div className={`bg-white dark:bg-[#1C1C1E] border-2 p-5 ${accent ? 'border-[#CCFF00] border-r-4 border-r-[#CCFF00]' : 'border-black/10 dark:border-white/10'}`}>
       <div className="flex items-center gap-2 mb-2">
         <span className={`material-symbols-outlined text-base ${accent ? 'text-[#506600]' : 'text-[#656464]'}`}>{icon}</span>
         <span className="text-[#656464] text-[10px] uppercase tracking-widest">{label}</span>
@@ -276,7 +276,7 @@ function CumulativeGraph({ data }) {
 function WorkoutDna({ dna, navigate }) {
   const { dominantType, sessionCount, typeBreakdown, pushPullBalance, weaknesses, strengths, recommendations } = dna
   return (
-    <section className="bg-white border-2 border-black/10 overflow-hidden">
+    <section className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 overflow-hidden">
       <div className="px-6 pt-6 pb-4 border-b-4 border-[#CCFF00]">
         <span className="text-[#506600] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">WORKOUT DNA</span>
         <h2 className="font-black text-2xl tracking-tighter text-[#151C25]">{DNA_LABELS[dominantType] || dominantType}</h2>
@@ -377,7 +377,7 @@ function DonutChart({ breakdown }) {
   return (
     <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} className="shrink-0">
       {arcs.map(arc => <path key={arc.type} d={arc.d} fill={TYPE_COLORS[arc.type] || '#666'} opacity={arc.type === dominant ? 1 : 0.5} />)}
-      <circle cx={CX} cy={CY} r={R - 10} fill="white" />
+      <circle cx={CX} cy={CY} r={R - 10} className="fill-white dark:fill-[#1C1C1E]" />
       <text x={CX} y={CY - 4} textAnchor="middle" fontSize="8" fill="#151C25" fontWeight="bold" fontFamily="sans-serif">{TYPE_LABELS[dominant] || dominant}</text>
       <text x={CX} y={CY + 8} textAnchor="middle" fontSize="7" fill="#656464" fontFamily="sans-serif">{entries[0]?.[1]}%</text>
     </svg>

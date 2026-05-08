@@ -103,13 +103,13 @@ export default function Plans() {
     : null
 
   if (loading) return (
-    <main className="min-h-screen bg-[#F8F9FF] flex items-center justify-center" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <main className="min-h-screen bg-[#F8F9FF] dark:bg-[#0e0e0e] flex items-center justify-center" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
       <span className="text-2xl font-black tracking-[0.2em] animate-pulse text-[#506600]">LOADING...</span>
     </main>
   )
 
   return (
-    <main className="min-h-screen bg-[#F8F9FF] text-[#151C25]" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <main className="min-h-screen bg-[#F8F9FF] dark:bg-[#0e0e0e] text-[#151C25] dark:text-white" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* Exercise Modal */}
       {videoExercise && (
@@ -135,7 +135,7 @@ export default function Plans() {
         <div className="flex flex-col md:flex-row-reverse min-h-[520px]">
           <div className="md:w-[52%] px-6 md:px-16 py-16 text-right flex flex-col justify-center">
             <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">TRAINING PROTOCOLS</span>
-            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-[#151C25]">תוכניות<br/>אימון</h1>
+            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תוכניות<br/>אימון</h1>
             <p className="text-[#656464] text-sm mt-4 uppercase tracking-widest font-bold">בנה את הגוף שלך</p>
             <button
               onClick={() => setShowCreate(true)}
@@ -155,10 +155,10 @@ export default function Plans() {
 
         {/* ── Active Plan Banner ── */}
         {activePlan && todayDay && (
-          <section className="bg-[#EEF4FF]/80 backdrop-blur-[24px] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <section className="bg-[#EEF4FF]/80 dark:bg-[#1C1C1E] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <span className="block text-[10px] font-black tracking-[0.3em] uppercase mb-1 text-[#506600]">ACTIVE PLAN</span>
-              <p className="text-2xl font-black uppercase text-[#151C25]">{activePlan.name}</p>
+              <p className="text-2xl font-black uppercase text-[#151C25] dark:text-white">{activePlan.name}</p>
               <p className="text-[#656464] text-sm mt-1 font-medium">
                 {t('plans.todayWorkout')}: <span className="text-[#151C25] font-black">{todayDay.name}</span>
               </p>
@@ -174,7 +174,7 @@ export default function Plans() {
 
         {/* ── Plan Detail Panel ── */}
         {selected && (
-          <section className="bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] overflow-hidden">
+          <section className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] overflow-hidden">
             <div className="flex items-start justify-between p-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -182,12 +182,12 @@ export default function Plans() {
                     {getPlanBadge(selected.name)}
                   </span>
                   {selected.is_custom === 1 && (
-                    <span className="text-[10px] font-black tracking-[0.2em] px-3 py-1 bg-[#EEF4FF] text-[#656464] uppercase rounded-lg">
+                    <span className="text-[10px] font-black tracking-[0.2em] px-3 py-1 bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#656464] dark:text-[#9CA3AF] uppercase rounded-lg">
                       {t('plans.custom')}
                     </span>
                   )}
                 </div>
-                <h2 className="text-2xl font-black uppercase mt-2 text-[#151C25]">{selected.name}</h2>
+                <h2 className="text-2xl font-black uppercase mt-2 text-[#151C25] dark:text-white">{selected.name}</h2>
                 {selected.description && (
                   <p className="text-[#656464] text-sm mt-1">{selected.description}</p>
                 )}
@@ -200,7 +200,7 @@ export default function Plans() {
               </button>
             </div>
 
-            <div className="divide-y divide-[#EEF4FF]">
+            <div className="divide-y divide-[#EEF4FF] dark:divide-[#2C2C2C]">
               {selected.days?.map(day => (
                 <div key={day.id} className="px-6 py-5">
                   <p className="text-xs font-black tracking-[0.2em] uppercase mb-3 text-[#506600]">{day.name}</p>
@@ -211,7 +211,7 @@ export default function Plans() {
                       return (
                         <div key={i} className="flex justify-between items-center">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm text-[#151C25] font-medium">{displayName}</span>
+                            <span className="text-sm text-[#151C25] dark:text-white font-medium">{displayName}</span>
                             {vid && (
                               <button onClick={() => setVideoExercise(ex.exercise_name)} className="text-[#506600]/60 hover:text-[#506600] transition-colors">
                                 <span className="material-symbols-outlined text-base">play_circle</span>
@@ -227,7 +227,7 @@ export default function Plans() {
               ))}
             </div>
 
-            <div className="p-6 flex gap-3 bg-[#EEF4FF] rounded-b-2xl">
+            <div className="p-6 flex gap-3 bg-[#EEF4FF] dark:bg-[#2C2C2C] rounded-b-2xl">
               <button
                 onClick={() => activatePlan(selected)}
                 className="flex-1 py-4 font-black text-sm uppercase tracking-[0.2em] bg-[#CCFF00] text-black rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200"
@@ -237,7 +237,7 @@ export default function Plans() {
               {selected.is_custom === 1 && (
                 <button
                   onClick={() => deletePlan(selected.id)}
-                  className="px-5 py-4 font-black text-sm transition-all duration-200 bg-white/80 backdrop-blur-[24px] text-[#656464] rounded-xl shadow-lg hover:text-red-500 hover:bg-red-50 active:scale-95"
+                  className="px-5 py-4 font-black text-sm transition-all duration-200 bg-white/80 dark:bg-[#2C2C2C] text-[#656464] rounded-xl shadow-lg hover:text-red-500 hover:bg-red-50 active:scale-95"
                 >
                   <span className="material-symbols-outlined text-base">delete</span>
                 </button>
@@ -249,7 +249,7 @@ export default function Plans() {
         {/* ── Premium Catalog — Asymmetric Bento Grid ── */}
         <section>
           <div className="flex items-center gap-4 mb-6">
-            <span className="text-xs font-black tracking-[0.3em] uppercase text-[#151C25]">PREMIUM CATALOG</span>
+            <span className="text-xs font-black tracking-[0.3em] uppercase text-[#151C25] dark:text-white">PREMIUM CATALOG</span>
             <span className="text-xs font-black text-[#656464]">{plans.length} PROTOCOLS</span>
           </div>
 
@@ -262,7 +262,7 @@ export default function Plans() {
                 <button
                   key={plan.id}
                   onClick={() => openPlan(plan.id)}
-                  className={`group text-right p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] active:scale-[0.98] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] bg-white/80 backdrop-blur-[24px] ${isFeatured ? 'col-span-2 md:col-span-2' : ''} ${isActive ? 'ring-2 ring-[#CCFF00] ring-offset-2 ring-offset-[#F8F9FF]' : ''}`}
+                  className={`group text-right p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] active:scale-[0.98] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] bg-white dark:bg-[#1C1C1E] ${isFeatured ? 'col-span-2 md:col-span-2' : ''} ${isActive ? 'ring-2 ring-[#CCFF00] ring-offset-2 ring-offset-[#F8F9FF] dark:ring-offset-[#0e0e0e]' : ''}`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col items-start gap-2">
@@ -275,11 +275,11 @@ export default function Plans() {
                         </span>
                       )}
                     </div>
-                    <span className="material-symbols-outlined mt-1 text-[#DCE3F0] group-hover:text-[#151C25] transition-colors">chevron_left</span>
+                    <span className="material-symbols-outlined mt-1 text-[#DCE3F0] dark:text-[#3C3C3C] group-hover:text-[#151C25] dark:group-hover:text-white transition-colors">chevron_left</span>
                   </div>
 
                   <div className="flex-1">
-                    <p className="text-lg font-black uppercase leading-tight text-[#151C25]">{plan.name}</p>
+                    <p className="text-lg font-black uppercase leading-tight text-[#151C25] dark:text-white">{plan.name}</p>
                     {plan.description && (
                       <p className="text-xs mt-1 font-medium line-clamp-2 text-[#656464]">{plan.description}</p>
                     )}
@@ -292,7 +292,7 @@ export default function Plans() {
                         {plan.days?.length} {t('plans.days')}
                       </span>
                     </div>
-                    <span className={`text-[10px] font-black tracking-[0.2em] px-2 py-0.5 uppercase rounded-md ${plan.is_custom ? 'bg-[#EEF4FF] text-[#656464]' : 'bg-[#CCFF00] text-black'}`}>
+                    <span className={`text-[10px] font-black tracking-[0.2em] px-2 py-0.5 uppercase rounded-md ${plan.is_custom ? 'bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#656464] dark:text-[#9CA3AF]' : 'bg-[#CCFF00] text-black'}`}>
                       {plan.is_custom ? t('plans.custom') : t('plans.builtin')}
                     </span>
                   </div>
@@ -328,11 +328,11 @@ export default function Plans() {
       {/* ── Create Plan Modal (light) ── */}
       {showCreate && (
         <div className="fixed inset-0 z-50 bg-[#151C25]/50 backdrop-blur-sm flex items-end md:items-center justify-center px-4 pb-4 md:pb-0">
-          <div className="w-full max-w-lg bg-[#F8F9FF] rounded-2xl shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-lg bg-[#F8F9FF] dark:bg-[#1C1C1E] rounded-2xl shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center pb-4 mb-2">
               <div>
                 <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">NEW PROTOCOL</span>
-                <h2 className="text-xl font-black uppercase tracking-tight text-[#151C25]">{t('plans.createNew')}</h2>
+                <h2 className="text-xl font-black uppercase tracking-tight text-[#151C25] dark:text-white">{t('plans.createNew')}</h2>
               </div>
               <button onClick={() => setShowCreate(false)} className="text-[#656464] hover:text-[#151C25] transition-colors p-1 hover:bg-[#EEF4FF] rounded-lg">
                 <span className="material-symbols-outlined">close</span>
@@ -340,14 +340,14 @@ export default function Plans() {
             </div>
 
             <input
-              className="w-full px-4 py-3 font-bold text-sm outline-none bg-[#EEF4FF] text-[#151C25] placeholder:text-[#656464] rounded-xl focus:bg-[#DCE3F0] transition-colors"
+              className="w-full px-4 py-3 font-bold text-sm outline-none bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#151C25] dark:text-white placeholder:text-[#656464] rounded-xl focus:bg-[#DCE3F0] dark:focus:bg-[#3C3C3C] transition-colors"
               placeholder={t('plans.planName')}
               value={newName}
               onChange={e => setNewName(e.target.value)}
               dir="rtl"
             />
             <input
-              className="w-full px-4 py-3 font-bold text-sm outline-none bg-[#EEF4FF] text-[#151C25] placeholder:text-[#656464] rounded-xl focus:bg-[#DCE3F0] transition-colors"
+              className="w-full px-4 py-3 font-bold text-sm outline-none bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#151C25] dark:text-white placeholder:text-[#656464] rounded-xl focus:bg-[#DCE3F0] dark:focus:bg-[#3C3C3C] transition-colors"
               placeholder={t('plans.description')}
               value={newDesc}
               onChange={e => setNewDesc(e.target.value)}
@@ -365,7 +365,7 @@ export default function Plans() {
                 </button>
               </div>
               {newDays.map((day, i) => (
-                <div key={i} className="bg-[#EEF4FF] rounded-xl p-4 space-y-3">
+                <div key={i} className="bg-[#EEF4FF] dark:bg-[#2C2C2C] rounded-xl p-4 space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-black text-[#656464] tracking-[0.2em]">יום {i + 1}</span>
                     {newDays.length > 1 && (
@@ -375,14 +375,14 @@ export default function Plans() {
                     )}
                   </div>
                   <input
-                    className="w-full px-3 py-2 font-bold text-sm outline-none bg-white text-[#151C25] placeholder:text-[#656464] rounded-lg focus:bg-[#F8F9FF] transition-colors"
+                    className="w-full px-3 py-2 font-bold text-sm outline-none bg-white dark:bg-[#1C1C1E] text-[#151C25] dark:text-white placeholder:text-[#656464] rounded-lg focus:bg-[#F8F9FF] dark:focus:bg-[#2C2C2C] transition-colors"
                     placeholder="שם היום — למשל: PUSH"
                     value={day.name}
                     onChange={e => setNewDays(d => d.map((x, j) => j === i ? { ...x, name: e.target.value } : x))}
                     dir="rtl"
                   />
                   <textarea
-                    className="w-full px-3 py-2 font-bold text-sm outline-none resize-none bg-white text-[#151C25] placeholder:text-[#656464] rounded-lg focus:bg-[#F8F9FF] transition-colors"
+                    className="w-full px-3 py-2 font-bold text-sm outline-none resize-none bg-white dark:bg-[#1C1C1E] text-[#151C25] dark:text-white placeholder:text-[#656464] rounded-lg focus:bg-[#F8F9FF] dark:focus:bg-[#2C2C2C] transition-colors"
                     placeholder={'תרגילים — שורה לכל תרגיל:\nBench Press\nPull-ups'}
                     rows={4}
                     value={day.exercises}
