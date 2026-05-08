@@ -1,4 +1,4 @@
-import { Component, useEffect, useState, useRef } from 'react'
+﻿import { Component, useEffect, useState, useRef } from 'react'
 import { premiumFetch, authFetch } from '../api'
 import saladImg from '../assets/salad.jpg'
 
@@ -9,7 +9,7 @@ class NutritionErrorBoundary extends Component {
   static getDerivedStateFromError() { return { hasError: true } }
   render() {
     if (this.state.hasError) return (
-      <main className="pt-24 pb-32 px-6 min-h-screen bg-[#F8F9FF] flex items-center justify-center" dir="rtl">
+      <main className="pt-24 pb-32 px-6 min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] flex items-center justify-center" dir="rtl">
         <div className="text-center space-y-2">
           <span className="text-[#506600] text-2xl font-black uppercase tracking-widest block">KINETIC</span>
           <p className="text-[#656464] text-sm">שגיאה בטעינת הדף — נסה לרענן</p>
@@ -23,7 +23,7 @@ class NutritionErrorBoundary extends Component {
 /* ── Stitch macro card — no progress bar, surface hierarchy only ── */
 function MacroBar({ label, current, target, unit, color, pct, large }) {
   return (
-    <div className={`bg-white/80 backdrop-blur-[24px] rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${large ? 'p-7 gap-4 min-h-[200px]' : 'p-5 gap-3 min-h-[150px]'}`}>
+    <div className={`bg-white/80 dark:bg-[#1A1A1A] backdrop-blur-[24px] rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${large ? 'p-7 gap-4 min-h-[200px]' : 'p-5 gap-3 min-h-[150px]'}`}>
       <div className="flex justify-between items-start">
         <span className="text-[#656464] text-lg font-black">{label}</span>
         <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#EEF4FF]" style={{ color }}>{pct}%</span>
@@ -176,7 +176,7 @@ function Nutrition() {
   function toast(msg) { setToastMsg(msg); setTimeout(() => setToastMsg(''), 3000) }
 
   if (loading) return (
-    <main className="pt-24 pb-32 px-6 min-h-screen bg-[#F8F9FF] flex items-center justify-center">
+    <main className="pt-24 pb-32 px-6 min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] flex items-center justify-center">
       <span className="text-[#506600] text-2xl font-black animate-pulse uppercase tracking-widest">LOADING...</span>
     </main>
   )
@@ -193,7 +193,7 @@ function Nutrition() {
   const SNACKS    = presets.filter(p => p.key.startsWith('snack'))
 
   return (
-    <main className="min-h-screen bg-[#F8F9FF] pb-32 text-[#151C25]" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <main className="min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] pb-32 text-[#151C25] dark:text-white" dir="rtl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* Toast */}
       {toastMsg && (

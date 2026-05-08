@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authFetch } from '../api'
 import Navbar from '../components/Navbar'
@@ -42,7 +42,7 @@ export default function Pricing() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FF] text-[#151C25] font-space" dir="rtl">
+    <div className="min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] text-[#151C25] dark:text-white font-space" dir="rtl">
       <Navbar />
 
       {/* Hero */}
@@ -81,7 +81,7 @@ export default function Pricing() {
               className={`relative flex flex-col flex-1 p-8 rounded-3xl transition-all duration-300 ${
                 plan.highlight
                   ? 'bg-[#EEF4FF] border-2 border-[#CCFF00] scale-[1.02] shadow-[0_24px_48px_rgba(204,255,0,0.12)]'
-                  : 'bg-white shadow-[0_24px_48px_rgba(0,0,0,0.06)]'
+                  : 'bg-white dark:bg-[#1A1A1A] shadow-[0_24px_48px_rgba(0,0,0,0.06)] dark:shadow-none dark:border dark:border-gray-800'
               }`}
             >
               {plan.highlight && (
@@ -123,7 +123,7 @@ export default function Pricing() {
       <section className="py-16 px-8">
         <div className="max-w-4xl mx-auto">
           <h3 className="text-2xl font-black text-[#151C25] text-center uppercase tracking-tight mb-10 italic">השוואה מלאה</h3>
-          <div className="bg-white rounded-3xl overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
+          <div className="bg-white dark:bg-[#1A1A1A] rounded-3xl overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.06)] dark:shadow-none dark:border dark:border-gray-800">
             <div className="grid grid-cols-3 px-6 py-4 border-b border-[#EEF4FF]">
               <span className="text-[#656464] text-xs font-black uppercase text-right">פיצ׳ר</span>
               <span className="text-[#656464] text-xs font-black uppercase text-center">Free</span>
