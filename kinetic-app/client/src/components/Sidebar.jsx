@@ -14,7 +14,7 @@ export default function Sidebar() {
   ]
 
   return (
-    <aside className="hidden md:flex fixed left-0 top-0 h-full w-20 flex-col items-center py-6 pt-20 gap-2 kinetic-nav-bg bg-[#0e0e0e]/80 backdrop-blur-2xl z-40 border-r border-white/5">
+    <aside className="hidden md:flex fixed left-0 top-0 h-full w-20 flex-col items-center py-6 pt-20 gap-2 kinetic-nav-bg bg-white/95 dark:bg-[#0e0e0e]/80 backdrop-blur-2xl z-40 border-r border-black/5 dark:border-white/5">
       {NAV_ITEMS.map(item => (
         <NavLink
           key={item.to}
@@ -23,7 +23,7 @@ export default function Sidebar() {
           className={({ isActive }) =>
             `relative group ${isActive
               ? 'flex flex-col items-center justify-center bg-[#CCFF00] text-[#0e0e0e] rounded-xl w-14 py-2 active:scale-90 duration-300'
-              : 'flex flex-col items-center justify-center text-[#adaaaa] opacity-50 hover:opacity-100 hover:text-[#CCFF00] rounded-xl w-14 py-2 transition-all active:scale-90 duration-300'}`
+              : 'flex flex-col items-center justify-center text-[#656464] dark:text-[#adaaaa] opacity-70 hover:opacity-100 hover:text-[#506600] dark:hover:text-[#CCFF00] rounded-xl w-14 py-2 transition-all active:scale-90 duration-300'}`
           }
         >
           {({ isActive }) => (

@@ -52,7 +52,7 @@ export default function TopAppBar() {
   }, [])
 
   return (
-    <header className="fixed top-0 w-full z-50 kinetic-nav-bg bg-[#0e0e0e]/60 backdrop-blur-xl shadow-[0_20px_40px_rgba(204,255,0,0.05)]">
+    <header className="fixed top-0 w-full z-50 kinetic-nav-bg bg-white/90 dark:bg-[#0e0e0e]/60 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_40px_rgba(204,255,0,0.05)] border-b border-black/5 dark:border-white/5">
       <div className="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
           <div className="relative" ref={menuRef}>

@@ -125,6 +125,8 @@ function Nutrition() {
   const [searchResults, setSearchResults] = useState([])
   const [selectedFood, setSelectedFood] = useState(null)
   const [grams, setGrams] = useState(100)
+  const [recLoading, setRecLoading] = useState(false)
+  const [recommendations, setRecommendations] = useState(null)
   const searchTimerRef = useRef(null)
   const today = new Date().toISOString().split('T')[0]
 
@@ -162,6 +164,20 @@ function Nutrition() {
     if (!res) return
     const g = await res.json()
     setGapFiller(g)
+  }
+
+  async function fetchRecommendations() {
+    setRecLoading(true)
+    setRecommendations(null)
+    try {
+      const res = await authFetch(`${API}/recommendations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ remainingCalories, remainingProtein }),
+      })
+      const d = await res.json()
+      setRecommendations(d)
+    } catch { toast('שגיאה בטעינת המלצות') } finally { setRecLoading(false) }
   }
 
   function handleSearchChange(q) {
@@ -363,6 +379,55 @@ function Nutrition() {
               <div className="flex items-center gap-2 text-[#506600]">
                 <span className="font-black">✓</span>
                 <span className="font-black text-sm">הגעת ליעד הקלורי היומי — כל הכבוד!</span>
+              </div>
+            )}
+
+            {/* ── AI Recommendations button ── */}
+            {remainingCalories > 0 && (
+              <button
+                onClick={fetchRecommendations}
+                disabled={recLoading}
+                className="w-full flex items-center justify-center gap-2 bg-[#151C25] dark:bg-[#CCFF00] text-white dark:text-black py-3 rounded-xl font-black text-sm tracking-wide shadow-[0_4px_24px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_24px_rgba(204,255,0,0.3)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 disabled:opacity-60"
+              >
+                {recLoading
+                  ? <><span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full" />מחשב המלצות...</>
+                  : <><span className="text-base">✦</span> קבל המלצות AI</>
+                }
+              </button>
+            )}
+
+            {/* ── Recommendations panel ── */}
+            {recommendations && (
+              <div className="space-y-3 pt-1">
+                {recommendations.message && (
+                  <p className="text-[#506600] text-sm font-black text-center">{recommendations.message}</p>
+                )}
+                {(recommendations.options || []).map((opt, i) => (
+                  <div key={i} className="bg-[#F8F9FF] dark:bg-[#1A1A1A] rounded-2xl p-5 space-y-3 border border-[#EEF4FF] dark:border-white/10">
+                    <div>
+                      <span className="font-black text-[#151C25] dark:text-white text-sm block">{opt.label}</span>
+                      <span className="text-[#656464] text-xs">{opt.desc}</span>
+                    </div>
+                    <div className="space-y-2">
+                      {opt.items.map((item, j) => (
+                        <div key={j} className="flex justify-between items-center bg-white dark:bg-[#252525] rounded-xl px-4 py-2.5">
+                          <span className="font-black text-[#151C25] dark:text-white text-sm">{item.emoji} {item.name} <span className="text-[#656464] font-normal">{item.amount}</span></span>
+                          <div className="flex gap-3 text-right shrink-0">
+                            <span className="text-[#506600] text-xs font-black">{item.protein}g</span>
+                            <span className="text-[#656464] text-xs">{item.calories} kcal</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex justify-between items-center pt-1 border-t border-[#EEF4FF] dark:border-white/10">
+                      <span className="text-[#656464] text-[10px] uppercase font-black tracking-widest">סה״כ</span>
+                      <div className="flex gap-3">
+                        <span className="text-[#506600] text-xs font-black">{opt.totalProtein}g חלבון</span>
+                        <span className="text-[#656464] text-xs">{opt.totalCalories} kcal</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

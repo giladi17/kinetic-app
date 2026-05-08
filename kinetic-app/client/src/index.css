@@ -50,22 +50,22 @@ body.light-mode {
   --text-primary: #1a1a1a;
 }
 
-body.light-mode .bg-surface-container-low,
-body.light-mode .bg-surface-container-high,
-body.light-mode .bg-surface-container-highest {
+html:not(.dark) .bg-surface-container-low,
+html:not(.dark) .bg-surface-container-high,
+html:not(.dark) .bg-surface-container-highest {
   background-color: #ffffff !important;
 }
 
-body.light-mode .bg-surface-container {
+html:not(.dark) .bg-surface-container {
   background-color: #f0f0f0 !important;
 }
 
-body.light-mode .text-on-surface,
-body.light-mode .text-on-surface-variant {
+html:not(.dark) .text-on-surface,
+html:not(.dark) .text-on-surface-variant {
   color: #444 !important;
 }
 
-body.light-mode .kinetic-nav-bg {
+html:not(.dark) .kinetic-nav-bg {
   background-color: rgba(255,255,255,0.92) !important;
 }
 

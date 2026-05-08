@@ -1571,6 +1571,85 @@ app.get('/api/nutrition/gap-filler', requireAuth, checkPremium, asyncHandler(asy
   })
 }))
 
+// POST /api/recommendations — smart food combos to fill macro gap
+app.post('/api/recommendations', requireAuth, (req, res) => {
+  const cal  = Math.max(0, Math.round(Number(req.body.remainingCalories) || 0))
+  const prot = Math.max(0, Math.round(Number(req.body.remainingProtein)  || 0))
+
+  if (cal < 50 && prot < 5) {
+    return res.json({ options: [], message: 'הגעת לכל היעדים היומיים — כל הכבוד! 🏆' })
+  }
+
+  // Food DB: cal/prot per 100g (or per unit when isUnit=true)
+  const FOODS = {
+    chicken: { name: 'חזה עוף', emoji: '🍗', cal100: 165, prot100: 31 },
+    shake:   { name: 'שייק חלבון', emoji: '🥤', calU: 130, protU: 25, unit: 'מנה', isUnit: true },
+    tuna:    { name: 'טונה', emoji: '🐟', cal100: 116, prot100: 26 },
+    eggs:    { name: 'ביצה', emoji: '🥚', calU: 78, protU: 6, unit: 'יחידה', isUnit: true },
+    cottage: { name: 'קוטג׳', emoji: '🥛', cal100: 98, prot100: 11 },
+    yogurt:  { name: 'יוגורט יווני', emoji: '🥣', cal100: 87, prot100: 10 },
+    rice:    { name: 'אורז מבושל', emoji: '🍚', cal100: 130, prot100: 2.7 },
+    banana:  { name: 'בננה', emoji: '🍌', calU: 105, protU: 1.3, unit: 'יחידה', isUnit: true },
+    oats:    { name: 'שיבולת שועל', emoji: '🌾', cal100: 375, prot100: 12.5 },
+    almonds: { name: 'שקדים', emoji: '🥜', cal100: 580, prot100: 20 },
+    sweetpot:{ name: 'בטטה', emoji: '🍠', cal100: 86, prot100: 1.6 },
+  }
+
+  function portion(food, targetCal, targetProt) {
+    if (food.isUnit) {
+      const units = Math.max(1, Math.min(3, Math.round(
+        food.protU > 0 ? Math.max(targetProt / food.protU, targetCal / food.calU) : targetCal / food.calU
+      )))
+      return { name: food.name, emoji: food.emoji, amount: `${units} ${food.unit}`,
+               calories: Math.round(food.calU * units), protein: Math.round(food.protU * units) }
+    }
+    let g = food.prot100 > 1 ? Math.round(targetProt / (food.prot100 / 100)) : Math.round(targetCal / (food.cal100 / 100))
+    g = Math.max(50, Math.min(300, Math.round(g / 25) * 25))
+    return { name: food.name, emoji: food.emoji, amount: `${g}g`,
+             calories: Math.round(food.cal100 * g / 100), protein: Math.round(food.prot100 * g / 100) }
+  }
+
+  const STRATEGIES = [
+    {
+      label: 'פוקוס חלבון 💪', desc: 'מינימום קלוריות, מקסימום חלבון לשיקום שריר',
+      picks: (c, p) => {
+        const main = portion(FOODS.chicken, c * 0.7, p * 0.8)
+        const supp = portion(FOODS.shake, c - main.calories, p - main.protein)
+        return [main, supp]
+      },
+    },
+    {
+      label: 'ארוחה מאוזנת 🥗', desc: 'חלבון + פחמימות מורכבות לאנרגיה ושיקום',
+      picks: (c, p) => {
+        const main = portion(FOODS.chicken, c * 0.6, p * 0.85)
+        const carb = portion(FOODS.rice, c - main.calories, 0)
+        return [main, carb]
+      },
+    },
+    {
+      label: 'מהיר ונוח ⚡', desc: 'מזון מוכן לאכילה לסגירת הפער',
+      picks: (c, p) => {
+        const main = portion(FOODS.cottage, c * 0.5, p * 0.6)
+        const side = portion(FOODS.banana, c - main.calories, 0)
+        return [main, side]
+      },
+    },
+  ]
+
+  const options = STRATEGIES.map(s => {
+    const items = s.picks(cal, prot).filter(i => i.calories > 0)
+    return {
+      label: s.label,
+      desc: s.desc,
+      items,
+      totalCalories: items.reduce((t, i) => t + i.calories, 0),
+      totalProtein:  items.reduce((t, i) => t + i.protein, 0),
+    }
+  })
+
+  res.json({ remainingCalories: cal, remainingProtein: prot, options })
+})
+
 // GET /api/nutrition/scan/:barcode
 app.get('/api/nutrition/scan/:barcode', (req, res) => {
   const url = `https://world.openfoodfacts.org/api/v0/product/${req.params.barcode}.json`
