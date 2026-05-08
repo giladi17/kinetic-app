@@ -183,13 +183,13 @@ export default function Dashboard() {
 
   const weeklyBars    = (d.weeklyActivity || []).length > 0 ? d.weeklyActivity : []
   const protein       = macros?.protein?.consumed  ?? 0
-  const proteinTarget = macros?.protein?.target    ?? 200
+  const proteinTarget = macros?.protein?.target    ?? user?.daily_protein_target ?? 130
   const carbs         = macros?.carbs?.consumed    ?? 0
   const carbsTarget   = macros?.carbs?.target      ?? 250
   const fat           = macros?.fat?.consumed      ?? 0
   const fatTarget     = macros?.fat?.target        ?? 80
   const calories      = macros?.calories?.consumed ?? d.todayCalories    ?? 0
-  const calTarget     = macros?.calories?.target   ?? d.dailyCalorieTarget ?? 2000
+  const calTarget     = macros?.calories?.target   ?? user?.daily_calorie_target ?? d.dailyCalorieTarget ?? 2800
   const waterTarget   = user?.waterTarget ?? 2.5
   const waterPct      = Math.min(100, Math.round((water / waterTarget) * 100))
   const calPct        = calTarget > 0 ? Math.min(100, Math.round((calories / calTarget) * 100)) : 0

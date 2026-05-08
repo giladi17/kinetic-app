@@ -134,7 +134,7 @@ function Nutrition() {
       authFetch(`${API}/nutrition/presets`).then(r => r.json()),
     ])
       .then(([nutrition, p]) => { setData(nutrition); setPresets(p) })
-      .catch(() => { setData({ totals: {}, targets: { calories: 2500, protein: 160 }, meals: [] }) })
+      .catch(() => { setData({ totals: {}, targets: { calories: 2800, protein: 130 }, meals: [] }) })
       .finally(() => setLoading(false))
     fetchGapFiller()
     authFetch(`${API}/nutrition/recent`).then(r => r.json()).then(setRecentMeals).catch(() => {})
@@ -182,7 +182,7 @@ function Nutrition() {
   )
 
   const totals  = data?.totals || {}
-  const targets = data?.targets || { calories: 2500, protein: 160 }
+  const targets = data?.targets || { calories: 2800, protein: 130 }
   const calPct  = Math.min(100, Math.round(((totals.calories || 0) / targets.calories) * 100))
   const protPct = Math.min(100, Math.round(((totals.protein  || 0) / targets.protein)  * 100))
   const carbPct = Math.min(100, Math.round(((totals.carbs    || 0) / (targets.carbs || 300)) * 100))
@@ -276,7 +276,7 @@ function Nutrition() {
           </div>
           {showBarcode && (
             <BarcodeScanner onAdd={async (meal) => {
-              await fetch(`${API}/nutrition`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...meal, date: today, entry_method: 'barcode' }) })
+              await authFetch(`${API}/nutrition`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...meal, date: today, entry_method: 'barcode' }) })
               toast(`נוסף: ${meal.meal_name}`)
               const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
               setData(updated); setShowBarcode(false)
