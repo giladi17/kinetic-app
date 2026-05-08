@@ -1972,15 +1972,42 @@ app.get('/api/readiness/today', requireAuth, (req, res) => {
   res.json(row || null)
 })
 
+// GET /api/weight — weight history from Prisma (for WeightTracker chart)
+app.get('/api/weight', requireAuth, asyncHandler(async (req, res) => {
+  const prismaUserId = await getPrismaUserId(req)
+  if (!prismaUserId) return res.json([])
+  const logs = await prisma.weightLog.findMany({
+    where: { userId: prismaUserId },
+    orderBy: { date: 'asc' },
+    take: 60,
+    select: { weight: true, date: true },
+  })
+  res.json(logs.map(l => {
+    const d = new Date(l.date)
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    return { weight: parseFloat(l.weight.toFixed(1)), date: l.date.toISOString().split('T')[0], label: `${dd}/${mm}` }
+  }))
+}))
+
 // POST /api/weight
-app.post('/api/weight', requireAuth, (req, res) => {
+app.post('/api/weight', requireAuth, asyncHandler(async (req, res) => {
   const { weight, date, body_fat, notes } = req.body
   const d = date || new Date().toISOString().split('T')[0]
+  // SQLite — keeps Progress page working
   db.prepare('DELETE FROM weight_logs WHERE date = ? AND user_id = ?').run(d, req.dbUserId)
   const result = db.prepare('INSERT INTO weight_logs (weight, date, body_fat, notes, user_id) VALUES (?, ?, ?, ?, ?)').run(weight, d, body_fat ?? null, notes ?? '', req.dbUserId)
   db.prepare('UPDATE user_stats SET current_weight = ? WHERE id = ?').run(weight, req.dbUserId)
+  // Prisma — WeightTracker chart (one entry per day)
+  const prismaUserId = await getPrismaUserId(req)
+  if (prismaUserId) {
+    const dayStart = new Date(d + 'T00:00:00.000Z')
+    const dayEnd   = new Date(d + 'T23:59:59.999Z')
+    await prisma.weightLog.deleteMany({ where: { userId: prismaUserId, date: { gte: dayStart, lte: dayEnd } } })
+    await prisma.weightLog.create({ data: { userId: prismaUserId, weight: parseFloat(weight), date: new Date(d + 'T12:00:00.000Z') } })
+  }
   res.json({ id: result.lastInsertRowid })
-})
+}))
 
 // PATCH /api/stats
 app.patch('/api/stats', requireAuth, (req, res) => {

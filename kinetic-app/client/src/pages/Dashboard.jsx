@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { useAppData } from '../context/AppDataContext'
 import { SkeletonCard, SkeletonText } from '../components/Skeleton'
 import WeeklyNutritionChart from '../components/WeeklyNutritionChart'
+import WeightTracker from '../components/WeightTracker'
 import { useLang } from '../context/LanguageContext'
 import { registerPushNotifications, isPushSupported } from '../utils/pushNotifications'
 
@@ -479,8 +480,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ⑥ Weekly Nutrition Chart — full width */}
-        <div className="md:col-span-12 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
+        {/* ⑥ Weekly Nutrition Chart — 8 cols */}
+        <div className="md:col-span-8 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
           <div className="flex justify-between items-end mb-2">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">7 DAYS</p>
@@ -493,6 +494,17 @@ export default function Dashboard() {
             </span>
           </div>
           <WeeklyNutritionChart />
+        </div>
+
+        {/* ⑥b Weight Tracker — 4 cols */}
+        <div className="md:col-span-4 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
+          <div className="mb-2">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">מעקב משקל</p>
+            <h2 className="text-xl font-black uppercase tracking-tight text-[#151C25] dark:text-white">
+              שקילה
+            </h2>
+          </div>
+          <WeightTracker />
         </div>
 
         {/* ⑦ Quick Stats — full width — LIGHT GLASS */}
