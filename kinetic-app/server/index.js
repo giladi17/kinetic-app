@@ -1313,6 +1313,89 @@ app.get('/api/nutrition/recent', requireAuth, asyncHandler(async (req, res) => {
   res.json(meals)
 }))
 
+// POST /api/nutrition/parse — free-text meal parser (keyword matching)
+app.post('/api/nutrition/parse', requireAuth, asyncHandler(async (req, res) => {
+  const text = (req.body.text || '').trim()
+  if (!text) return res.status(400).json({ error: 'text required' })
+
+  // [name, keywords, calU/calG, protU/protG, unit, defQ/defG]
+  const FOODS = [
+    { name: 'חביתה',        kw: ['חביתה','אומלט','חביתת'],              calU: 160, protU: 13, unit: 'מנה',    defQ: 1 },
+    { name: 'ביצה',         kw: ['ביצה','ביצים','ביצת'],                calU: 78,  protU: 7,  unit: 'יחידה',  defQ: 1 },
+    { name: 'חזה עוף',      kw: ['חזה עוף','שניצל','פילה עוף'],         calG: 165, protG: 31, defG: 150 },
+    { name: 'עוף',          kw: ['עוף','פרגית'],                        calG: 165, protG: 27, defG: 150 },
+    { name: 'טונה',         kw: ['טונה'],                               calG: 116, protG: 26, defG: 80  },
+    { name: 'סלמון',        kw: ['סלמון'],                              calG: 208, protG: 20, defG: 100 },
+    { name: "קוטג'",        kw: ["קוטג","קוטג'"],                       calG: 98,  protG: 11, defG: 200 },
+    { name: 'יוגורט יווני', kw: ['יוגורט'],                             calG: 87,  protG: 10, defG: 150 },
+    { name: 'גבינה צהובה',  kw: ['גבינה'],                              calG: 364, protG: 25, defG: 30  },
+    { name: 'שייק חלבון',   kw: ['שייק','פרוטאין','ווי'],               calU: 130, protU: 25, unit: 'מנה',    defQ: 1 },
+    { name: 'בשר טחון',     kw: ['בשר','המבורגר','בורגר'],              calG: 254, protG: 26, defG: 150 },
+    { name: 'לחם',          kw: ['לחם','פרוסה','פרוסות','טוסט'],        calU: 69,  protU: 2.4,unit: 'פרוסה',  defQ: 1 },
+    { name: 'אורז',         kw: ['אורז'],                               calG: 130, protG: 2.7, defG: 150 },
+    { name: 'פסטה',         kw: ['פסטה','ספגטי','מקרוני'],              calG: 131, protG: 5,   defG: 150 },
+    { name: 'שיבולת שועל',  kw: ['שיבולת','קוואקר','פתיתי'],            calG: 375, protG: 12.5,defG: 80  },
+    { name: 'בטטה',         kw: ['בטטה'],                               calG: 86,  protG: 1.6, defG: 150 },
+    { name: 'תפוח',         kw: ['תפוח'],                               calU: 95,  protU: 0.5, unit: 'יחידה', defQ: 1 },
+    { name: 'בננה',         kw: ['בננה','בננות'],                       calU: 105, protU: 1.3, unit: 'יחידה', defQ: 1 },
+    { name: 'אבוקדו',       kw: ['אבוקדו'],                             calU: 240, protU: 3,   unit: 'יחידה', defQ: 1 },
+    { name: 'שקדים',        kw: ['שקדים','אגוזים'],                     calG: 580, protG: 20,  defG: 30  },
+    { name: 'חמאת בוטנים',  kw: ['חמאת בוטנים','חמאה'],                calG: 588, protG: 25,  defG: 30  },
+    { name: 'חלב',          kw: ['חלב'],                                calG: 42,  protG: 3.4, defG: 200 },
+  ]
+
+  const HEB_NUMS = { 'אחד': 1, 'אחת': 1, 'שניים': 2, 'שתיים': 2, 'שני': 2, 'שתי': 2, 'שלוש': 3, 'שלושה': 3, 'ארבע': 4, 'ארבעה': 4, 'חמש': 5, 'חמישה': 5 }
+
+  function getQty(chunk) {
+    const m = chunk.match(/(\d+(?:\.\d+)?)\s*(?:גרם|גר|g|ml)?$/)
+    if (m) return parseFloat(m[1])
+    const words = chunk.trim().split(/\s+/)
+    for (let i = words.length - 1; i >= 0; i--) if (HEB_NUMS[words[i]]) return HEB_NUMS[words[i]]
+    return null
+  }
+
+  const items = []
+  const matched = []
+
+  for (const food of FOODS) {
+    for (const kw of food.kw) {
+      const idx = text.indexOf(kw)
+      if (idx === -1) continue
+      if (matched.some(([s, e]) => idx >= s && idx < e)) continue
+
+      const before = text.slice(Math.max(0, idx - 20), idx)
+      const qty    = getQty(before)
+      let cal, prot, amount
+
+      if (food.calU !== undefined) {
+        const n = qty || food.defQ
+        cal    = Math.round(food.calU * n)
+        prot   = parseFloat((food.protU * n).toFixed(1))
+        amount = `${n} ${food.unit}`
+      } else {
+        const g = qty || food.defG
+        cal    = Math.round(food.calG * g / 100)
+        prot   = parseFloat((food.protG * g / 100).toFixed(1))
+        amount = `${g}g`
+      }
+
+      items.push({ name: food.name, amount, calories: cal, protein: prot })
+      matched.push([idx, idx + kw.length])
+      break
+    }
+  }
+
+  if (items.length === 0) {
+    return res.json({ found: false, message: 'לא זיהיתי מזון בטקסט — נסה להיות ספציפי יותר' })
+  }
+
+  const totalCalories = items.reduce((t, i) => t + i.calories, 0)
+  const totalProtein  = parseFloat(items.reduce((t, i) => t + i.protein, 0).toFixed(1))
+  const meal_name     = text.length > 50 ? text.slice(0, 50) + '...' : text
+
+  res.json({ found: true, items, totalCalories, totalProtein, meal_name })
+}))
+
 // GET /api/nutrition/search?q=...
 // ─── READINESS ───────────────────────────────────────────────────────────────
 

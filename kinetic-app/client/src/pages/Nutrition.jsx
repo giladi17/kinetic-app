@@ -127,6 +127,11 @@ function Nutrition() {
   const [grams, setGrams] = useState(100)
   const [recLoading, setRecLoading] = useState(false)
   const [recommendations, setRecommendations] = useState(null)
+  const [aiText, setAiText] = useState('')
+  const [aiParsing, setAiParsing] = useState(false)
+  const [aiResult, setAiResult] = useState(null)
+  const [loggingRec, setLoggingRec] = useState(null)
+  const [loggedRecs, setLoggedRecs] = useState(new Set())
   const searchTimerRef = useRef(null)
   const today = new Date().toISOString().split('T')[0]
 
@@ -178,6 +183,38 @@ function Nutrition() {
       const d = await res.json()
       setRecommendations(d)
     } catch { toast('שגיאה בטעינת המלצות') } finally { setRecLoading(false) }
+  }
+
+  async function parseAI() {
+    if (!aiText.trim()) return
+    setAiParsing(true); setAiResult(null)
+    try {
+      const res = await authFetch(`${API}/nutrition/parse`, { method: 'POST', body: JSON.stringify({ text: aiText }) })
+      setAiResult(await res.json())
+    } catch { toast('שגיאה בניתוח הטקסט') } finally { setAiParsing(false) }
+  }
+
+  async function logAIMeal() {
+    if (!aiResult?.found) return
+    try {
+      await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: aiResult.meal_name, calories: aiResult.totalCalories, protein: aiResult.totalProtein, carbs: 0, fat: 0, date: today, entry_method: 'ai_text' }) })
+      toast(`✨ נוסף: ${aiResult.meal_name}`)
+      const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+      setData(updated); setAiText(''); setAiResult(null); fetchGapFiller()
+    } catch { toast('שגיאה — נסה שוב') }
+  }
+
+  async function logOption(opt, idx) {
+    setLoggingRec(idx)
+    try {
+      for (const item of opt.items) {
+        await authFetch(`${API}/nutrition`, { method: 'POST', body: JSON.stringify({ meal_name: item.name, calories: item.calories, protein: item.protein, carbs: 0, fat: 0, date: today, entry_method: 'recommendation' }) })
+      }
+      toast(`✓ ${opt.label} נוסף ליומן`)
+      setLoggedRecs(prev => new Set([...prev, idx]))
+      const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
+      setData(updated); fetchGapFiller()
+    } catch { toast('שגיאה — נסה שוב') } finally { setLoggingRec(null) }
   }
 
   function handleSearchChange(q) {
@@ -261,6 +298,56 @@ function Nutrition() {
 
       {/* ── Content (no max-w-3xl container — full editorial width) ── */}
       <div className="px-5 md:px-10 pt-10 max-w-5xl mx-auto space-y-8">
+
+        {/* ── AI Smart Input ── */}
+        <div className="bg-white/80 dark:bg-[#1C1C1E] backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] space-y-4">
+          <div>
+            <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">AI ASSISTANT</span>
+            <h3 className="font-black text-[#151C25] dark:text-white text-lg uppercase tracking-tight leading-none">הזנה חכמה ✨</h3>
+            <p className="text-[#656464] text-xs mt-1">כתוב מה אכלת בשפה חופשית</p>
+          </div>
+          <textarea
+            className="w-full bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] dark:text-white text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors resize-none"
+            placeholder={`לדוגמה: "2 פרוסות לחם עם חביתה וקוטג'"`}
+            rows={3}
+            value={aiText}
+            onChange={e => { setAiText(e.target.value); setAiResult(null) }}
+            dir="rtl"
+          />
+          <button
+            onClick={parseAI}
+            disabled={aiParsing || !aiText.trim()}
+            className="w-full flex items-center justify-center gap-2 bg-[#151C25] dark:bg-[#CCFF00] text-white dark:text-black py-3 rounded-xl font-black text-sm tracking-wide shadow-[0_4px_24px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_24px_rgba(204,255,0,0.3)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 disabled:opacity-60"
+          >
+            {aiParsing
+              ? <><span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full" />מנתח...</>
+              : <>✨ הוסף ארוחה ב-AI</>
+            }
+          </button>
+          {aiResult && !aiResult.found && (
+            <p className="text-[#656464] text-sm text-center py-1">{aiResult.message}</p>
+          )}
+          {aiResult?.found && (
+            <div className="bg-[#F0F7E0] dark:bg-[#1a2400] rounded-xl p-4 space-y-3">
+              <p className="text-[#506600] font-black text-sm">✓ זיהיתי {aiResult.totalCalories} קלוריות ו-{aiResult.totalProtein}g חלבון</p>
+              <div className="space-y-1.5">
+                {aiResult.items.map((item, i) => (
+                  <div key={i} className="flex justify-between text-xs">
+                    <span className="text-[#151C25] dark:text-white font-black">{item.name} <span className="text-[#656464] font-normal">{item.amount}</span></span>
+                    <div className="flex gap-3">
+                      <span className="text-[#506600] font-black">{item.protein}g</span>
+                      <span className="text-[#656464]">{item.calories} kcal</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-2 pt-1">
+                <button onClick={logAIMeal} className="flex-1 bg-[#CCFF00] text-black py-2.5 rounded-xl font-black text-sm shadow-[0_4px_16px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200">✓ הוסף ליומן</button>
+                <button onClick={() => setAiResult(null)} className="px-4 bg-[#EEF4FF] text-[#656464] py-2.5 rounded-xl font-black text-sm hover:bg-[#DCE3F0] active:scale-95 transition-all duration-200">ביטול</button>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* ── Macro Bento Grid — asymmetric ── */}
         {/* Row 1: Calories (featured, 2 cols) + Protein (1 col) */}
@@ -426,6 +513,16 @@ function Nutrition() {
                         <span className="text-[#656464] text-xs">{opt.totalCalories} kcal</span>
                       </div>
                     </div>
+                    <button
+                      onClick={() => logOption(opt, i)}
+                      disabled={loggingRec === i || loggedRecs.has(i)}
+                      className={`w-full py-2.5 rounded-xl font-black text-sm transition-all duration-200 active:scale-95 hover:-translate-y-0.5 ${loggedRecs.has(i) ? 'bg-[#EEF4FF] text-[#506600] cursor-default' : 'bg-[#CCFF00] text-black shadow-[0_4px_16px_rgba(204,255,0,0.35)] hover:shadow-[0_8px_24px_rgba(204,255,0,0.5)]'}`}
+                    >
+                      {loggingRec === i
+                        ? <span className="flex items-center justify-center gap-2"><span className="animate-spin inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full" />מוסיף...</span>
+                        : loggedRecs.has(i) ? '✓ נוסף ליומן' : '🍽 אכלתי את זה'
+                      }
+                    </button>
                   </div>
                 ))}
               </div>
