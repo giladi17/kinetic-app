@@ -41,17 +41,22 @@ export default function Onboarding() {
 
   async function finish() {
     setSaving(true)
+    const profileData = {
+      goal,
+      fitnessLevel,
+      daysPerWeek: days === '5+' ? 5 : parseInt(days),
+      age: parseInt(age) || 25,
+    }
     try {
       await authFetch(`${API}/users/onboarding`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          goal,
-          fitnessLevel,
-          daysPerWeek: days === '5+' ? 5 : parseInt(days),
-          age: parseInt(age) || 25,
-        }),
+        body: JSON.stringify(profileData),
       })
+      // Persist to Prisma (PostgreSQL) so profile survives server restarts
+      authFetch(`${API}/profile`, {
+        method: 'POST',
+        body: JSON.stringify(profileData),
+      }).catch(() => {})
       await refreshUser()
       navigate('/dashboard', { replace: true })
     } catch {

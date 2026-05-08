@@ -2403,10 +2403,56 @@ app.post('/api/ai/generate-plan', requireAuth, asyncHandler(async (req, res) => 
 
 // ─── USERS ──────────────────────────────────────────────────────────────────
 
+// GET /api/profile
+app.get('/api/profile', requireAuth, asyncHandler(async (req, res) => {
+  const prismaUserId = await getPrismaUserId(req)
+  if (!prismaUserId) return res.json(null)
+  const profile = await prisma.userProfile.findUnique({ where: { userId: prismaUserId } })
+  res.json(profile || null)
+}))
+
+// POST /api/profile
+app.post('/api/profile', requireAuth, asyncHandler(async (req, res) => {
+  const { goal, fitnessLevel, daysPerWeek, age } = req.body
+  const prismaUserId = await getPrismaUserId(req)
+  if (!prismaUserId) return res.status(400).json({ error: 'user not found' })
+  const profile = await prisma.userProfile.upsert({
+    where: { userId: prismaUserId },
+    create: {
+      userId: prismaUserId,
+      goal: goal || null,
+      fitnessLevel: fitnessLevel || null,
+      daysPerWeek: parseInt(daysPerWeek) || null,
+      age: parseInt(age) || null,
+    },
+    update: {
+      goal: goal || null,
+      fitnessLevel: fitnessLevel || null,
+      daysPerWeek: parseInt(daysPerWeek) || null,
+      age: parseInt(age) || null,
+    },
+  })
+  res.json(profile)
+}))
+
 // GET /api/users/me
-app.get('/api/users/me', requireAuth, (req, res) => {
+app.get('/api/users/me', requireAuth, asyncHandler(async (req, res) => {
   const s = db.prepare('SELECT * FROM user_stats WHERE id = ?').get(req.dbUserId)
   const u = db.prepare('SELECT is_pro FROM users WHERE id = ?').get(req.dbUserId)
+  let onboardingDone = s.onboarding_done || 0
+  // If SQLite says not done, check Prisma — PostgreSQL persists across Railway redeploys
+  if (!onboardingDone) {
+    try {
+      const prismaUserId = await getPrismaUserId(req)
+      if (prismaUserId) {
+        const profile = await prisma.userProfile.findUnique({ where: { userId: prismaUserId } })
+        if (profile) {
+          onboardingDone = 1
+          db.prepare('UPDATE user_stats SET onboarding_done = 1 WHERE id = ?').run(req.dbUserId)
+        }
+      }
+    } catch {}
+  }
   const trialDate = s.trial_ends_at ? new Date(s.trial_ends_at) : null
   const now = new Date()
   const daysLeft = trialDate ? Math.max(0, Math.ceil((trialDate - now) / 86400000)) : 0
@@ -2421,14 +2467,13 @@ app.get('/api/users/me', requireAuth, (req, res) => {
     isPremium,
     dailyCalorieTarget: s.daily_calorie_target,
     dailyProteinTarget: s.daily_protein_target,
-    onboardingDone: s.onboarding_done || 0,
+    onboardingDone,
     tourDone: s.tour_done === 1,
     gender: s.gender || 'male',
     aiPersona: s.ai_persona || 'auto',
     waterToday: s.water_date === today ? (s.water_today || 0) : 0,
   })
-})
-
+}))
 // PATCH /api/users/tour-done
 app.patch('/api/users/tour-done', requireAuth, (req, res) => {
   db.prepare('UPDATE user_stats SET tour_done = 1 WHERE id = ?').run(req.dbUserId)
@@ -2545,7 +2590,7 @@ setInterval(async () => {
 }, 30 * 60 * 1000)
 
 // POST /api/users/onboarding
-app.post('/api/users/onboarding', requireAuth, (req, res) => {
+app.post('/api/users/onboarding', requireAuth, asyncHandler(async (req, res) => {
   // Skip mode — just mark onboarding done
   if (req.body.skip === true) {
     db.prepare('UPDATE user_stats SET onboarding_done = 1 WHERE id = ?').run(req.dbUserId)
@@ -2617,8 +2662,21 @@ app.post('/api/users/onboarding', requireAuth, (req, res) => {
     }
   }
 
+
+  // Persist onboarding profile to Prisma so it survives Railway redeploys
+  try {
+    const prismaUserId = await getPrismaUserId(req)
+    if (prismaUserId) {
+      const dpw = parseInt(daysPerWeek) || 3
+      await prisma.userProfile.upsert({
+        where: { userId: prismaUserId },
+        create: { userId: prismaUserId, goal: goal || null, fitnessLevel: fitnessLevel || null, daysPerWeek: dpw, age: a },
+        update: { goal: goal || null, fitnessLevel: fitnessLevel || null, daysPerWeek: dpw, age: a },
+      })
+    }
+  } catch (e) { console.error('Prisma profile upsert error:', e.message) }
   res.json({ success: true, tier: 'premium', trialEndsAt: trialStr, calories, protein })
-})
+}))
 
 // PATCH /api/users/upgrade
 app.patch('/api/users/upgrade', requireAuth, (req, res) => {
