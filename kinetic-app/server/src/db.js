@@ -1,17 +1,17 @@
+const { Pool } = require('pg')
+const { PrismaPg } = require('@prisma/adapter-pg')
 const { PrismaClient } = require('../prisma/generated/client')
 require('dotenv').config()
 
-const dbUrl = process.env.DATABASE_URL
-if (!dbUrl) {
-  console.error('CRITICAL ERROR: DATABASE_URL is not defined in the environment.')
+const connectionString = process.env.DATABASE_URL
+
+if (!connectionString) {
+  console.error('CRITICAL ERROR: DATABASE_URL is not defined.')
 }
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: dbUrl,
-    },
-  },
-})
+const pool = new Pool({ connectionString })
+const adapter = new PrismaPg(pool)
+
+const prisma = new PrismaClient({ adapter })
 
 module.exports = prisma

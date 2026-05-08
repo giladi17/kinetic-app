@@ -15,6 +15,7 @@
   "type": "commonjs",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.8.0",
@@ -25,12 +26,12 @@
     "google-auth-library": "^10.6.2",
     "jsonwebtoken": "^9.0.3",
     "node-cron": "^4.2.1",
+    "pg": "^8.20.0",
+    "prisma": "^7.8.0",
     "resend": "^6.11.0",
     "stripe": "^22.0.1",
-    "prisma": "^7.8.0",
     "web-push": "^3.6.7"
   },
-  "devDependencies": {},
   "prisma": {
     "schema": "prisma/schema.prisma"
   }
