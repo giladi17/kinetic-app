@@ -1466,17 +1466,10 @@ app.get('/api/nutrition/search', requireAuth, (req, res) => {
 })
 
 // GET /api/nutrition/gap-filler
-app.get('/api/nutrition/gap-filler', requireAuth, checkPremium, (req, res) => {
+app.get('/api/nutrition/gap-filler', requireAuth, checkPremium, asyncHandler(async (req, res) => {
   const today = new Date().toISOString().split('T')[0]
-  const stats = db.prepare('SELECT * FROM user_stats WHERE id = ?').get(req.dbUserId)
-  const user  = db.prepare('SELECT * FROM users WHERE id = ?').get(req.dbUserId)
 
-  const totals = db.prepare(`
-    SELECT SUM(calories) AS calories, SUM(protein) AS protein
-    FROM nutrition_logs WHERE date = ? AND user_id = ?
-  `).get(today, req.dbUserId)
-
-  // Today's session + workout category for MET
+  // Today's session + workout category for MET (still from SQLite)
   const todaySession = db.prepare(`
     SELECT s.duration, w.category FROM sessions s
     LEFT JOIN workouts w ON s.workout_id = w.id
@@ -1486,17 +1479,30 @@ app.get('/api/nutrition/gap-filler', requireAuth, checkPremium, (req, res) => {
 
   const MET = { HIIT: 8, STRENGTH: 5, CARDIO: 7, YOGA: 3 }
   const met = MET[todaySession?.category?.toUpperCase()] || 0
-  const weightKg = stats?.current_weight || 75
+  const weightKg = 75
   const durationHours = (todaySession?.duration || 0) / 3600
   const caloriesBurned = Math.round(met * weightKg * durationHours)
 
-  const caloriesConsumed = Math.round(totals?.calories || 0)
-  const proteinConsumed  = Math.round(totals?.protein  || 0)
-  const caloriesTarget   = stats?.daily_calorie_target || 2500
-  const proteinTarget    = stats?.daily_protein_target  || 160
+  // Pull today's nutrition totals from Prisma
+  const prismaUserId = await getPrismaUserId(req)
+  let caloriesConsumed = 0
+  let proteinConsumed  = 0
+  if (prismaUserId) {
+    const dayStart = new Date(today + 'T00:00:00.000Z')
+    const dayEnd   = new Date(today + 'T23:59:59.999Z')
+    const agg = await prisma.nutritionLog.aggregate({
+      where: { userId: prismaUserId, date: { gte: dayStart, lte: dayEnd } },
+      _sum: { calories: true, protein: true },
+    })
+    caloriesConsumed = Math.round(agg._sum.calories || 0)
+    proteinConsumed  = Math.round(agg._sum.protein  || 0)
+  }
 
-  const caloriesGap = caloriesTarget + caloriesBurned - caloriesConsumed
-  const proteinGap  = proteinTarget  - proteinConsumed
+  const caloriesTarget = 2800
+  const proteinTarget  = 130
+
+  const caloriesGap = Math.max(0, caloriesTarget + caloriesBurned - caloriesConsumed)
+  const proteinGap  = Math.max(0, proteinTarget  - proteinConsumed)
   const postWorkoutWindow = !!todaySession
 
   // Build smart suggestions
@@ -1563,7 +1569,7 @@ app.get('/api/nutrition/gap-filler', requireAuth, checkPremium, (req, res) => {
     message,
     suggestions: uniqueSuggestions.slice(0, 4),
   })
-})
+}))
 
 // GET /api/nutrition/scan/:barcode
 app.get('/api/nutrition/scan/:barcode', (req, res) => {
