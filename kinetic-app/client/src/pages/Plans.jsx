@@ -63,7 +63,6 @@ export default function Plans() {
         animate: true,
         showProgress: false,
         steps: [{
-          element: '#tour-plan',
           popover: {
             title: 'תוכניות אימון',
             description: 'בחר את הפרוטוקול שלך והתחל לעבוד — PPL, Full Body, או תוכנית מותאמת אישית.',
@@ -77,7 +76,7 @@ export default function Plans() {
         },
       })
       d.drive()
-    }, 800)
+    }, 300)
     return () => clearTimeout(t)
   }, [loading, plans]) // eslint-disable-line react-hooks/exhaustive-deps
 

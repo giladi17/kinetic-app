@@ -159,7 +159,6 @@ function Nutrition() {
         animate: true,
         showProgress: false,
         steps: [{
-          element: '#tour-nut',
           popover: {
             title: 'הזנה אוטומטית',
             description: 'פשוט כתוב מה אכלת כאן, או השתמש בכפתורים המהירים למטה — ה-AI יחשב הכל.',
@@ -173,7 +172,7 @@ function Nutrition() {
         },
       })
       d.drive()
-    }, 800)
+    }, 300)
     return () => clearTimeout(t)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

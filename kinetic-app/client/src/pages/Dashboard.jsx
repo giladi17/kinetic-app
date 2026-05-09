@@ -186,7 +186,6 @@ export default function Dashboard() {
         animate: true,
         showProgress: false,
         steps: [{
-          element: '#tour-dash',
           popover: {
             title: 'לוח הבקרה שלך',
             description: 'כאן תוכל לראות את ההתקדמות היומית שלך — מאקרו, צעדים, ומדד התאוששות.',
@@ -200,7 +199,7 @@ export default function Dashboard() {
         },
       })
       d.drive()
-    }, 800)
+    }, 300)
     return () => clearTimeout(t)
   }, [loading]) // eslint-disable-line react-hooks/exhaustive-deps
 
