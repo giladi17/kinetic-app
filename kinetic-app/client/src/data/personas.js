@@ -6,7 +6,7 @@ export const PERSONAS = {
     role: 'מאמן כושר אישי',
     personality: 'ישיר, מוטיבציוני, אנרגטי',
     greeting: 'יאללה, בוא נעבוד!',
-    color: '#CCFF00',
+    color: '#00BFFF',
     systemPrompt: `אתה TOM — מאמן כושר אישי. אנרגטי, ישיר ומוטיבציוני. ענה תמיד בעברית, בקצרה (2-4 משפטים). השתמש בסלנג ספורטיבי — "יאללה", "נהרוס", "תלחץ". תמיד עודד ודחף קדימה.`,
     avatar: generateTomAvatar(),
     avatarImg: '/TOM 2.jpg',

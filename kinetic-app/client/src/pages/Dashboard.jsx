@@ -10,7 +10,7 @@ import { useLang } from '../context/LanguageContext'
 import { registerPushNotifications, isPushSupported } from '../utils/pushNotifications'
 
 const API  = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-const LIME = '#CCFF00'
+const LIME = '#00BFFF'
 const TEAL = '#00BFFF'
 
 /* ─── Dark mode hook ─── */
@@ -52,7 +52,7 @@ function RecoveryBarChart({ data, accent, dark }) {
           ? accent
           : dark ? 'rgba(0,191,255,0.07)' : 'rgba(21,28,37,0.15)'
         const glowShadow = day.today
-          ? `0 0 18px ${dark ? 'rgba(0,191,255,0.45)' : 'rgba(204,255,0,0.4)'}`
+          ? `0 0 18px ${dark ? 'rgba(0,191,255,0.45)' : 'rgba(0,191,255,0.4)'}`
           : 'none'
         return (
           <div key={i} className="flex-1 flex flex-col items-center gap-2">

@@ -116,7 +116,7 @@ export default function Plans() {
         <div className="fixed inset-0 bg-[#151C25]/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setVideoExercise(null)}>
           <div className="w-full max-w-md" onClick={e => e.stopPropagation()}>
             <div className="flex justify-end mb-3">
-              <button onClick={() => setVideoExercise(null)} className="bg-white/80 dark:bg-[#2C2C2C] backdrop-blur-[24px] rounded-full p-2 shadow-xl hover:bg-[#CCFF00] transition-colors">
+              <button onClick={() => setVideoExercise(null)} className="bg-white/80 dark:bg-[#2C2C2C] backdrop-blur-[24px] rounded-full p-2 shadow-xl hover:bg-[#00BFFF] transition-colors">
                 <span className="material-symbols-outlined text-[#151C25]">close</span>
               </button>
             </div>
@@ -127,7 +127,7 @@ export default function Plans() {
 
       {/* Toast */}
       {toast && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#CCFF00] text-black px-6 py-3 font-black text-sm shadow-xl tracking-[0.2em] rounded-xl">{toast}</div>
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#00BFFF] text-black px-6 py-3 font-black text-sm shadow-xl tracking-[0.2em] rounded-xl">{toast}</div>
       )}
 
       {/* ── Hero (asymmetric bleeding) ── */}
@@ -139,7 +139,7 @@ export default function Plans() {
             <p className="text-[#656464] text-sm mt-4 uppercase tracking-widest font-bold">בנה את הגוף שלך</p>
             <button
               onClick={() => setShowCreate(true)}
-              className="mt-8 self-end flex items-center gap-2 px-6 py-3 font-black text-sm uppercase tracking-[0.2em] bg-[#CCFF00] text-black rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200"
+              className="mt-8 self-end flex items-center gap-2 px-6 py-3 font-black text-sm uppercase tracking-[0.2em] bg-[#00BFFF] text-black rounded-xl shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-95 transition-all duration-200"
             >
               <span className="material-symbols-outlined text-lg">add</span>
               {t('plans.create')}
@@ -165,7 +165,7 @@ export default function Plans() {
             </div>
             <button
               onClick={() => navigate('/plans')}
-              className="flex-shrink-0 bg-[#CCFF00] text-black px-8 py-4 font-black text-sm uppercase tracking-[0.2em] rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+              className="flex-shrink-0 bg-[#00BFFF] text-black px-8 py-4 font-black text-sm uppercase tracking-[0.2em] rounded-xl shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
             >
               {t('plans.startToday')}
             </button>
@@ -178,7 +178,7 @@ export default function Plans() {
             <div className="flex items-start justify-between p-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-[10px] font-black tracking-[0.2em] px-3 py-1 bg-[#CCFF00] text-black uppercase rounded-lg">
+                  <span className="text-[10px] font-black tracking-[0.2em] px-3 py-1 bg-[#00BFFF] text-black uppercase rounded-lg">
                     {getPlanBadge(selected.name)}
                   </span>
                   {selected.is_custom === 1 && (
@@ -230,7 +230,7 @@ export default function Plans() {
             <div className="p-6 flex gap-3 bg-[#EEF4FF] dark:bg-[#2C2C2C] rounded-b-2xl">
               <button
                 onClick={() => activatePlan(selected)}
-                className="flex-1 py-4 font-black text-sm uppercase tracking-[0.2em] bg-[#CCFF00] text-black rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200"
+                className="flex-1 py-4 font-black text-sm uppercase tracking-[0.2em] bg-[#00BFFF] text-black rounded-xl shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-95 transition-all duration-200"
               >
                 {t('plans.activate')}
               </button>
@@ -262,11 +262,11 @@ export default function Plans() {
                 <button
                   key={plan.id}
                   onClick={() => openPlan(plan.id)}
-                  className={`group text-right p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] active:scale-[0.98] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] bg-white dark:bg-[#1C1C1E] ${isFeatured ? 'col-span-2 md:col-span-2' : ''} ${isActive ? 'ring-2 ring-[#CCFF00] ring-offset-2 ring-offset-[#F8F9FF] dark:ring-offset-[#0e0e0e]' : ''}`}
+                  className={`group text-right p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] active:scale-[0.98] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] bg-white dark:bg-[#1C1C1E] ${isFeatured ? 'col-span-2 md:col-span-2' : ''} ${isActive ? 'ring-2 ring-[#00BFFF] ring-offset-2 ring-offset-[#F8F9FF] dark:ring-offset-[#0e0e0e]' : ''}`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col items-start gap-2">
-                      <span className="text-[10px] font-black tracking-[0.2em] px-3 py-1 uppercase bg-[#CCFF00] text-black rounded-lg">
+                      <span className="text-[10px] font-black tracking-[0.2em] px-3 py-1 uppercase bg-[#00BFFF] text-black rounded-lg">
                         {badge}
                       </span>
                       {isActive && (
@@ -292,7 +292,7 @@ export default function Plans() {
                         {plan.days?.length} {t('plans.days')}
                       </span>
                     </div>
-                    <span className={`text-[10px] font-black tracking-[0.2em] px-2 py-0.5 uppercase rounded-md ${plan.is_custom ? 'bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#656464] dark:text-[#9CA3AF]' : 'bg-[#CCFF00] text-black'}`}>
+                    <span className={`text-[10px] font-black tracking-[0.2em] px-2 py-0.5 uppercase rounded-md ${plan.is_custom ? 'bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#656464] dark:text-[#9CA3AF]' : 'bg-[#00BFFF] text-black'}`}>
                       {plan.is_custom ? t('plans.custom') : t('plans.builtin')}
                     </span>
                   </div>
@@ -304,9 +304,9 @@ export default function Plans() {
 
         {/* ── AI Coach Section (intentional dark contrast) ── */}
         <section className="bg-[#151C25] rounded-2xl shadow-2xl p-8 md:p-12 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 opacity-20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[80px]" style={{ background: '#CCFF00' }} />
+          <div className="absolute top-0 right-0 w-96 h-96 opacity-20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[80px]" style={{ background: '#00BFFF' }} />
           <div className="relative z-10">
-            <span className="block text-xs font-black tracking-[0.3em] uppercase mb-4 text-[#CCFF00]">AI COACH</span>
+            <span className="block text-xs font-black tracking-[0.3em] uppercase mb-4 text-[#00BFFF]">AI COACH</span>
             <h2 className="text-3xl md:text-5xl font-black uppercase mb-3 text-white tracking-tighter">
               רוצה תוכנית מותאמת אישית?
             </h2>
@@ -315,7 +315,7 @@ export default function Plans() {
             </p>
             <button
               onClick={() => setShowCreate(true)}
-              className="inline-flex items-center gap-2 px-8 py-4 font-black text-sm uppercase tracking-[0.2em] bg-[#CCFF00] text-black rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200"
+              className="inline-flex items-center gap-2 px-8 py-4 font-black text-sm uppercase tracking-[0.2em] bg-[#00BFFF] text-black rounded-xl shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-95 transition-all duration-200"
             >
               <span className="material-symbols-outlined text-lg">add</span>
               {t('plans.create')}
@@ -396,7 +396,7 @@ export default function Plans() {
             <button
               onClick={createPlan}
               disabled={saving || !newName.trim()}
-              className="w-full py-4 font-black text-sm uppercase tracking-[0.2em] bg-[#CCFF00] text-black rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full py-4 font-black text-sm uppercase tracking-[0.2em] bg-[#00BFFF] text-black rounded-xl shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {saving ? t('common.loading') : t('plans.createNew')}
             </button>

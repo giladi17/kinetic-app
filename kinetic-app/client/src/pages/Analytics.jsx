@@ -5,7 +5,7 @@ import { SkeletonCard, SkeletonText } from '../components/Skeleton'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
-const TYPE_COLORS = { STRENGTH: '#CCFF00', HIIT: '#FF6B35', CARDIO: '#00D4FF', FLEXIBILITY: '#A855F7', OTHER: '#666666' }
+const TYPE_COLORS = { STRENGTH: '#00BFFF', HIIT: '#FF6B35', CARDIO: '#00D4FF', FLEXIBILITY: '#A855F7', OTHER: '#666666' }
 const TYPE_LABELS = { STRENGTH: 'כוח', HIIT: 'HIIT', CARDIO: 'קרדיו', FLEXIBILITY: 'גמישות', YOGA: 'יוגה', OTHER: 'אחר' }
 const DNA_LABELS = { STRENGTH: 'אתה Strength-First Athlete', HIIT: 'אתה HIIT Warrior', CARDIO: 'אתה Endurance Runner', YOGA: 'אתה Mind-Body Expert', OTHER: 'אתה Well-Rounded Athlete' }
 
@@ -52,7 +52,7 @@ export default function Analytics() {
     <main className="pt-24 pb-32 px-4 max-w-2xl mx-auto space-y-10 min-h-screen bg-[#F8F9FF] dark:bg-[#0e0e0e] text-[#151C25] dark:text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* Header */}
-      <div className="pt-4 space-y-1 border-b-2 border-[#CCFF00] pb-8">
+      <div className="pt-4 space-y-1 border-b-2 border-[#00BFFF] pb-8">
         <span className="text-[#506600] text-[10px] tracking-[0.25em] font-black uppercase block">PERFORMANCE DATA</span>
         <h1 className="text-[#151C25] font-black text-6xl md:text-8xl tracking-tighter leading-none">אנליטיקה</h1>
         <p className="text-[#656464] text-lg mt-3">ניתוח נתונים בזמן אמת לביצועים טובים יותר</p>
@@ -62,7 +62,7 @@ export default function Analytics() {
       {dna && <WorkoutDna dna={dna} navigate={navigate} />}
 
       {/* Compound Volume */}
-      <section className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 overflow-hidden border-r-4 border-r-[#CCFF00]">
+      <section className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 overflow-hidden border-r-4 border-r-[#00BFFF]">
         <div className="px-6 pt-6 pb-0">
           <span className="text-[#506600] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">TOTAL VOLUME</span>
           <div className="flex items-end justify-between gap-3">
@@ -73,7 +73,7 @@ export default function Analytics() {
               </h2>
               <p className="text-[#656464] text-xs mt-1">סה"כ הורם אי פעם</p>
             </div>
-            <div className="bg-[#EEF4FF] border border-[#CCFF00]/50 px-4 py-3 text-center shrink-0">
+            <div className="bg-[#EEF4FF] border border-[#00BFFF]/50 px-4 py-3 text-center shrink-0">
               <span className="text-[#656464] text-[9px] uppercase tracking-widest block">תחזית חודשית</span>
               <span className="text-[#506600] font-black text-xl">~{(compound?.projectedMonthly || 0).toLocaleString()}kg</span>
             </div>
@@ -105,12 +105,12 @@ export default function Analytics() {
           </div>
         )}
         {compound?.milestone && compound.milestone.daysLeft <= 60 && (
-          <div className="mx-6 mb-5 flex items-center gap-3 bg-[#EEF4FF] border border-[#CCFF00]/40 px-4 py-3">
+          <div className="mx-6 mb-5 flex items-center gap-3 bg-[#EEF4FF] border border-[#00BFFF]/40 px-4 py-3">
             <span className="material-symbols-outlined text-[#506600] text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>flag</span>
             <p className="text-[#151C25] text-sm flex-1">עוד <span className="font-black text-[#506600]">{compound.milestone.daysLeft} ימים</span> תגיע ל-{compound.milestone.name}</p>
           </div>
         )}
-        <div className="mx-6 mb-6 border-r-2 border-[#CCFF00] pr-4 py-1">
+        <div className="mx-6 mb-6 border-r-2 border-[#00BFFF] pr-4 py-1">
           <p className="text-[#656464] text-xs italic">"ריבית דריבית היא הפלא השמיני של העולם"</p>
           <span className="text-[#656464]/60 text-[9px] mt-1 block">— Albert Einstein</span>
         </div>
@@ -123,7 +123,7 @@ export default function Analytics() {
           <h2 className="text-[#151C25] font-black text-3xl tracking-tighter uppercase">זיהוי תקיעות</h2>
         </div>
         {(!plateaus?.plateaus?.length) ? (
-          <div className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 flex items-center gap-3 border-r-4 border-r-[#CCFF00]">
+          <div className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 flex items-center gap-3 border-r-4 border-r-[#00BFFF]">
             <span className="material-symbols-outlined text-2xl text-[#506600]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
             <div>
               <p className="text-[#151C25] font-black text-base">אתה מתקדם בכל התרגילים</p>
@@ -144,7 +144,7 @@ export default function Analytics() {
           </div>
           {exList.length > 0 && (
             <select value={selectedExercise} onChange={e => setSelectedExercise(e.target.value)}
-              className="bg-[#F8F9FF] border-2 border-black/10 px-3 py-2 text-[#151C25] text-xs outline-none focus:border-[#CCFF00] max-w-[140px] shrink-0">
+              className="bg-[#F8F9FF] border-2 border-black/10 px-3 py-2 text-[#151C25] text-xs outline-none focus:border-[#00BFFF] max-w-[140px] shrink-0">
               {exList.map(ex => <option key={ex} value={ex}>{ex}</option>)}
             </select>
           )}
@@ -158,7 +158,7 @@ export default function Analytics() {
                 <span className="text-[#656464]">משקל בפועל</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-4 border-t-2 border-[#CCFF00] inline-block"></span>
+                <span className="w-4 border-t-2 border-[#00BFFF] inline-block"></span>
                 <span className="text-[#506600] font-black">MA3</span>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default function Analytics() {
 
       {/* Quick Links */}
       <div className="space-y-3">
-        <button onClick={() => navigate('/war-room')} className="w-full bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 flex items-center justify-between active:scale-[0.98] duration-200 hover:bg-[#CCFF00] dark:hover:bg-[#CCFF00] transition-all group">
+        <button onClick={() => navigate('/war-room')} className="w-full bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 flex items-center justify-between active:scale-[0.98] duration-200 hover:bg-[#00BFFF] dark:hover:bg-[#00BFFF] transition-all group">
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-[#506600] group-hover:text-black transition-colors" style={{ fontVariationSettings: "'FILL' 1" }}>analytics</span>
             <div className="text-right">
@@ -206,7 +206,7 @@ export default function Analytics() {
 
 function PlateauCard({ plateau, onAsk }) {
   return (
-    <div className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 border-r-4 border-r-[#CCFF00] space-y-3">
+    <div className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 p-5 border-r-4 border-r-[#00BFFF] space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-[#151C25] font-black text-base tracking-tight">{plateau.exercise}</h3>
@@ -215,12 +215,12 @@ function PlateauCard({ plateau, onAsk }) {
             <span className="text-[#506600] text-xs font-black">{plateau.sessionsStuck} אימונים תקוע</span>
           </div>
         </div>
-        <span className="material-symbols-outlined text-[#CCFF00] text-2xl shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>warning</span>
+        <span className="material-symbols-outlined text-[#00BFFF] text-2xl shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>warning</span>
       </div>
       <div className="flex items-center justify-between gap-3">
         <span className="text-[#656464] text-sm flex-1">{plateau.suggestion}</span>
         <button onClick={() => onAsk(`אני תקוע ב-${plateau.exercise} על ${plateau.currentWeight}kg כבר ${plateau.sessionsStuck} אימונים. מה לעשות?`)}
-          className="flex items-center gap-1.5 bg-[#EEF4FF] border border-[#CCFF00]/50 text-[#506600] px-3 py-2 text-xs font-black active:scale-95 duration-200 hover:bg-[#CCFF00] hover:text-black transition-all shrink-0">
+          className="flex items-center gap-1.5 bg-[#EEF4FF] border border-[#00BFFF]/50 text-[#506600] px-3 py-2 text-xs font-black active:scale-95 duration-200 hover:bg-[#00BFFF] hover:text-black transition-all shrink-0">
           <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
           שאל את ה-AI
         </button>
@@ -231,7 +231,7 @@ function PlateauCard({ plateau, onAsk }) {
 
 function StatCard({ icon, label, value, sub, accent }) {
   return (
-    <div className={`bg-white dark:bg-[#1C1C1E] border-2 p-5 ${accent ? 'border-[#CCFF00] border-r-4 border-r-[#CCFF00]' : 'border-black/10 dark:border-white/10'}`}>
+    <div className={`bg-white dark:bg-[#1C1C1E] border-2 p-5 ${accent ? 'border-[#00BFFF] border-r-4 border-r-[#00BFFF]' : 'border-black/10 dark:border-white/10'}`}>
       <div className="flex items-center gap-2 mb-2">
         <span className={`material-symbols-outlined text-base ${accent ? 'text-[#506600]' : 'text-[#656464]'}`}>{icon}</span>
         <span className="text-[#656464] text-[10px] uppercase tracking-widest">{label}</span>
@@ -262,12 +262,12 @@ function CumulativeGraph({ data }) {
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none" style={{ height: 70 }}>
       <defs>
         <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#CCFF00" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#CCFF00" stopOpacity="0" />
+          <stop offset="0%" stopColor="#00BFFF" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#00BFFF" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path d={areaPath} fill="url(#cg)" />
-      <path d={linePath} fill="none" stroke="#CCFF00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={linePath} fill="none" stroke="#00BFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx={pts.at(-1).x} cy={pts.at(-1).y} r="3.5" fill="#506600" />
     </svg>
   )
@@ -277,7 +277,7 @@ function WorkoutDna({ dna, navigate }) {
   const { dominantType, sessionCount, typeBreakdown, pushPullBalance, weaknesses, strengths, recommendations } = dna
   return (
     <section className="bg-white dark:bg-[#1C1C1E] border-2 border-black/10 dark:border-white/10 overflow-hidden">
-      <div className="px-6 pt-6 pb-4 border-b-4 border-[#CCFF00]">
+      <div className="px-6 pt-6 pb-4 border-b-4 border-[#00BFFF]">
         <span className="text-[#506600] text-[10px] tracking-[0.25em] font-black uppercase block mb-1">WORKOUT DNA</span>
         <h2 className="font-black text-2xl tracking-tighter text-[#151C25]">{DNA_LABELS[dominantType] || dominantType}</h2>
         <p className="text-[#656464] text-xs mt-1">מבוסס על {sessionCount} אימונים</p>
@@ -305,7 +305,7 @@ function WorkoutDna({ dna, navigate }) {
           <div className="flex items-center gap-2">
             <span className="text-[#656464] text-[10px] w-8 text-right">Push</span>
             <div className="flex-1 h-3 bg-[#EEF4FF] overflow-hidden flex">
-              <div className="h-full transition-all duration-700" style={{ width: `${pushPullBalance.push + pushPullBalance.pull > 0 ? (pushPullBalance.push / (pushPullBalance.push + pushPullBalance.pull)) * 100 : 50}%`, backgroundColor: '#CCFF00' }} />
+              <div className="h-full transition-all duration-700" style={{ width: `${pushPullBalance.push + pushPullBalance.pull > 0 ? (pushPullBalance.push / (pushPullBalance.push + pushPullBalance.pull)) * 100 : 50}%`, backgroundColor: '#00BFFF' }} />
               <div className="h-full flex-1" style={{ backgroundColor: '#00D4FF' }} />
             </div>
             <span className="text-[#656464] text-[10px] w-8">Pull</span>
@@ -324,7 +324,7 @@ function WorkoutDna({ dna, navigate }) {
                 <span className="material-symbols-outlined text-xs text-[#506600]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>חוזקות
               </span>
               <div className="flex flex-wrap gap-1.5">
-                {strengths.map((s, i) => <span key={i} className="text-[10px] px-2 py-1 font-black bg-[#EEF4FF] text-[#506600] border border-[#CCFF00]/40">{s}</span>)}
+                {strengths.map((s, i) => <span key={i} className="text-[10px] px-2 py-1 font-black bg-[#EEF4FF] text-[#506600] border border-[#00BFFF]/40">{s}</span>)}
               </div>
             </div>
           )}
@@ -351,7 +351,7 @@ function WorkoutDna({ dna, navigate }) {
                   <p className="text-[#656464] text-xs mt-0.5">{rec.desc}</p>
                 </div>
                 {rec.workoutId && (
-                  <button onClick={() => navigate('/plans')} className="shrink-0 px-3 py-1.5 font-black text-xs bg-[#CCFF00] text-black hover:bg-black hover:text-[#CCFF00] transition-all active:scale-95 duration-200">לתוכנית</button>
+                  <button onClick={() => navigate('/plans')} className="shrink-0 px-3 py-1.5 font-black text-xs bg-[#00BFFF] text-black hover:bg-black hover:text-[#00BFFF] transition-all active:scale-95 duration-200">לתוכנית</button>
                 )}
               </div>
             ))}
@@ -397,7 +397,7 @@ function MovingAvgGraph({ data }) {
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 100 }}>
       <path d={actualPath} fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1.5" strokeDasharray="4,3" strokeLinecap="round" />
       {data.map((d, i) => <circle key={i} cx={toX(i)} cy={toY(d.weight)} r="2.5" fill="rgba(0,0,0,0.3)" />)}
-      <path d={maPath} fill="none" stroke="#CCFF00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={maPath} fill="none" stroke="#00BFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

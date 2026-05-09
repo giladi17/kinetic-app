@@ -22,8 +22,8 @@ export default function BottomNav() {
           onClick={() => { if (navigator.vibrate) navigator.vibrate(10) }}
           className={({ isActive }) =>
             isActive
-              ? 'flex flex-col items-center justify-center bg-[#CCFF00] text-[#0e0e0e] rounded-md px-3 py-1 active:scale-90 duration-300'
-              : 'flex flex-col items-center justify-center text-[#adaaaa] opacity-50 hover:opacity-100 hover:text-[#CCFF00] transition-all active:scale-90 duration-300'
+              ? 'flex flex-col items-center justify-center bg-[#00BFFF] text-[#0e0e0e] rounded-md px-3 py-1 active:scale-90 duration-300'
+              : 'flex flex-col items-center justify-center text-[#adaaaa] opacity-50 hover:opacity-100 hover:text-[#00BFFF] transition-all active:scale-90 duration-300'
           }
         >
           {({ isActive }) => (

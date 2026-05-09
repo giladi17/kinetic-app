@@ -88,7 +88,7 @@ export default function TopAppBar() {
               </div>
             )}
           </div>
-          <span className="font-headline font-black text-2xl italic tracking-tighter text-[#CCFF00] dark:text-[#00BFFF]">KINETIC</span>
+          <span className="font-headline font-black text-2xl italic tracking-tighter text-[#00BFFF]">KINETIC</span>
         </div>
         <div className="flex items-center gap-3">
           <button

@@ -42,7 +42,7 @@ export default function MorningCheckin({ onComplete }) {
   if (!show) return null
 
   const readinessScore = Math.round((sleepHours / 9) * 50 + (subjectiveScore / 10) * 50)
-  const scoreColor = readinessScore >= 70 ? '#CCFF00' : readinessScore >= 50 ? '#ffa500' : '#ff734a'
+  const scoreColor = readinessScore >= 70 ? '#00BFFF' : readinessScore >= 50 ? '#ffa500' : '#ff734a'
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-6">
@@ -57,7 +57,7 @@ export default function MorningCheckin({ onComplete }) {
           <label className="font-label text-xs text-on-surface-variant uppercase">שעות שינה: <strong className="text-on-surface">{sleepHours}h</strong></label>
           <input type="range" min="4" max="10" step="0.5" value={sleepHours}
             onChange={e => setSleepHours(parseFloat(e.target.value))}
-            className="w-full accent-[#CCFF00]" />
+            className="w-full accent-[#00BFFF]" />
           <div className="flex justify-between font-label text-[10px] text-on-surface-variant">
             <span>4h</span><span>10h</span>
           </div>
@@ -67,7 +67,7 @@ export default function MorningCheckin({ onComplete }) {
           <label className="font-label text-xs text-on-surface-variant uppercase">תחושה כללית: <strong className="text-on-surface">{subjectiveScore}/10</strong></label>
           <input type="range" min="1" max="10" step="1" value={subjectiveScore}
             onChange={e => setSubjectiveScore(parseInt(e.target.value))}
-            className="w-full accent-[#CCFF00]" />
+            className="w-full accent-[#00BFFF]" />
           <div className="flex justify-between font-label text-[10px] text-on-surface-variant">
             <span>עייף 😴</span><span>מוכן 💪</span>
           </div>

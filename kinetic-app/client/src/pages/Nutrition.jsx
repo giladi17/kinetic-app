@@ -1,4 +1,4 @@
-﻿import { Component, useEffect, useState, useRef } from 'react'
+import { Component, useEffect, useState, useRef } from 'react'
 import { premiumFetch, authFetch } from '../api'
 import saladImg from '../assets/salad.jpg'
 
@@ -66,7 +66,7 @@ function BarcodeScanner({ onAdd }) {
         <button
           onClick={scan}
           disabled={scanning || !barcode.trim()}
-          className="bg-[#CCFF00] text-black px-5 py-3 rounded-xl font-black text-sm shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200 disabled:opacity-50"
+          className="bg-[#00BFFF] text-black px-5 py-3 rounded-xl font-black text-sm shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-95 transition-all duration-200 disabled:opacity-50"
         >
           {scanning ? '...' : 'חפש'}
         </button>
@@ -86,11 +86,11 @@ function BarcodeScanner({ onAdd }) {
               <span className="text-[#656464] text-xs uppercase tracking-widest">כמות</span>
               <span className="text-[#506600] font-black text-sm">{grams}g</span>
             </div>
-            <input type="range" min="10" max="500" step="5" value={grams} onChange={e => setGrams(parseInt(e.target.value))} className="w-full accent-[#CCFF00]" />
+            <input type="range" min="10" max="500" step="5" value={grams} onChange={e => setGrams(parseInt(e.target.value))} className="w-full accent-[#00BFFF]" />
           </div>
           <button
             onClick={() => onAdd({ meal_name: product.name, calories: Math.round(calc(product.calories_per_100g, grams)), protein: calc(product.protein_per_100g, grams), carbs: calc(product.carbs_per_100g, grams), fat: calc(product.fat_per_100g, grams) })}
-            className="w-full bg-[#CCFF00] text-black py-3 rounded-xl font-black text-sm shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+            className="w-full bg-[#00BFFF] text-black py-3 rounded-xl font-black text-sm shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
           >
             הוסף לתזונה
           </button>
@@ -258,7 +258,7 @@ function Nutrition() {
 
       {/* Toast */}
       {toastMsg && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#CCFF00] text-black px-6 py-3 rounded-xl font-black text-sm shadow-2xl">{toastMsg}</div>
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#00BFFF] text-black px-6 py-3 rounded-xl font-black text-sm shadow-2xl">{toastMsg}</div>
       )}
 
       {/* ── Hero — image position:absolute top:0, true full-bleed behind fixed header ── */}
@@ -323,7 +323,7 @@ function Nutrition() {
                 key={label}
                 onClick={() => parseAI(label)}
                 disabled={aiParsing}
-                className="px-3 py-1.5 rounded-xl font-black text-xs bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#506600] dark:text-[#CCFF00] hover:bg-[#DCE3F0] dark:hover:bg-[#3C3C3C] active:scale-95 transition-all duration-150 disabled:opacity-50"
+                className="px-3 py-1.5 rounded-xl font-black text-xs bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#506600] dark:text-[#00BFFF] hover:bg-[#DCE3F0] dark:hover:bg-[#3C3C3C] active:scale-95 transition-all duration-150 disabled:opacity-50"
               >
                 + {label}
               </button>
@@ -332,7 +332,7 @@ function Nutrition() {
           <button
             onClick={() => parseAI()}
             disabled={aiParsing || !aiText.trim()}
-            className="w-full flex items-center justify-center gap-2 bg-[#151C25] dark:bg-[#CCFF00] text-white dark:text-black py-3 rounded-xl font-black text-sm tracking-wide shadow-[0_4px_24px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_24px_rgba(204,255,0,0.3)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 disabled:opacity-60"
+            className="w-full flex items-center justify-center gap-2 bg-[#151C25] dark:bg-[#00BFFF] text-white dark:text-black py-3 rounded-xl font-black text-sm tracking-wide shadow-[0_4px_24px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_24px_rgba(0,191,255,0.3)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 disabled:opacity-60"
           >
             {aiParsing
               ? <><span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full" />מנתח...</>
@@ -357,7 +357,7 @@ function Nutrition() {
                 ))}
               </div>
               <div className="flex gap-2 pt-1">
-                <button onClick={logAIMeal} className="flex-1 bg-[#CCFF00] text-black py-2.5 rounded-xl font-black text-sm shadow-[0_4px_16px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200">✓ הוסף ליומן</button>
+                <button onClick={logAIMeal} className="flex-1 bg-[#00BFFF] text-black py-2.5 rounded-xl font-black text-sm shadow-[0_4px_16px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200">✓ הוסף ליומן</button>
                 <button onClick={() => setAiResult(null)} className="px-4 bg-[#EEF4FF] text-[#656464] py-2.5 rounded-xl font-black text-sm hover:bg-[#DCE3F0] active:scale-95 transition-all duration-200">ביטול</button>
               </div>
             </div>
@@ -368,7 +368,7 @@ function Nutrition() {
         {/* Row 1: Calories (featured, 2 cols) + Protein (1 col) */}
         <div className="grid grid-cols-3 gap-6">
           <div className="col-span-2">
-            <MacroBar large label="קלוריות" current={Math.round(totals.calories || 0)} target={targets.calories} unit="kcal" color="#CCFF00" pct={calPct} />
+            <MacroBar large label="קלוריות" current={Math.round(totals.calories || 0)} target={targets.calories} unit="kcal" color="#00BFFF" pct={calPct} />
           </div>
           <MacroBar label="חלבון" current={Math.round(totals.protein || 0)} target={targets.protein} unit="g" color="#ff734a" pct={protPct} />
         </div>
@@ -393,7 +393,7 @@ function Nutrition() {
             </div>
             <button
               onClick={() => setShowBarcode(s => !s)}
-              className="bg-[#CCFF00] text-black px-5 py-2.5 rounded-xl font-black text-xs tracking-widest shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 transition-all duration-200"
+              className="bg-[#00BFFF] text-black px-5 py-2.5 rounded-xl font-black text-xs tracking-widest shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-95 transition-all duration-200"
             >
               סרוק
             </button>
@@ -470,7 +470,7 @@ function Nutrition() {
                             setData(updated); fetchGapFiller()
                           } catch { toast('שגיאה — נסה שוב') }
                         }}
-                        className="w-9 h-9 rounded-full bg-[#CCFF00] text-black font-black text-lg flex items-center justify-center shadow-[0_4px_16px_rgba(204,255,0,0.4)] active:scale-90 hover:-translate-y-0.5 transition-all duration-200 flex-shrink-0"
+                        className="w-9 h-9 rounded-full bg-[#00BFFF] text-black font-black text-lg flex items-center justify-center shadow-[0_4px_16px_rgba(0,191,255,0.4)] active:scale-90 hover:-translate-y-0.5 transition-all duration-200 flex-shrink-0"
                       >+</button>
                     </div>
                   </div>
@@ -489,7 +489,7 @@ function Nutrition() {
               <button
                 onClick={fetchRecommendations}
                 disabled={recLoading}
-                className="w-full flex items-center justify-center gap-2 bg-[#151C25] dark:bg-[#CCFF00] text-white dark:text-black py-3 rounded-xl font-black text-sm tracking-wide shadow-[0_4px_24px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_24px_rgba(204,255,0,0.3)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 disabled:opacity-60"
+                className="w-full flex items-center justify-center gap-2 bg-[#151C25] dark:bg-[#00BFFF] text-white dark:text-black py-3 rounded-xl font-black text-sm tracking-wide shadow-[0_4px_24px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_24px_rgba(0,191,255,0.3)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 disabled:opacity-60"
               >
                 {recLoading
                   ? <><span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full" />מחשב המלצות...</>
@@ -531,7 +531,7 @@ function Nutrition() {
                     <button
                       onClick={() => logOption(opt, i)}
                       disabled={loggingRec === i || loggedRecs.has(i)}
-                      className={`w-full py-2.5 rounded-xl font-black text-sm transition-all duration-200 active:scale-95 hover:-translate-y-0.5 ${loggedRecs.has(i) ? 'bg-[#EEF4FF] text-[#506600] cursor-default' : 'bg-[#CCFF00] text-black shadow-[0_4px_16px_rgba(204,255,0,0.35)] hover:shadow-[0_8px_24px_rgba(204,255,0,0.5)]'}`}
+                      className={`w-full py-2.5 rounded-xl font-black text-sm transition-all duration-200 active:scale-95 hover:-translate-y-0.5 ${loggedRecs.has(i) ? 'bg-[#EEF4FF] text-[#506600] cursor-default' : 'bg-[#00BFFF] text-black shadow-[0_4px_16px_rgba(0,191,255,0.35)] hover:shadow-[0_8px_24px_rgba(0,191,255,0.5)]'}`}
                     >
                       {loggingRec === i
                         ? <span className="flex items-center justify-center gap-2"><span className="animate-spin inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full" />מוסיף...</span>
@@ -560,7 +560,7 @@ function Nutrition() {
               </div>
               <button
                 onClick={() => { setAddModal(group.label); setAddSearch(''); setAddBarcode(false) }}
-                className="w-10 h-10 rounded-full bg-[#CCFF00] text-black font-black text-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(204,255,0,0.4)] hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(204,255,0,0.5)] active:scale-90 transition-all duration-200"
+                className="w-10 h-10 rounded-full bg-[#00BFFF] text-black font-black text-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(0,191,255,0.4)] hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(0,191,255,0.5)] active:scale-90 transition-all duration-200"
               >+</button>
             </div>
             <div className="space-y-3">
@@ -577,7 +577,7 @@ function Nutrition() {
                       <span className="text-[#506600] text-xs font-black">{p.protein}g חלבון</span>
                     </div>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-[#CCFF00] text-black font-black text-base flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(204,255,0,0.35)] group-hover:shadow-[0_6px_18px_rgba(204,255,0,0.55)] transition-all duration-300">+</div>
+                  <div className="w-8 h-8 rounded-full bg-[#00BFFF] text-black font-black text-base flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(0,191,255,0.35)] group-hover:shadow-[0_6px_18px_rgba(0,191,255,0.55)] transition-all duration-300">+</div>
                 </button>
               ))}
             </div>
@@ -601,7 +601,7 @@ function Nutrition() {
                       <span className="text-[#506600] text-xs font-black">{m.protein}g חלבון</span>
                     </div>
                   </div>
-                  <span className={`text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wide ${m.entry_method === 'one_tap' ? 'bg-[#CCFF00] text-black' : 'bg-[#EEF4FF] text-[#656464]'}`}>
+                  <span className={`text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wide ${m.entry_method === 'one_tap' ? 'bg-[#00BFFF] text-black' : 'bg-[#EEF4FF] text-[#656464]'}`}>
                     {m.entry_method === 'one_tap' ? 'QUICK' : 'MANUAL'}
                   </span>
                 </div>
@@ -649,7 +649,7 @@ function Nutrition() {
                     <span className="text-[#656464] text-xs uppercase font-black tracking-widest">כמות</span>
                     <span className="text-[#506600] font-black text-sm">{grams}g</span>
                   </div>
-                  <input type="range" min="10" max="500" step="5" value={grams} onChange={e => setGrams(Number(e.target.value))} className="w-full accent-[#CCFF00]" />
+                  <input type="range" min="10" max="500" step="5" value={grams} onChange={e => setGrams(Number(e.target.value))} className="w-full accent-[#00BFFF]" />
                 </div>
                 <div className="grid grid-cols-4 gap-2 text-center">
                   {[
@@ -675,7 +675,7 @@ function Nutrition() {
                     const updated = await authFetch(`${API}/nutrition?date=${today}`).then(r => r.json())
                     setData(updated); setAddModal(null); setAddSearch(''); setSelectedFood(null); setSearchResults([])
                   } catch { toast('שגיאה — נסה שוב') }
-                }} className="w-full bg-[#CCFF00] text-black py-3 rounded-xl font-black text-sm shadow-[0_4px_24px_rgba(204,255,0,0.35)] active:scale-[0.98] hover:-translate-y-0.5 transition-all duration-200">הוסף {grams}g</button>
+                }} className="w-full bg-[#00BFFF] text-black py-3 rounded-xl font-black text-sm shadow-[0_4px_24px_rgba(0,191,255,0.35)] active:scale-[0.98] hover:-translate-y-0.5 transition-all duration-200">הוסף {grams}g</button>
               </div>
             )}
 
@@ -686,7 +686,7 @@ function Nutrition() {
                   ? <p className="text-[#656464] text-xs text-center py-2">לא נמצאו תוצאות</p>
                   : searchResults.map((f, i) => (
                     <button key={i} onClick={() => { setSelectedFood(f); setGrams(100) }}
-                      className="w-full bg-white rounded-xl p-3 flex justify-between items-center active:scale-[0.98] text-right hover:bg-[#CCFF00] transition-all duration-300 group">
+                      className="w-full bg-white rounded-xl p-3 flex justify-between items-center active:scale-[0.98] text-right hover:bg-[#00BFFF] transition-all duration-300 group">
                       <div>
                         <span className="font-black text-[#151C25] dark:text-white text-sm block">{f.name}</span>
                         <div className="flex gap-3 mt-0.5">
@@ -727,7 +727,7 @@ function Nutrition() {
                 {recentMeals.map((m, i) => (
                   <button key={i}
                     onClick={() => { setSelectedFood({ name: m.meal_name, calories: m.calories, protein: m.protein, carbs: m.carbs, fat: m.fat, per: 100 }); setGrams(100) }}
-                    className="w-full bg-white rounded-xl p-3 flex justify-between items-center active:scale-[0.98] text-right hover:bg-[#CCFF00] transition-all duration-300 group">
+                    className="w-full bg-white rounded-xl p-3 flex justify-between items-center active:scale-[0.98] text-right hover:bg-[#00BFFF] transition-all duration-300 group">
                     <div>
                       <span className="font-black text-[#151C25] dark:text-white text-sm block">{m.meal_name}</span>
                       <div className="flex gap-3 mt-0.5">
@@ -735,7 +735,7 @@ function Nutrition() {
                         <span className="text-[#506600] text-[10px] font-black">{m.protein}g חלבון</span>
                       </div>
                     </div>
-                    <span className="text-[#CCFF00] group-hover:text-black text-xl font-black">+</span>
+                    <span className="text-[#00BFFF] group-hover:text-black text-xl font-black">+</span>
                   </button>
                 ))}
               </div>

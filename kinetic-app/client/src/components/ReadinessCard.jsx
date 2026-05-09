@@ -42,7 +42,7 @@ export default function ReadinessCard() {
   )
 
   const { score, recommendation, breakdown } = readiness
-  const scoreColor = score >= 80 ? '#CCFF00' : score >= 60 ? '#FFB800' : '#FF6B6B'
+  const scoreColor = score >= 80 ? '#00BFFF' : score >= 60 ? '#FFB800' : '#FF6B6B'
   const circumference = 2 * Math.PI * 32  // r=32 → ≈201
 
   return (
@@ -83,7 +83,7 @@ export default function ReadinessCard() {
       {/* פירוט 4 גורמים */}
       <div className="grid grid-cols-2 gap-2">
         {Object.entries(breakdown).map(([key, item]) => {
-          const color = item.score >= 80 ? '#CCFF00' : item.score >= 60 ? '#FFB800' : '#FF6B6B'
+          const color = item.score >= 80 ? '#00BFFF' : item.score >= 60 ? '#FFB800' : '#FF6B6B'
           return (
             <div
               key={key}

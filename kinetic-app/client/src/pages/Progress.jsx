@@ -4,7 +4,7 @@ import { fetchProgress, addWeightLog } from '../api'
 import { SkeletonCard, SkeletonText } from '../components/Skeleton'
 const progressHeroImg = 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1XNtCO471NxM1P0UqG22ft25JvCI72IbymXeqK5fILJxb02ZZq0kQs4eCedCpo7BaMbU-r62b9x9IZngPtozoZvOAb0q7no2fctVkgArBxJYl3-2IElB-osf_qp27t75ffg4f7Vsxm1t0LxYZN0nuGT5U3eisD0smtpQUidj-S8gnPcD-3KPBWy3Zpq8JWYPcOgSvL3ydTjDQrYr1DFUg22-3Jj1fLztqp6hC204oDNykW8ji71_kKizDfPNAO8qOeW0wpdARDuU'
 
-const LIME = '#CCFF00'
+const LIME = '#00BFFF'
 const SEEN_BADGES_KEY = 'kinetic_seen_badges'
 
 export default function Progress() {
@@ -113,7 +113,7 @@ export default function Progress() {
             <div className="flex items-center gap-4 justify-end">
               <button
                 onClick={openModal}
-                className="inline-flex items-center gap-2 font-black text-sm px-6 py-3 rounded-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] text-[#151C25]"
+                className="inline-flex items-center gap-2 font-black text-sm px-6 py-3 rounded-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] text-[#151C25]"
                 style={{ backgroundColor: LIME }}
               >
                 <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
@@ -387,7 +387,7 @@ export default function Progress() {
             {badges.map((badge, i) => (
               <div key={badge.id || i}
                 className={`bg-white rounded-2xl p-5 shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col gap-3 ${badge.locked ? 'opacity-40 grayscale' : ''}`}
-                style={badge.unlocked ? { boxShadow: `0 4px 20px rgba(204,255,0,0.12)` } : {}}>
+                style={badge.unlocked ? { boxShadow: `0 4px 20px rgba(0,191,255,0.12)` } : {}}>
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
                     style={{ backgroundColor: `${badge.color}18` }}>
@@ -443,26 +443,26 @@ function WeightChart({ logs, svgData }) {
         <svg className="w-full" viewBox="0 0 400 120" preserveAspectRatio="none" style={{ height: '160px' }}>
           <defs>
             <linearGradient id="wGrad" x1="0%" x2="0%" y1="0%" y2="100%">
-              <stop offset="0%"   style={{ stopColor: '#CCFF00', stopOpacity: 0.3 }} />
-              <stop offset="100%" style={{ stopColor: '#CCFF00', stopOpacity: 0 }} />
+              <stop offset="0%"   style={{ stopColor: '#00BFFF', stopOpacity: 0.3 }} />
+              <stop offset="100%" style={{ stopColor: '#00BFFF', stopOpacity: 0 }} />
             </linearGradient>
           </defs>
           <path d={svgData.area} fill="url(#wGrad)" />
-          <path d={svgData.line} fill="none" stroke="#CCFF00" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
+          <path d={svgData.line} fill="none" stroke="#00BFFF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
           {svgData.points.map((p, i) => (
             <g key={i} style={{ cursor: 'pointer' }}
               onClick={() => setTooltip(tooltip?.i === i ? null : { i, ...p, log: logs[i] })}>
               <circle cx={p.x} cy={p.y} r="8" fill="transparent" />
               <circle cx={p.x} cy={p.y} r={tooltip?.i === i ? 5 : 3.5}
-                fill={i === svgData.points.length - 1 ? '#CCFF00' : '#fff'}
-                stroke="#CCFF00" strokeWidth="2" className="transition-all" />
+                fill={i === svgData.points.length - 1 ? '#00BFFF' : '#fff'}
+                stroke="#00BFFF" strokeWidth="2" className="transition-all" />
             </g>
           ))}
         </svg>
         {tooltip && (
           <div className="absolute bg-[#151C25] rounded-xl px-3 py-2 pointer-events-none z-10 text-center shadow-2xl"
             style={{ left: `${(tooltip.x / 400) * 100}%`, top: `${(tooltip.y / 120) * 100}%`, transform: 'translate(-50%, -130%)' }}>
-            <p className="font-black text-sm" style={{ color: '#CCFF00' }}>{tooltip.log.weight} kg</p>
+            <p className="font-black text-sm" style={{ color: '#00BFFF' }}>{tooltip.log.weight} kg</p>
             {tooltip.log.body_fat && <p className="text-white/60 text-[10px]">{tooltip.log.body_fat}% שומן</p>}
             <p className="text-white/40 text-[10px]">{formatDate(tooltip.log.date)}</p>
           </div>
@@ -502,7 +502,7 @@ function AddMeasurementModal({ onClose, onSaved }) {
         <div className="w-10 h-1 bg-white/20 rounded-full mx-auto md:hidden" />
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[9px] font-black tracking-[0.3em] uppercase mb-1" style={{ color: '#CCFF00' }}>NEW ENTRY</p>
+            <p className="text-[9px] font-black tracking-[0.3em] uppercase mb-1" style={{ color: '#00BFFF' }}>NEW ENTRY</p>
             <h3 className="font-black text-white text-xl">הוסף מדידה</h3>
           </div>
           <button onClick={onClose} className="text-white/30 hover:text-white transition-colors">
@@ -517,7 +517,7 @@ function AddMeasurementModal({ onClose, onSaved }) {
         ].map(f => (
           <div key={f.key}>
             <label className="text-white/40 text-xs uppercase tracking-widest block mb-1.5">
-              {f.label} {f.required && <span style={{ color: '#CCFF00' }}>*</span>}
+              {f.label} {f.required && <span style={{ color: '#00BFFF' }}>*</span>}
             </label>
             <div className="relative">
               <input type={f.type} placeholder={f.placeholder} value={form[f.key]} {...(f.extra || {})}
@@ -536,7 +536,7 @@ function AddMeasurementModal({ onClose, onSaved }) {
         </div>
         <button onClick={handleSave} disabled={saving || !form.weight}
           className="w-full font-black text-base py-4 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-black"
-          style={{ backgroundColor: '#CCFF00', boxShadow: '0 4px_24px_rgba(204,255,0,0.35)' }}>
+          style={{ backgroundColor: '#00BFFF', boxShadow: '0 4px_24px_rgba(0,191,255,0.35)' }}>
           {saving ? 'שומר...' : 'שמור מדידה'}
         </button>
       </div>

@@ -6,7 +6,7 @@ import {
 import { authFetch } from '../api'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-const LIME   = '#CCFF00'
+const LIME   = '#00BFFF'
 const ORANGE = '#ff734a'
 
 function useDarkMode() {

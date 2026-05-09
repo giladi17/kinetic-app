@@ -26,8 +26,8 @@ html {
 .animate-fade-up-delay-3 { animation: fadeUp 0.35s ease 0.15s forwards; opacity: 0; }
 
 :root {
-  --accent-color: #CCFF00;
-  --accent-bright: #CCFF00;
+  --accent-color: #00BFFF;
+  --accent-bright: #00BFFF;
   --accent-dim: #a8d400;
   --bg-primary: #F8F9FF;
   --text-primary: #151C25;

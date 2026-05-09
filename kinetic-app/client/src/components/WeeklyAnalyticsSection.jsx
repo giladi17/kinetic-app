@@ -7,9 +7,9 @@ import {
 import { authFetch } from '../api'
 
 const API          = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-const LIME         = '#CCFF00'
+const LIME         = '#00BFFF'
 const ORANGE       = '#ff734a'
-const LIME_DIM     = 'rgba(204,255,0,0.35)'
+const LIME_DIM     = 'rgba(0,191,255,0.35)'
 const ORANGE_DIM   = 'rgba(255,115,74,0.35)'
 const CAL_TARGET   = 2800
 const PROT_TARGET  = 130
@@ -207,7 +207,7 @@ export default function WeeklyAnalyticsSection() {
                   key={i}
                   fill={entry.calories >= CAL_TARGET ? LIME : LIME_DIM}
                   style={entry.calories >= CAL_TARGET
-                    ? { filter: 'drop-shadow(0 0 8px rgba(204,255,0,0.55))' }
+                    ? { filter: 'drop-shadow(0 0 8px rgba(0,191,255,0.55))' }
                     : {}}
                 />
               ))}
@@ -241,7 +241,7 @@ export default function WeeklyAnalyticsSection() {
                   className="text-xs font-black px-2 py-0.5 rounded-full"
                   style={{
                     color: parseFloat(weightDelta) <= 0 ? LIME : '#FF6B6B',
-                    backgroundColor: parseFloat(weightDelta) <= 0 ? 'rgba(204,255,0,0.12)' : 'rgba(255,107,107,0.12)',
+                    backgroundColor: parseFloat(weightDelta) <= 0 ? 'rgba(0,191,255,0.12)' : 'rgba(255,107,107,0.12)',
                   }}
                 >
                   {parseFloat(weightDelta) > 0 ? '+' : ''}{weightDelta} ק"ג
@@ -263,7 +263,7 @@ export default function WeeklyAnalyticsSection() {
               className="w-24 rounded-xl px-3 py-2 text-sm font-black border outline-none transition-all
                 bg-[#F8F9FF] dark:bg-[#2C2C2C] text-[#151C25] dark:text-white
                 border-[#E8EEF8] dark:border-[#3C3C3C]
-                focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20"
+                focus:border-[#00BFFF] focus:ring-2 focus:ring-[#00BFFF]/20"
             />
             <button
               onClick={saveWeight}

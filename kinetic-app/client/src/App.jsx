@@ -72,13 +72,13 @@ function AppRoutes() {
     <div className="min-h-screen bg-[#0e0e0e] flex flex-col items-center justify-center gap-4">
       <span
         className="font-black text-2xl italic tracking-[0.25em] animate-pulse"
-        style={{ color: '#CCFF00', fontFamily: "'Space Grotesk', sans-serif" }}
+        style={{ color: '#00BFFF', fontFamily: "'Space Grotesk', sans-serif" }}
       >
         KINETIC
       </span>
       <svg className="animate-spin w-6 h-6" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="10" stroke="#CCFF00" strokeWidth="2" strokeOpacity="0.2" />
-        <path d="M22 12a10 10 0 0 0-10-10" stroke="#CCFF00" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="12" cy="12" r="10" stroke="#00BFFF" strokeWidth="2" strokeOpacity="0.2" />
+        <path d="M22 12a10 10 0 0 0-10-10" stroke="#00BFFF" strokeWidth="2" strokeLinecap="round" />
       </svg>
     </div>
   )

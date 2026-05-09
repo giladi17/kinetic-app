@@ -3,8 +3,8 @@ export const EXERCISE_ILLUSTRATIONS = {
 'Bench Press': `<svg viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
   <rect width="420" height="380" fill="#111111" rx="12"/>
   <!-- כותרת -->
-  <rect width="420" height="44" fill="#CCFF00" rx="12"/>
-  <rect y="32" width="420" height="12" fill="#CCFF00"/>
+  <rect width="420" height="44" fill="#00BFFF" rx="12"/>
+  <rect y="32" width="420" height="12" fill="#00BFFF"/>
   <text x="210" y="28" text-anchor="middle" fill="#0e0e0e" font-size="15" font-weight="bold">לחיצת חזה — Bench Press</text>
 
   <!-- פאנל 1 -->
@@ -31,7 +31,7 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M50 163 Q38 170 30 178" stroke="#1e3f6e" stroke-width="11" fill="none" stroke-linecap="round"/>
   <path d="M30 178 Q24 185 22 192" stroke="#1a3458" stroke-width="9" fill="none" stroke-linecap="round"/>
   <ellipse cx="20" cy="194" rx="8" ry="4" fill="#333"/>
-  <text x="70" y="200" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 1 — מנח התחלתי</text>
+  <text x="70" y="200" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 1 — מנח התחלתי</text>
   <text x="70" y="211" text-anchor="middle" fill="#888" font-size="7">מוט מעל החזה</text>
   <text x="70" y="221" text-anchor="middle" fill="#888" font-size="7">ידיים ישרות</text>
 
@@ -57,12 +57,12 @@ export const EXERCISE_ILLUSTRATIONS = {
   <rect x="176" y="119" width="9" height="13" rx="2" fill="#666"/>
   <rect x="225" y="119" width="9" height="13" rx="2" fill="#666"/>
   <!-- זווית מרפק -->
-  <text x="170" y="140" fill="#CCFF00" font-size="8">90°</text>
+  <text x="170" y="140" fill="#00BFFF" font-size="8">90°</text>
   <!-- רגליים -->
   <path d="M186 163 Q174 170 166 178" stroke="#1e3f6e" stroke-width="11" fill="none" stroke-linecap="round"/>
   <path d="M166 178 Q160 185 158 192" stroke="#1a3458" stroke-width="9" fill="none" stroke-linecap="round"/>
   <ellipse cx="156" cy="194" rx="8" ry="4" fill="#333"/>
-  <text x="210" y="200" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 2 — ירידה</text>
+  <text x="210" y="200" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 2 — ירידה</text>
   <text x="210" y="211" text-anchor="middle" fill="#888" font-size="7">מוט לחזה התחתון</text>
   <text x="210" y="221" text-anchor="middle" fill="#888" font-size="7">מרפקים 75°</text>
 
@@ -86,19 +86,19 @@ export const EXERCISE_ILLUSTRATIONS = {
   <rect x="322" y="109" width="9" height="13" rx="2" fill="#666"/>
   <rect x="375" y="109" width="9" height="13" rx="2" fill="#666"/>
   <!-- חץ למעלה -->
-  <path d="M408 145 L408 120" stroke="#CCFF00" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <polygon points="404,120 408,112 412,120" fill="#CCFF00"/>
+  <path d="M408 145 L408 120" stroke="#00BFFF" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <polygon points="404,120 408,112 412,120" fill="#00BFFF"/>
   <!-- רגליים -->
   <path d="M326 163 Q314 170 306 178" stroke="#1e3f6e" stroke-width="11" fill="none" stroke-linecap="round"/>
   <path d="M306 178 Q300 185 298 192" stroke="#1a3458" stroke-width="9" fill="none" stroke-linecap="round"/>
   <ellipse cx="296" cy="194" rx="8" ry="4" fill="#333"/>
-  <text x="350" y="200" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 3 — לחיצה</text>
+  <text x="350" y="200" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 3 — לחיצה</text>
   <text x="350" y="211" text-anchor="middle" fill="#888" font-size="7">דחף עם נשיפה</text>
   <text x="350" y="221" text-anchor="middle" fill="#888" font-size="7">גב שטוח תמיד</text>
 
   <!-- נקודות מפתח -->
   <rect x="8" y="215" width="404" height="155" fill="#161616" rx="8" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="210" y="235" text-anchor="middle" fill="#CCFF00" font-size="12" font-weight="bold">נקודות מפתח</text>
+  <text x="210" y="235" text-anchor="middle" fill="#00BFFF" font-size="12" font-weight="bold">נקודות מפתח</text>
   <!-- עמודה שמאל — נכון -->
   <rect x="16" y="244" width="194" height="118" fill="#1a2a1a" rx="6"/>
   <text x="113" y="262" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="bold">✓ ביצוע נכון</text>
@@ -125,8 +125,8 @@ export const EXERCISE_ILLUSTRATIONS = {
 
 'Squat': `<svg viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
   <rect width="420" height="380" fill="#111111" rx="12"/>
-  <rect width="420" height="44" fill="#CCFF00" rx="12"/>
-  <rect y="32" width="420" height="12" fill="#CCFF00"/>
+  <rect width="420" height="44" fill="#00BFFF" rx="12"/>
+  <rect y="32" width="420" height="12" fill="#00BFFF"/>
   <text x="210" y="28" text-anchor="middle" fill="#0e0e0e" font-size="15" font-weight="bold">סקוואט — Squat</text>
 
   <!-- פאנל 1 — עמידה -->
@@ -155,7 +155,7 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M83 133 Q88 155 90 175" stroke="#1e3f6e" stroke-width="13" fill="none" stroke-linecap="round"/>
   <path d="M90 175 Q92 188 93 197" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <ellipse cx="96" cy="199" rx="9" ry="4" fill="#333"/>
-  <text x="70" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 1 — עמידה</text>
+  <text x="70" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 1 — עמידה</text>
   <text x="70" y="224" text-anchor="middle" fill="#888" font-size="7">רגליים רוחב כתפיים</text>
   <text x="70" y="234" text-anchor="middle" fill="#888" font-size="7">מוט על הטרפז</text>
 
@@ -186,8 +186,8 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M252 165 Q258 178 260 197" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <ellipse cx="262" cy="199" rx="9" ry="4" fill="#333"/>
   <!-- קו 90 מעלות -->
-  <text x="260" y="168" fill="#CCFF00" font-size="9">90°</text>
-  <text x="210" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 2 — ירידה</text>
+  <text x="260" y="168" fill="#00BFFF" font-size="9">90°</text>
+  <text x="210" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 2 — ירידה</text>
   <text x="210" y="224" text-anchor="middle" fill="#888" font-size="7">ירך מקבילה לרצפה</text>
   <text x="210" y="234" text-anchor="middle" fill="#888" font-size="7">ברכיים מעל בהונות</text>
 
@@ -215,15 +215,15 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M384 172 Q390 184 392 197" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <ellipse cx="394" cy="199" rx="9" ry="4" fill="#333"/>
   <!-- חץ למעלה -->
-  <path d="M408 160 L408 110" stroke="#CCFF00" stroke-width="2" stroke-dasharray="4,3"/>
-  <polygon points="403,110 408,100 413,110" fill="#CCFF00"/>
-  <text x="350" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 3 — עלייה</text>
+  <path d="M408 160 L408 110" stroke="#00BFFF" stroke-width="2" stroke-dasharray="4,3"/>
+  <polygon points="403,110 408,100 413,110" fill="#00BFFF"/>
+  <text x="350" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 3 — עלייה</text>
   <text x="350" y="224" text-anchor="middle" fill="#888" font-size="7">דחף מהעקבים</text>
   <text x="350" y="234" text-anchor="middle" fill="#888" font-size="7">גב ישר בעלייה</text>
 
   <!-- נקודות מפתח -->
   <rect x="8" y="245" width="404" height="127" fill="#161616" rx="8" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="210" y="265" text-anchor="middle" fill="#CCFF00" font-size="12" font-weight="bold">נקודות מפתח</text>
+  <text x="210" y="265" text-anchor="middle" fill="#00BFFF" font-size="12" font-weight="bold">נקודות מפתח</text>
   <rect x="16" y="274" width="194" height="90" fill="#1a2a1a" rx="6"/>
   <text x="113" y="291" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="bold">✓ ביצוע נכון</text>
   <text x="28" y="308" fill="#4ade80" font-size="9">●</text>
@@ -244,8 +244,8 @@ export const EXERCISE_ILLUSTRATIONS = {
 
 'Deadlift': `<svg viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
   <rect width="420" height="380" fill="#111111" rx="12"/>
-  <rect width="420" height="44" fill="#CCFF00" rx="12"/>
-  <rect y="32" width="420" height="12" fill="#CCFF00"/>
+  <rect width="420" height="44" fill="#00BFFF" rx="12"/>
+  <rect y="32" width="420" height="12" fill="#00BFFF"/>
   <text x="210" y="28" text-anchor="middle" fill="#0e0e0e" font-size="15" font-weight="bold">דד-ליפט — Deadlift</text>
 
   <!-- פאנל 1 — הכנה -->
@@ -275,7 +275,7 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M84 138 Q94 155 100 172" stroke="#1e3f6e" stroke-width="13" fill="none" stroke-linecap="round"/>
   <path d="M100 172 Q104 183 106 197" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <ellipse cx="108" cy="199" rx="9" ry="4" fill="#333"/>
-  <text x="70" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 1 — הכנה</text>
+  <text x="70" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 1 — הכנה</text>
   <text x="70" y="224" text-anchor="middle" fill="#888" font-size="7">גב ישר, בר על אמצע</text>
   <text x="70" y="234" text-anchor="middle" fill="#888" font-size="7">כף הרגל</text>
 
@@ -305,9 +305,9 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M246 178 Q252 188 254 197" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <ellipse cx="256" cy="199" rx="9" ry="4" fill="#333"/>
   <!-- חץ -->
-  <path d="M264 165 L264 108" stroke="#CCFF00" stroke-width="2" stroke-dasharray="4,3"/>
-  <polygon points="259,108 264,98 269,108" fill="#CCFF00"/>
-  <text x="210" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 2 — הרמה</text>
+  <path d="M264 165 L264 108" stroke="#00BFFF" stroke-width="2" stroke-dasharray="4,3"/>
+  <polygon points="259,108 264,98 269,108" fill="#00BFFF"/>
+  <text x="210" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 2 — הרמה</text>
   <text x="210" y="224" text-anchor="middle" fill="#888" font-size="7">גב ורגליים עולים יחד</text>
   <text x="210" y="234" text-anchor="middle" fill="#888" font-size="7">בר קרוב לגוף</text>
 
@@ -337,14 +337,14 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M372 180 Q374 190 375 197" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <ellipse cx="377" cy="199" rx="9" ry="4" fill="#333"/>
   <!-- כוכב נעילה -->
-  <text x="405" y="90" fill="#CCFF00" font-size="16">★</text>
-  <text x="350" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 3 — נעילה</text>
+  <text x="405" y="90" fill="#00BFFF" font-size="16">★</text>
+  <text x="350" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 3 — נעילה</text>
   <text x="350" y="224" text-anchor="middle" fill="#888" font-size="7">כתפיים אחורה</text>
   <text x="350" y="234" text-anchor="middle" fill="#888" font-size="7">ירכיים קדימה</text>
 
   <!-- נקודות מפתח -->
   <rect x="8" y="245" width="404" height="127" fill="#161616" rx="8" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="210" y="265" text-anchor="middle" fill="#CCFF00" font-size="12" font-weight="bold">נקודות מפתח</text>
+  <text x="210" y="265" text-anchor="middle" fill="#00BFFF" font-size="12" font-weight="bold">נקודות מפתח</text>
   <rect x="16" y="274" width="194" height="90" fill="#1a2a1a" rx="6"/>
   <text x="113" y="291" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="bold">✓ ביצוע נכון</text>
   <text x="28" y="308" fill="#4ade80" font-size="9">●</text>
@@ -365,8 +365,8 @@ export const EXERCISE_ILLUSTRATIONS = {
 
 'Pull-ups': `<svg viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
   <rect width="420" height="380" fill="#111111" rx="12"/>
-  <rect width="420" height="44" fill="#CCFF00" rx="12"/>
-  <rect y="32" width="420" height="12" fill="#CCFF00"/>
+  <rect width="420" height="44" fill="#00BFFF" rx="12"/>
+  <rect y="32" width="420" height="12" fill="#00BFFF"/>
   <text x="210" y="28" text-anchor="middle" fill="#0e0e0e" font-size="15" font-weight="bold">מתח — Pull-ups</text>
 
   <!-- פאנל 1 — תלייה -->
@@ -392,7 +392,7 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M52 187 Q50 194 49 200" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <path d="M71 158 Q74 172 76 187" stroke="#1e3f6e" stroke-width="13" fill="none" stroke-linecap="round"/>
   <path d="M76 187 Q77 194 78 200" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
-  <text x="70" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 1 — תלייה</text>
+  <text x="70" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 1 — תלייה</text>
   <text x="70" y="224" text-anchor="middle" fill="#888" font-size="7">פשיטה מלאה של הידיים</text>
   <text x="70" y="234" text-anchor="middle" fill="#888" font-size="7">כתפיים פעילות למטה</text>
 
@@ -417,9 +417,9 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M211 152 Q214 168 216 185" stroke="#1e3f6e" stroke-width="13" fill="none" stroke-linecap="round"/>
   <path d="M216 185 Q217 193 218 200" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <!-- חץ למעלה -->
-  <path d="M258 150 L258 95" stroke="#CCFF00" stroke-width="2" stroke-dasharray="4,3"/>
-  <polygon points="253,95 258,85 263,95" fill="#CCFF00"/>
-  <text x="210" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 2 — משיכה</text>
+  <path d="M258 150 L258 95" stroke="#00BFFF" stroke-width="2" stroke-dasharray="4,3"/>
+  <polygon points="253,95 258,85 263,95" fill="#00BFFF"/>
+  <text x="210" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 2 — משיכה</text>
   <text x="210" y="224" text-anchor="middle" fill="#888" font-size="7">מרפקים אחורה ומטה</text>
   <text x="210" y="234" text-anchor="middle" fill="#888" font-size="7">חזה לבר</text>
 
@@ -444,14 +444,14 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M351 128 Q354 145 356 162" stroke="#1e3f6e" stroke-width="13" fill="none" stroke-linecap="round"/>
   <path d="M356 162 Q357 172 358 180" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <!-- כוכב -->
-  <text x="402" y="70" fill="#CCFF00" font-size="16">★</text>
-  <text x="350" y="213" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">שלב 3 — שיא</text>
+  <text x="402" y="70" fill="#00BFFF" font-size="16">★</text>
+  <text x="350" y="213" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">שלב 3 — שיא</text>
   <text x="350" y="224" text-anchor="middle" fill="#888" font-size="7">סנטר מעל הבר</text>
   <text x="350" y="234" text-anchor="middle" fill="#888" font-size="7">ירד לאט בשליטה</text>
 
   <!-- נקודות מפתח -->
   <rect x="8" y="245" width="404" height="127" fill="#161616" rx="8" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="210" y="265" text-anchor="middle" fill="#CCFF00" font-size="12" font-weight="bold">נקודות מפתח</text>
+  <text x="210" y="265" text-anchor="middle" fill="#00BFFF" font-size="12" font-weight="bold">נקודות מפתח</text>
   <rect x="16" y="274" width="194" height="90" fill="#1a2a1a" rx="6"/>
   <text x="113" y="291" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="bold">✓ ביצוע נכון</text>
   <text x="28" y="308" fill="#4ade80" font-size="9">●</text>
@@ -472,8 +472,8 @@ export const EXERCISE_ILLUSTRATIONS = {
 
 'Plank': `<svg viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
   <rect width="420" height="380" fill="#111111" rx="12"/>
-  <rect width="420" height="44" fill="#CCFF00" rx="12"/>
-  <rect y="32" width="420" height="12" fill="#CCFF00"/>
+  <rect width="420" height="44" fill="#00BFFF" rx="12"/>
+  <rect y="32" width="420" height="12" fill="#00BFFF"/>
   <text x="210" y="28" text-anchor="middle" fill="#0e0e0e" font-size="15" font-weight="bold">פלאנק — Plank</text>
 
   <!-- פאנל גדול — ביצוע נכון -->
@@ -495,8 +495,8 @@ export const EXERCISE_ILLUSTRATIONS = {
   <path d="M70 140 Q52 152 38 165" stroke="#1e3f6e" stroke-width="13" fill="none" stroke-linecap="round"/>
   <path d="M38 165 Q26 176 20 192" stroke="#1a3458" stroke-width="10" fill="none" stroke-linecap="round"/>
   <!-- קו ישר מראש לרגל -->
-  <line x1="232" y1="112" x2="25" y2="183" stroke="#CCFF00" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
-  <text x="138" y="208" text-anchor="middle" fill="#CCFF00" font-size="8" font-weight="bold">קו ישר מהראש לרגליים</text>
+  <line x1="232" y1="112" x2="25" y2="183" stroke="#00BFFF" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+  <text x="138" y="208" text-anchor="middle" fill="#00BFFF" font-size="8" font-weight="bold">קו ישר מהראש לרגליים</text>
   <text x="138" y="219" text-anchor="middle" fill="#888" font-size="7">מרפקים מתחת לכתפיים, בטן מכווצת</text>
 
   <!-- פאנל קטן — שגיאה -->
@@ -522,7 +522,7 @@ export const EXERCISE_ILLUSTRATIONS = {
 
   <!-- הוראות -->
   <rect x="8" y="215" width="404" height="157" fill="#161616" rx="8" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="210" y="236" text-anchor="middle" fill="#CCFF00" font-size="12" font-weight="bold">כיצד לבצע פלאנק נכון</text>
+  <text x="210" y="236" text-anchor="middle" fill="#00BFFF" font-size="12" font-weight="bold">כיצד לבצע פלאנק נכון</text>
   <rect x="16" y="246" width="194" height="118" fill="#1a2a1a" rx="6"/>
   <text x="113" y="263" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="bold">✓ עשה זאת</text>
   <text x="28" y="280" fill="#4ade80" font-size="9">●</text>

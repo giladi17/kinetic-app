@@ -228,7 +228,7 @@ export default function ActiveWorkout() {
       </div>
       <button
         onClick={() => setIsStarted(true)}
-        className="bg-electric-lime text-black px-14 py-5 rounded-2xl font-black text-xl uppercase tracking-widest hover:shadow-[0_0_30px_rgba(204,255,0,0.4)] hover:scale-105 active:scale-95 transition-all"
+        className="bg-electric-lime text-black px-14 py-5 rounded-2xl font-black text-xl uppercase tracking-widest hover:shadow-[0_0_30px_rgba(0,191,255,0.4)] hover:scale-105 active:scale-95 transition-all"
       >
         {t('activeWorkout.startButton')}
       </button>
@@ -298,7 +298,7 @@ export default function ActiveWorkout() {
       {summary && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-6">
           <div className="bg-[#0E0E0E] rounded-3xl p-8 w-full max-w-sm space-y-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-electric-lime/20 mx-auto flex items-center justify-center shadow-[0_0_25px_rgba(204,255,0,0.35)]">
+            <div className="w-16 h-16 rounded-full bg-electric-lime/20 mx-auto flex items-center justify-center shadow-[0_0_25px_rgba(0,191,255,0.35)]">
               <span className="material-symbols-outlined text-electric-lime text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                 emoji_events
               </span>
@@ -416,7 +416,7 @@ export default function ActiveWorkout() {
         <button
           onClick={finishWorkout}
           disabled={completedSets.length === 0}
-          className="w-full bg-electric-lime text-black py-5 rounded-2xl font-black text-base tracking-widest uppercase hover:shadow-[0_0_30px_rgba(204,255,0,0.4)] hover:scale-[1.02] transition-all active:scale-95 disabled:opacity-25 disabled:cursor-not-allowed"
+          className="w-full bg-electric-lime text-black py-5 rounded-2xl font-black text-base tracking-widest uppercase hover:shadow-[0_0_30px_rgba(0,191,255,0.4)] hover:scale-[1.02] transition-all active:scale-95 disabled:opacity-25 disabled:cursor-not-allowed"
         >
           {t('activeWorkout.finishWorkout')}
         </button>
@@ -584,7 +584,7 @@ function SetRow({ setNumber, set, onUpdate, onComplete }) {
           set.completed
             ? 'bg-electric-lime/15 text-electric-lime cursor-default'
             : canComplete
-              ? 'bg-electric-lime text-black shadow-[0_0_12px_rgba(204,255,0,0.3)]'
+              ? 'bg-electric-lime text-black shadow-[0_0_12px_rgba(0,191,255,0.3)]'
               : 'bg-gray-800 text-gray-600 opacity-30'
         }`}
       >

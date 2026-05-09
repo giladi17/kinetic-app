@@ -62,13 +62,13 @@ export default function PaywallModal() {
       dir="rtl"
       onClick={e => { if (e.target === e.currentTarget) setOpen(false) }}
     >
-      <div className="bg-[#1a1a1a] border border-[#CCFF00]/30 rounded-2xl p-8 w-full max-w-sm space-y-6 shadow-[0_0_40px_rgba(204,255,0,0.1)]">
+      <div className="bg-[#1a1a1a] border border-[#00BFFF]/30 rounded-2xl p-8 w-full max-w-sm space-y-6 shadow-[0_0_40px_rgba(0,191,255,0.1)]">
 
         {/* Header */}
         <div className="text-center space-y-3">
-          <div className="w-14 h-14 rounded-xl bg-[#CCFF00]/10 mx-auto flex items-center justify-center">
+          <div className="w-14 h-14 rounded-xl bg-[#00BFFF]/10 mx-auto flex items-center justify-center">
             <span
-              className="material-symbols-outlined text-[#CCFF00] text-3xl"
+              className="material-symbols-outlined text-[#00BFFF] text-3xl"
               style={{ fontVariationSettings: "'FILL' 1" }}
             >
               {feature?.icon || 'workspace_premium'}
@@ -81,9 +81,9 @@ export default function PaywallModal() {
                 {feature.title}
               </h2>
               <p className="text-[#adaaaa] text-sm leading-relaxed">{feature.desc}</p>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#CCFF00]/10 rounded-full">
-                <span className="material-symbols-outlined text-[#CCFF00] text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
-                <span className="text-[#CCFF00] text-xs font-bold tracking-widest uppercase">פיצ'ר Pro בלבד</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#00BFFF]/10 rounded-full">
+                <span className="material-symbols-outlined text-[#00BFFF] text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
+                <span className="text-[#00BFFF] text-xs font-bold tracking-widest uppercase">פיצ'ר Pro בלבד</span>
               </div>
             </>
           ) : (
@@ -101,7 +101,7 @@ export default function PaywallModal() {
           {PRO_FEATURES.map((f, i) => (
             <div key={i} className="flex items-center gap-3 px-3 py-2 bg-white/5 rounded-lg">
               <span
-                className="material-symbols-outlined text-[#CCFF00] text-base"
+                className="material-symbols-outlined text-[#00BFFF] text-base"
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
                 {f.icon}
@@ -121,7 +121,7 @@ export default function PaywallModal() {
           <button
             onClick={handleUpgrade}
             disabled={loading}
-            className="w-full bg-[#CCFF00] text-[#0e0e0e] py-4 rounded-xl font-headline font-black text-sm tracking-widest uppercase hover:brightness-110 transition-all active:scale-95 shadow-[0_0_20px_rgba(204,255,0,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full bg-[#00BFFF] text-[#0e0e0e] py-4 rounded-xl font-headline font-black text-sm tracking-widest uppercase hover:brightness-110 transition-all active:scale-95 shadow-[0_0_20px_rgba(0,191,255,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? '...' : 'שדרג ל-Pro ✦'}
           </button>

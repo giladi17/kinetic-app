@@ -81,7 +81,7 @@ export default function Onboarding() {
       {/* ── Progress bar ── */}
       <div className="w-full h-1 bg-white/10">
         <div
-          className="h-full bg-[#CCFF00] transition-all duration-500 ease-out"
+          className="h-full bg-[#00BFFF] transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -109,7 +109,7 @@ export default function Onboarding() {
         {step === 1 && (
           <div className="space-y-8">
             <div className="space-y-2">
-              <p className="text-[#CCFF00] text-xs font-bold uppercase tracking-widest">שלב 1</p>
+              <p className="text-[#00BFFF] text-xs font-bold uppercase tracking-widest">שלב 1</p>
               <h1 className="font-headline text-3xl font-black uppercase tracking-tight">
                 מה המטרה שלך?
               </h1>
@@ -122,7 +122,7 @@ export default function Onboarding() {
                   onClick={() => setGoal(g.key)}
                   className={`relative p-5 rounded-2xl flex flex-col items-center gap-3 transition-all duration-200 active:scale-95 border ${
                     goal === g.key
-                      ? 'bg-[#CCFF00] text-[#0e0e0e] border-[#CCFF00] shadow-[0_0_25px_rgba(204,255,0,0.25)]'
+                      ? 'bg-[#00BFFF] text-[#0e0e0e] border-[#00BFFF] shadow-[0_0_25px_rgba(0,191,255,0.25)]'
                       : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
                   }`}
                 >
@@ -151,7 +151,7 @@ export default function Onboarding() {
         {step === 2 && (
           <div className="space-y-8">
             <div className="space-y-2">
-              <p className="text-[#CCFF00] text-xs font-bold uppercase tracking-widest">שלב 2</p>
+              <p className="text-[#00BFFF] text-xs font-bold uppercase tracking-widest">שלב 2</p>
               <h1 className="font-headline text-3xl font-black uppercase tracking-tight">
                 רמת הכושר שלך?
               </h1>
@@ -164,7 +164,7 @@ export default function Onboarding() {
                   onClick={() => setFitnessLevel(f.key)}
                   className={`w-full px-5 py-4 rounded-2xl flex items-center gap-4 transition-all duration-200 active:scale-[0.98] border ${
                     fitnessLevel === f.key
-                      ? 'bg-[#CCFF00] text-[#0e0e0e] border-[#CCFF00] shadow-[0_0_25px_rgba(204,255,0,0.25)]'
+                      ? 'bg-[#00BFFF] text-[#0e0e0e] border-[#00BFFF] shadow-[0_0_25px_rgba(0,191,255,0.25)]'
                       : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
                   }`}
                 >
@@ -198,7 +198,7 @@ export default function Onboarding() {
         {step === 3 && (
           <div className="space-y-8">
             <div className="space-y-2">
-              <p className="text-[#CCFF00] text-xs font-bold uppercase tracking-widest">שלב 3</p>
+              <p className="text-[#00BFFF] text-xs font-bold uppercase tracking-widest">שלב 3</p>
               <h1 className="font-headline text-3xl font-black uppercase tracking-tight">
                 כמה ימים בשבוע<br />אתה מתאמן?
               </h1>
@@ -211,7 +211,7 @@ export default function Onboarding() {
                   onClick={() => setDays(d)}
                   className={`aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 font-headline font-black text-2xl transition-all duration-200 active:scale-95 border ${
                     days === d
-                      ? 'bg-[#CCFF00] text-[#0e0e0e] border-[#CCFF00] shadow-[0_0_25px_rgba(204,255,0,0.25)]'
+                      ? 'bg-[#00BFFF] text-[#0e0e0e] border-[#00BFFF] shadow-[0_0_25px_rgba(0,191,255,0.25)]'
                       : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
                   }`}
                 >
@@ -227,7 +227,7 @@ export default function Onboarding() {
         {step === 4 && (
           <div className="space-y-8">
             <div className="space-y-2">
-              <p className="text-[#CCFF00] text-xs font-bold uppercase tracking-widest">שלב 4</p>
+              <p className="text-[#00BFFF] text-xs font-bold uppercase tracking-widest">שלב 4</p>
               <h1 className="font-headline text-3xl font-black uppercase tracking-tight">מה גילך?</h1>
               <p className="text-white/40 text-sm">לחישוב יעדי הקלוריות שלך</p>
             </div>
@@ -240,7 +240,7 @@ export default function Onboarding() {
                 onChange={e => setAge(e.target.value)}
                 placeholder="25"
                 autoFocus
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-center text-6xl font-headline font-black text-white outline-none focus:border-[#CCFF00]/40 focus:bg-white/8 transition-all placeholder:text-white/15 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-center text-6xl font-headline font-black text-white outline-none focus:border-[#00BFFF]/40 focus:bg-white/8 transition-all placeholder:text-white/15 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <p className="text-white/25 text-sm tracking-wider uppercase">שנים</p>
             </div>
@@ -271,7 +271,7 @@ export default function Onboarding() {
         <button
           onClick={handleNext}
           disabled={!canProceed || saving}
-          className="w-full bg-[#CCFF00] text-[#0e0e0e] py-5 rounded-2xl font-headline font-black text-base tracking-widest uppercase transition-all active:scale-[0.98] disabled:opacity-25 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(204,255,0,0.15)]"
+          className="w-full bg-[#00BFFF] text-[#0e0e0e] py-5 rounded-2xl font-headline font-black text-base tracking-widest uppercase transition-all active:scale-[0.98] disabled:opacity-25 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(0,191,255,0.15)]"
         >
           {saving ? 'שומר...' : step === TOTAL_STEPS ? 'בואו נתחיל ✦' : 'הבא →'}
         </button>

@@ -85,7 +85,7 @@ export default function WarRoom() {
                                   <div className="flex-1">
                                             <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">ציון שבועי</p>
                                             <p className="font-headline font-bold text-3xl">
-                                                        <span style={{ color: score >= 75 ? '#CCFF00' : score >= 50 ? '#FFB700' : '#FF4D4D' }}>{score}</span>
+                                                        <span style={{ color: score >= 75 ? '#00BFFF' : score >= 50 ? '#FFB700' : '#FF4D4D' }}>{score}</span>
                                                         <span className="text-on-surface-variant text-lg font-normal">/100</span>
                                             </p>
                                             <p className="font-body text-sm text-on-surface-variant mt-1">
@@ -141,7 +141,7 @@ export default function WarRoom() {
                                                   className="w-full bg-surface-container-low rounded-xl px-4 py-3 flex items-center gap-3 active:scale-[0.98] duration-200 text-right"
                                                 >
                                                 <span className="w-5 h-5 rounded-md border-2 shrink-0 flex items-center justify-center transition-all duration-200"
-                                                                  style={{ borderColor: checkedGoals[i] ? '#CCFF00' : '#444', backgroundColor: checkedGoals[i] ? '#CCFF00' : 'transparent' }}>
+                                                                  style={{ borderColor: checkedGoals[i] ? '#00BFFF' : '#444', backgroundColor: checkedGoals[i] ? '#00BFFF' : 'transparent' }}>
                                                   {checkedGoals[i] && (
                                                                                       <span className="material-symbols-outlined text-xs font-bold" style={{ color: '#0e0e0e', fontVariationSettings: "'FILL' 1", fontSize: 14 }}>check</span>
                                                                 )}
@@ -167,7 +167,7 @@ export default function WarRoom() {
 function ScoreRing({ score }) {
     const R = 36, CX = 44, CY = 44, circ = 2 * Math.PI * R
         const pct = score / 100
-            const color = score >= 75 ? '#CCFF00' : score >= 50 ? '#FFB700' : '#FF4D4D'
+            const color = score >= 75 ? '#00BFFF' : score >= 50 ? '#FFB700' : '#FF4D4D'
                 return (
                       <svg width="88" height="88" viewBox="0 0 88 88" className="shrink-0">
                             <circle cx={CX} cy={CY} r={R} fill="none" stroke="#2a2a2a" strokeWidth="8" />
@@ -197,7 +197,7 @@ function StatBox({ icon, label, value, unit, delta, isPercent }) {
                                     <span className="font-label text-[10px] text-on-surface-variant">{unit}</span>
                             </div>
                         {hasDelta && (
-                                <div className={`flex items-center gap-1 font-label text-[9px] font-bold ${neutral ? 'text-on-surface-variant' : positive ? 'text-[#CCFF00]' : 'text-[#FF4D4D]'}`}>
+                                <div className={`flex items-center gap-1 font-label text-[9px] font-bold ${neutral ? 'text-on-surface-variant' : positive ? 'text-[#00BFFF]' : 'text-[#FF4D4D]'}`}>
                                           <span className="material-symbols-outlined text-xs">{neutral ? 'remove' : positive ? 'arrow_upward' : 'arrow_downward'}</span>
                                   {isPercent ? `${Math.abs(delta)}% vs שבוע שעבר` : `${positive ? '+' : ''}${delta} vs שבוע שעבר`}
                                 </div>

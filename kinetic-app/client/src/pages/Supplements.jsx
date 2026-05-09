@@ -93,7 +93,7 @@ export default function Supplements() {
 
       {/* Toast */}
       {toastMsg && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#CCFF00] text-black px-6 py-3 font-black text-sm shadow-xl tracking-[0.2em] rounded-xl">
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#00BFFF] text-black px-6 py-3 font-black text-sm shadow-xl tracking-[0.2em] rounded-xl">
           {toastMsg}
         </div>
       )}
@@ -103,14 +103,14 @@ export default function Supplements() {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-6">
           <div className="bg-[#121212] rounded-2xl shadow-2xl p-8 w-full max-w-sm space-y-6">
             <div className="space-y-1 pb-4 mb-2">
-              <span className="text-[#CCFF00] text-xs font-black tracking-[0.2em]">NEW SUPPLEMENT</span>
+              <span className="text-[#00BFFF] text-xs font-black tracking-[0.2em]">NEW SUPPLEMENT</span>
               <h2 className="text-white font-black text-2xl">תוסף חדש</h2>
             </div>
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-white/40 text-xs font-black tracking-[0.2em] uppercase">שם התוסף</label>
                 <input
-                  className="w-full border-b-2 border-[#CCFF00] bg-[#1a1a1a] px-4 py-3 text-white outline-none font-bold rounded-lg placeholder:text-white/30"
+                  className="w-full border-b-2 border-[#00BFFF] bg-[#1a1a1a] px-4 py-3 text-white outline-none font-bold rounded-lg placeholder:text-white/30"
                   placeholder="למשל: Vitamin D"
                   value={newName}
                   onChange={e => setNewName(e.target.value)}
@@ -138,7 +138,7 @@ export default function Supplements() {
               <button
                 onClick={addSupplement}
                 disabled={saving || !newName.trim() || !newServings}
-                className="flex-[2] bg-[#CCFF00] text-black py-3 font-black text-sm tracking-[0.2em] rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-95 duration-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex-[2] bg-[#00BFFF] text-black py-3 font-black text-sm tracking-[0.2em] rounded-xl shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-95 duration-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {saving ? 'שומר...' : 'הוסף תוסף'}
               </button>
@@ -152,7 +152,7 @@ export default function Supplements() {
         <div className="w-full mx-auto px-8 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
           {/* Text — right side (RTL) */}
           <div className="text-right">
-            <span className="inline-block px-4 py-1 bg-[#CCFF00] text-[#5B7300] text-[10px] font-black tracking-widest mb-6 rounded-full uppercase">KINETIC PERFORMANCE</span>
+            <span className="inline-block px-4 py-1 bg-[#00BFFF] text-[#5B7300] text-[10px] font-black tracking-widest mb-6 rounded-full uppercase">KINETIC PERFORMANCE</span>
             <h1 className="text-6xl md:text-8xl font-black text-[#151C25] dark:text-white leading-[0.9] tracking-tighter mb-8">
               הדלק המדעי<br /><span style={{ color: '#506600' }}>לביצועי שיא</span>
             </h1>
@@ -163,7 +163,7 @@ export default function Supplements() {
               <button
                 onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
                 className="px-8 py-4 rounded-xl font-black text-base text-white shadow-[0_8px_32px_rgba(80,102,0,0.35)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
-                style={{ background: 'linear-gradient(135deg, #506600 0%, #CCFF00 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #506600 0%, #00BFFF 100%)' }}
               >
                 לכל הקטלוג
               </button>
@@ -221,7 +221,7 @@ export default function Supplements() {
             {/* Athlete image — 2 cols */}
             <div className="lg:col-span-2 relative">
               <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none"
-                style={{ backgroundColor: '#CCFF00' }} />
+                style={{ backgroundColor: '#00BFFF' }} />
               <img
                 src={STITCH_ATHLETE_URL}
                 alt="Athlete"
@@ -239,7 +239,7 @@ export default function Supplements() {
               <div className="space-y-10">
                 {WHY_FEATURES.map((f, i) => (
                   <div key={i} className="flex items-start gap-6 flex-row-reverse">
-                    <div className="w-14 h-14 bg-[#CCFF00] rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_16px_rgba(204,255,0,0.4)]">
+                    <div className="w-14 h-14 bg-[#00BFFF] rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_16px_rgba(0,191,255,0.4)]">
                       <span className="material-symbols-outlined text-[#151C25] dark:text-white text-2xl"
                         style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
                     </div>
@@ -257,16 +257,16 @@ export default function Supplements() {
 
       {/* CTA */}
       <section className="px-8 max-w-5xl mx-auto mt-16 mb-8">
-        <div className="bg-[#CCFF00] rounded-2xl shadow-2xl p-16 text-center relative overflow-hidden">
+        <div className="bg-[#00BFFF] rounded-2xl shadow-2xl p-16 text-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 opacity-20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[80px]" style={{ background: '#ffffff' }} />
           <div className="absolute bottom-0 left-0 w-96 h-96 opacity-20 rounded-full translate-y-1/2 -translate-x-1/2 blur-[80px]" style={{ background: '#000000' }} />
           <div className="relative z-10 max-w-xl mx-auto space-y-6">
-            <span className="inline-block bg-[#121212] text-[#CCFF00] text-[10px] font-black tracking-[0.4em] px-5 py-2 uppercase rounded-xl">KINETIC PERFORMANCE</span>
+            <span className="inline-block bg-[#121212] text-[#00BFFF] text-[10px] font-black tracking-[0.4em] px-5 py-2 uppercase rounded-xl">KINETIC PERFORMANCE</span>
             <h2 className="text-[#121212] font-black text-6xl md:text-7xl tracking-[-0.04em] leading-[0.88]">בניית תוכנית<br />תוספים אישית</h2>
             <p className="text-[#121212]/60 text-xs tracking-[0.35em] uppercase max-w-xs mx-auto">הוסף את התוספים שלך ועקוב אחר ההתקדמות יום אחר יום</p>
             <button
               onClick={() => { setNewName(''); setNewServings(''); setShowModal(true) }}
-              className="inline-flex items-center gap-2 bg-[#121212] text-[#CCFF00] px-10 py-4 font-black text-xs tracking-[0.3em] rounded-xl shadow-xl hover:-translate-y-0.5 active:scale-95 duration-200 transition-all uppercase"
+              className="inline-flex items-center gap-2 bg-[#121212] text-[#00BFFF] px-10 py-4 font-black text-xs tracking-[0.3em] rounded-xl shadow-xl hover:-translate-y-0.5 active:scale-95 duration-200 transition-all uppercase"
             >
               <span className="material-symbols-outlined text-base">add</span>
               הוסף תוסף ראשון
@@ -318,7 +318,7 @@ function SupplementCard({ supp, info, onTake }) {
             className={`mr-5 px-5 py-3 font-black text-xs tracking-[0.2em] uppercase rounded-xl active:scale-95 duration-200 transition-all shrink-0 ${
               takenToday
                 ? 'bg-[#EEF4FF] text-[#656464] cursor-default'
-                : 'bg-[#CCFF00] text-[#151C25] dark:text-white shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)]'
+                : 'bg-[#00BFFF] text-[#151C25] dark:text-white shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)]'
             }`}
           >
             {takenToday ? 'לקחתי ✓' : 'לקחתי'}
@@ -335,7 +335,7 @@ function SupplementCard({ supp, info, onTake }) {
           </div>
           <div className="w-full h-1.5 bg-[#EEF4FF] rounded-full overflow-hidden">
             <div className="h-full transition-all duration-700 rounded-full"
-              style={{ width: `${supp.pct_remaining}%`, backgroundColor: supp.low_stock ? '#f97316' : '#CCFF00' }} />
+              style={{ width: `${supp.pct_remaining}%`, backgroundColor: supp.low_stock ? '#f97316' : '#00BFFF' }} />
           </div>
         </div>
 
@@ -407,7 +407,7 @@ function CatalogCard({ preset, info, onAdd }) {
           )}
           <button
             onClick={onAdd}
-            className="flex-[2] flex items-center justify-center gap-1 bg-[#CCFF00] text-[#151C25] dark:text-white px-3 py-3 font-black text-xs rounded-xl shadow-[0_4px_24px_rgba(204,255,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(204,255,0,0.5)] active:scale-90 duration-200 transition-all tracking-widest uppercase"
+            className="flex-[2] flex items-center justify-center gap-1 bg-[#00BFFF] text-[#151C25] dark:text-white px-3 py-3 font-black text-xs rounded-xl shadow-[0_4px_24px_rgba(0,191,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,191,255,0.5)] active:scale-90 duration-200 transition-all tracking-widest uppercase"
           >
             <span className="material-symbols-outlined text-base">add</span>
             הוסף
@@ -426,7 +426,7 @@ function InfoPanel({ info }) {
       <ul className="space-y-2">
         {info.benefits.map((b, i) => (
           <li key={i} className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 shrink-0 bg-[#CCFF00] rounded-full" />
+            <span className="w-1.5 h-1.5 shrink-0 bg-[#00BFFF] rounded-full" />
             <span className="text-[#151C25] dark:text-white text-sm">{b}</span>
           </li>
         ))}
@@ -453,7 +453,7 @@ function InfoPanel({ info }) {
           <div className="flex flex-wrap gap-2">
             {info.buyLinks.map(link => (
               <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 bg-[#CCFF00]/10 text-[#CCFF00] px-3 py-2 text-xs font-black rounded-lg hover:bg-[#CCFF00] hover:text-black active:scale-95 duration-200 transition-all">
+                className="flex items-center gap-1.5 bg-[#00BFFF]/10 text-[#00BFFF] px-3 py-2 text-xs font-black rounded-lg hover:bg-[#00BFFF] hover:text-black active:scale-95 duration-200 transition-all">
                 <span>{link.flag}</span>{link.name}
               </a>
             ))}

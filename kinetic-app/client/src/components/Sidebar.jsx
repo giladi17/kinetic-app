@@ -22,8 +22,8 @@ export default function Sidebar() {
           onClick={() => { if (navigator.vibrate) navigator.vibrate(10) }}
           className={({ isActive }) =>
             `relative group ${isActive
-              ? 'flex flex-col items-center justify-center bg-[#CCFF00] dark:bg-[#00BFFF] text-[#0e0e0e] rounded-xl w-14 py-2 active:scale-90 duration-300'
-              : 'flex flex-col items-center justify-center text-[#656464] dark:text-[#adaaaa] opacity-70 hover:opacity-100 hover:text-[#506600] dark:hover:text-[#00BFFF] rounded-xl w-14 py-2 transition-all active:scale-90 duration-300'}`
+              ? 'flex flex-col items-center justify-center bg-[#00BFFF] text-[#0e0e0e] rounded-xl w-14 py-2 active:scale-90 duration-300'
+              : 'flex flex-col items-center justify-center text-[#656464] dark:text-[#adaaaa] opacity-70 hover:opacity-100 hover:text-[#00BFFF] rounded-xl w-14 py-2 transition-all active:scale-90 duration-300'}`
           }
         >
           {({ isActive }) => (
