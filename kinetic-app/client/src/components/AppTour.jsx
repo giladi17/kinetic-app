@@ -1,9 +1,8 @@
-import React, { Suspense, useState, useEffect, useCallback } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import React, { Suspense, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ACTIONS, EVENTS, STATUS } from 'react-joyride'
 
-// Dynamic import bypasses Rollup's static default-export analysis on the ESM
-// bundle, which lacks a proper `default` export and causes [MISSING_EXPORT].
+// Dynamic import avoids Rollup's static default-export check on the ESM bundle
 const JoyrideComponent = React.lazy(() =>
   import('react-joyride').then(mod => ({ default: mod.default ?? mod.Joyride }))
 )
@@ -129,63 +128,46 @@ const TOUR_STEPS = [
   },
 ]
 
+// Route to navigate to before showing each step
 const STEP_ROUTES = ['/dashboard', '/nutrition', '/plans', '/dashboard']
 
 export default function AppTour({ onDone }) {
   const navigate = useNavigate()
-  const location = useLocation()
 
-  const [run, setRun] = useState(false)
+  const [runTour, setRunTour] = useState(false)
   const [stepIndex, setStepIndex] = useState(0)
-  const [pendingStep, setPendingStep] = useState(null)
 
+  // Start tour after a short delay so the dashboard has rendered its targets
   useEffect(() => {
-    if (location.pathname !== '/dashboard') {
-      navigate('/dashboard', { replace: true })
-    } else {
-      setTimeout(() => setRun(true), 400)
-    }
+    navigate('/dashboard', { replace: true })
+    const t = setTimeout(() => setRunTour(true), 400)
+    return () => clearTimeout(t)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (pendingStep === null) return
-    const timer = setTimeout(() => {
-      setStepIndex(pendingStep)
-      setPendingStep(null)
-      setRun(true)
-    }, 500)
-    return () => clearTimeout(timer)
-  }, [location.pathname, pendingStep])
+  function handleCallback(data) {
+    const { action, index, status, type } = data
 
-  const finish = useCallback(() => {
-    localStorage.setItem(TOUR_KEY, 'true')
-    setRun(false)
-    onDone?.()
-    navigate('/dashboard', { replace: true })
-  }, [navigate, onDone])
-
-  const handleCallback = useCallback((data) => {
-    const { action, index, type, status } = data
-
-    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-      finish()
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+      localStorage.setItem(TOUR_KEY, 'true')
+      setRunTour(false)
+      onDone?.()
       return
     }
 
     if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
-      const next = index + (action === ACTIONS.PREV ? -1 : 1)
-      const clamped = Math.max(0, Math.min(next, TOUR_STEPS.length - 1))
-      const targetRoute = STEP_ROUTES[clamped]
+      const nextStepIndex = index + (action === ACTIONS.PREV ? -1 : 1)
+      const clamped = Math.max(0, Math.min(nextStepIndex, TOUR_STEPS.length - 1))
 
-      if (targetRoute && location.pathname !== targetRoute) {
-        setRun(false)
-        setPendingStep(clamped)
-        navigate(targetRoute)
-      } else {
+      // Pause Joyride, navigate, then resume on the new page after DOM settles
+      setRunTour(false)
+      navigate(STEP_ROUTES[clamped])
+
+      setTimeout(() => {
         setStepIndex(clamped)
-      }
+        setRunTour(true)
+      }, 300)
     }
-  }, [location.pathname, navigate, finish])
+  }
 
   const locale = {
     back: 'חזור',
@@ -200,7 +182,7 @@ export default function AppTour({ onDone }) {
     <Suspense fallback={null}>
       <JoyrideComponent
         steps={TOUR_STEPS}
-        run={run}
+        run={runTour}
         stepIndex={stepIndex}
         continuous
         showSkipButton
