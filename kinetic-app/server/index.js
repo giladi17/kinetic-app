@@ -2040,6 +2040,58 @@ app.post('/api/weight', requireAuth, asyncHandler(async (req, res) => {
   res.json({ id: result.lastInsertRowid })
 }))
 
+
+// GET /api/analytics/weekly-summary
+app.get('/api/analytics/weekly-summary', requireAuth, asyncHandler(async (req, res) => {
+  const prismaUserId = await getPrismaUserId(req)
+  const nutritionData = []
+  const now = new Date()
+  let totalCalories = 0, totalProtein = 0, daysWithData = 0
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(d.getDate() - i)
+    const dateStr  = d.toISOString().split('T')[0]
+    const dayStart = new Date(dateStr + 'T00:00:00.000Z')
+    const dayEnd   = new Date(dateStr + 'T23:59:59.999Z')
+    let cal = 0, prot = 0
+    if (prismaUserId) {
+      const agg = await prisma.nutritionLog.aggregate({
+        where: { userId: prismaUserId, date: { gte: dayStart, lte: dayEnd } },
+        _sum: { calories: true, protein: true },
+      })
+      cal  = Math.round(agg._sum.calories || 0)
+      prot = Math.round(agg._sum.protein  || 0)
+    }
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    if (cal > 0 || prot > 0) { totalCalories += cal; totalProtein += prot; daysWithData++ }
+    nutritionData.push({ date: `${dd}/${mm}`, calories: cal, protein: prot })
+  }
+
+  let weightData = []
+  if (prismaUserId) {
+    const logs = await prisma.weightLog.findMany({
+      where: { userId: prismaUserId },
+      orderBy: { date: 'asc' },
+      take: 30,
+      select: { weight: true, date: true },
+    })
+    weightData = logs.map(l => {
+      const d  = new Date(l.date)
+      const dd = String(d.getDate()).padStart(2, '0')
+      const mm = String(d.getMonth() + 1).padStart(2, '0')
+      return { label: `${dd}/${mm}`, weight: parseFloat(l.weight.toFixed(1)) }
+    })
+  }
+
+  const averages = {
+    calories: daysWithData > 0 ? Math.round(totalCalories / daysWithData) : 0,
+    protein:  daysWithData > 0 ? Math.round(totalProtein  / daysWithData) : 0,
+  }
+
+  res.json({ nutritionData, weightData, averages })
+}))
 // PATCH /api/stats
 app.patch('/api/stats', requireAuth, (req, res) => {
   const allowed = ['steps', 'step_goal', 'resting_hr', 'sleep', 'hydration', 'active_minutes', 'body_fat', 'gender', 'ai_persona']
