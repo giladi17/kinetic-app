@@ -134,7 +134,7 @@ export default function AppTour({ onDone }) {
   // Kick off on dashboard after giving it time to render
   useEffect(() => {
     navigate('/dashboard', { replace: true })
-    const t = setTimeout(() => setRunTour(true), 500)
+    const t = setTimeout(() => setRunTour(true), 800)
     return () => clearTimeout(t)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -172,7 +172,7 @@ export default function AppTour({ onDone }) {
         setTimeout(() => {
           setStepIndex(nextIndex)
           setRunTour(true)
-        }, 400)
+        }, 800)
       } else {
         setStepIndex(nextIndex)
       }
