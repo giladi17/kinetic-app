@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import Joyride, { ACTIONS, EVENTS, STATUS } from 'react-joyride'
+import * as JoyrideModule from 'react-joyride'
+const Joyride = JoyrideModule.default ?? JoyrideModule
+const { ACTIONS, EVENTS, STATUS } = JoyrideModule
 import { useUser } from '../context/UserContext'
 import { getPersona } from '../data/personas'
 
