@@ -52,7 +52,7 @@ export default function TopAppBar() {
   }, [])
 
   return (
-    <header className="fixed top-0 w-full z-50 kinetic-nav-bg bg-white/90 dark:bg-[#0e0e0e]/60 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_40px_rgba(204,255,0,0.05)] border-b border-black/5 dark:border-white/5">
+    <header className="fixed top-0 w-full z-50 kinetic-nav-bg bg-white/90 dark:bg-[#050505]/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_40px_rgba(0,191,255,0.05)] border-b border-black/5 dark:border-white/[0.06]">
       <div className="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
           <div className="relative" ref={menuRef}>
@@ -88,19 +88,19 @@ export default function TopAppBar() {
               </div>
             )}
           </div>
-          <span className="font-headline font-black text-2xl italic tracking-tighter text-[#CCFF00]">KINETIC</span>
+          <span className="font-headline font-black text-2xl italic tracking-tighter text-[#CCFF00] dark:text-[#00BFFF]">KINETIC</span>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-xl bg-[#EEF4FF] dark:bg-[#1E2832] transition-all duration-500 hover:scale-110 hover:shadow-[0_4px_20px_rgba(204,255,0,0.25)] active:scale-90"
+            className="p-2.5 rounded-xl bg-[#EEF4FF] dark:bg-[#0D1A24] transition-all duration-500 hover:scale-110 hover:shadow-[0_4px_20px_rgba(0,191,255,0.25)] active:scale-90"
             aria-label={isDark ? 'עבור למצב בהיר' : 'עבור למצב כהה'}
           >
             <span
               className="material-symbols-outlined transition-all duration-500 block"
               style={{
                 fontVariationSettings: "'FILL' 1",
-                color: isDark ? '#CCFF00' : '#506600',
+                color: isDark ? '#00BFFF' : '#506600',
                 transform: isDark ? 'rotate(0deg) scale(1)' : 'rotate(-30deg) scale(0.9)',
               }}
             >

@@ -9,7 +9,7 @@ import StreakProtectionBanner from './StreakProtectionBanner'
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-[#F8F9FF] dark:bg-[#0E0E0E] text-[#151C25] dark:text-white">
+    <div className="min-h-screen bg-[#F8F9FF] dark:bg-[#050505] text-[#151C25] dark:text-white">
       <TopAppBar />
       <Sidebar />
       <StreakProtectionBanner />

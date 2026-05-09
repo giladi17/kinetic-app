@@ -9,48 +9,63 @@ import WeeklyAnalyticsSection from '../components/WeeklyAnalyticsSection'
 import { useLang } from '../context/LanguageContext'
 import { registerPushNotifications, isPushSupported } from '../utils/pushNotifications'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API  = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 const LIME = '#CCFF00'
+const TEAL = '#00BFFF'
 
-/* ─── Animated weekly bar chart (light-mode variant) ─── */
+/* ─── Dark mode hook ─── */
+function useDarkMode() {
+  const [dark, setDark] = useState(
+    () => typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  )
+  useEffect(() => {
+    const obs = new MutationObserver(() =>
+      setDark(document.documentElement.classList.contains('dark'))
+    )
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+  return dark
+}
+
+/* ─── Animated weekly bar chart ─── */
 const HEB_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳']
 
-function RecoveryBarChart({ data }) {
+function RecoveryBarChart({ data, accent, dark }) {
   if (!data || data.length === 0) {
     return (
       <div className="h-44 flex flex-col items-center justify-center gap-3">
-        <span className="material-symbols-outlined text-[#DCE3F0] text-5xl">bar_chart</span>
+        <span className="material-symbols-outlined text-[#DCE3F0] dark:text-[#2A2A2A] text-5xl">bar_chart</span>
         <p className="text-[#B0B0B0] font-black text-sm uppercase tracking-widest">אין נתונים לשבוע זה</p>
       </div>
     )
   }
 
-  const days = data.map((d, i) => ({ ...d, label: HEB_DAYS[i] ?? d.label }))
+  const days   = data.map((d, i) => ({ ...d, label: HEB_DAYS[i] ?? d.label }))
   const maxPct = Math.max(...days.map(d => d.pct || 0), 1)
 
   return (
     <div className="flex items-end justify-between h-44 gap-2 md:gap-3 px-1">
       {days.map((day, i) => {
-        const height = Math.max(5, Math.round((day.pct / maxPct) * 100))
+        const height     = Math.max(5, Math.round((day.pct / maxPct) * 100))
+        const fillColor  = day.today
+          ? accent
+          : dark ? 'rgba(0,191,255,0.07)' : 'rgba(21,28,37,0.15)'
+        const glowShadow = day.today
+          ? `0 0 18px ${dark ? 'rgba(0,191,255,0.45)' : 'rgba(204,255,0,0.4)'}`
+          : 'none'
         return (
           <div key={i} className="flex-1 flex flex-col items-center gap-2">
             <div
-              className="w-full bg-[#EEF4FF] rounded-t-lg relative overflow-hidden"
+              className="w-full bg-[#EEF4FF] dark:bg-[#0F0F0F] rounded-t-lg relative overflow-hidden border border-transparent dark:border-white/[0.04]"
               style={{ height: '148px' }}
             >
               <div
                 className="absolute bottom-0 w-full rounded-t-lg transition-all duration-1000 ease-out"
-                style={{
-                  height: `${height}%`,
-                  backgroundColor: day.today ? LIME : 'rgba(21,28,37,0.15)',
-                  boxShadow: day.today ? `0 0 18px rgba(204,255,0,0.4)` : 'none',
-                }}
+                style={{ height: `${height}%`, backgroundColor: fillColor, boxShadow: glowShadow }}
               />
             </div>
-            <span
-              className="text-[10px] font-black"
-              style={{ color: day.today ? LIME : '#B0B0B0' }}
-            >
+            <span className="text-[10px] font-black" style={{ color: day.today ? accent : '#B0B0B0' }}>
               {day.label}
             </span>
           </div>
@@ -93,6 +108,12 @@ export default function Dashboard() {
     dashboard: appDashboard,
     todayNutrition: appMacros,
   } = useAppData() || {}
+
+  const dark   = useDarkMode()
+  const ACCENT = dark ? TEAL : LIME
+
+  const CARD  = 'bg-white dark:bg-[#0D0D0D] dark:border dark:border-white/[0.07]'
+  const TRACK = 'bg-[#F0F0F0] dark:bg-[#1A1A1A]'
 
   const [data,          setData]          = useState(null)
   const [loading,       setLoading]       = useState(true)
@@ -166,7 +187,7 @@ export default function Dashboard() {
   }
 
   if (loading) return (
-    <main className="mt-24 px-4 md:px-8 max-w-7xl mx-auto space-y-8 pb-32 bg-[#F8F9FF] dark:bg-[#0e0e0e] text-[#151C25] dark:text-white dark:text-white min-h-screen">
+    <main className="mt-24 px-4 md:px-8 max-w-7xl mx-auto space-y-8 pb-32 bg-[#F8F9FF] dark:bg-[#050505] text-[#151C25] dark:text-white min-h-screen">
       <div className="space-y-3"><SkeletonText width="w-40" /><SkeletonText width="w-64" /></div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <SkeletonCard className="md:col-span-8 h-72" />
@@ -187,7 +208,7 @@ export default function Dashboard() {
     readinessScore >= 80 ? 'מוכנות מלאה' :
     readinessScore >= 60 ? 'מוכנות בינונית' : 'מנוחה מומלצת'
   const readinessColor =
-    readinessScore >= 80 ? LIME :
+    readinessScore >= 80 ? ACCENT :
     readinessScore >= 60 ? '#FFB800' : '#FF6B6B'
 
   const weeklyBars    = (d.weeklyActivity || []).length > 0 ? d.weeklyActivity : []
@@ -212,7 +233,7 @@ export default function Dashboard() {
 
   /* ─────────────── RENDER ─────────────── */
   return (
-    <main className="mt-20 md:mt-24 px-4 md:px-8 max-w-7xl mx-auto pb-32 bg-[#F8F9FF] dark:bg-[#0e0e0e] text-[#151C25] dark:text-white dark:text-white min-h-screen">
+    <main className="mt-20 md:mt-24 px-4 md:px-8 max-w-7xl mx-auto pb-32 bg-[#F8F9FF] dark:bg-[#050505] text-[#151C25] dark:text-white min-h-screen">
 
       {/* ── Page Header ── */}
       <header className="mb-8 pt-6">
@@ -221,7 +242,7 @@ export default function Dashboard() {
         </p>
         <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-[#151C25] dark:text-white leading-none">
           שלום, {displayName} —{' '}
-          <span className="bg-[#121212] text-[#CCFF00] px-3 py-1 italic rounded-sm">
+          <span className="bg-[#121212] px-3 py-1 italic rounded-sm" style={{ color: ACCENT }}>
             לוח ביצועים
           </span>
         </h1>
@@ -229,14 +250,12 @@ export default function Dashboard() {
 
       {/* ── Daily Challenge ── */}
       {challenge && (
-        <div className="mb-8 bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 flex items-center gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
+        <div className={`mb-8 p-4 rounded-2xl flex items-center gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.06)] ${CARD}`}>
           <div className="text-3xl shrink-0">{challenge.text.split(' ').pop()}</div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] text-[#656464] uppercase font-black tracking-widest block mb-0.5">
-              אתגר יומי
-            </span>
+            <span className="text-[10px] text-[#656464] uppercase font-black tracking-widest block mb-0.5">אתגר יומי</span>
             <p className="font-black text-sm text-[#151C25] dark:text-white truncate">{challenge.text.split(' ').slice(0, -1).join(' ')}</p>
-            <span className="text-xs font-bold" style={{ color: LIME }}>+{challenge.xp} XP</span>
+            <span className="text-xs font-bold" style={{ color: ACCENT }}>+{challenge.xp} XP</span>
           </div>
           <button
             onClick={() => {
@@ -246,9 +265,9 @@ export default function Dashboard() {
             className={`shrink-0 px-4 py-2 rounded-lg font-black text-xs uppercase transition-all ${
               challengeDone
                 ? 'text-[#121212] font-black'
-                : 'bg-[#F0F0F0] text-[#151C25] dark:text-white hover:bg-[#EEF4FF]'
+                : 'bg-[#F0F0F0] dark:bg-[#1A1A1A] text-[#151C25] dark:text-white hover:bg-[#EEF4FF] dark:hover:bg-[#222]'
             }`}
-            style={challengeDone ? { backgroundColor: LIME } : {}}
+            style={challengeDone ? { backgroundColor: ACCENT } : {}}
           >
             {challengeDone ? '✓ בוצע' : 'סמן כבוצע'}
           </button>
@@ -258,8 +277,8 @@ export default function Dashboard() {
       {/* ══════════════ BENTO GRID ══════════════ */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
 
-        {/* ① Recovery Index — 8 cols — LIGHT GLASS */}
-        <div className="md:col-span-8 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500">
+        {/* ① Recovery Index — 8 cols */}
+        <div className={`md:col-span-8 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500 ${CARD}`}>
           <div className="flex justify-between items-end mb-8">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">ביצועים שבועיים</p>
@@ -276,28 +295,28 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <RecoveryBarChart data={weeklyBars} />
+          <RecoveryBarChart data={weeklyBars} accent={ACCENT} dark={dark} />
 
           <div className="mt-4 flex justify-end">
             <button
               onClick={() => openAI('מה אתה ממליץ היום לפי ציון המוכנות שלי?')}
               className="text-xs font-black uppercase tracking-widest pb-0.5 hover:opacity-60 transition-opacity"
-              style={{ color: LIME, borderBottom: `2px solid ${LIME}` }}
+              style={{ color: ACCENT, borderBottom: `2px solid ${ACCENT}` }}
             >
               שאל את המאמן AI
             </button>
           </div>
         </div>
 
-        {/* ② Daily Steps — 4 cols — photo + dark overlay (preserved for readability) */}
+        {/* ② Daily Steps — 4 cols — photo + dark overlay */}
         <div
           className="md:col-span-4 p-6 md:p-8 rounded-2xl text-white flex flex-col justify-between min-h-[280px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500"
           style={{ backgroundImage: 'url(/images/athlete.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#151C25] via-[#151C25]/70 to-[#151C25]/30" style={{ opacity: 0.88 }} />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#000] via-[#000]/70 to-[#000]/30" style={{ opacity: dark ? 0.92 : 0.88 }} />
           <div className="relative z-10 flex flex-col justify-between h-full">
             <div className="flex justify-between items-start">
-              <span className="material-symbols-outlined text-4xl" style={{ color: LIME }}>bolt</span>
+              <span className="material-symbols-outlined text-4xl" style={{ color: ACCENT }}>bolt</span>
               <div className="text-left">
                 <h2 className="text-xs font-black uppercase tracking-widest text-white/50">צעדים היום</h2>
                 <p className="text-3xl md:text-4xl font-black tracking-tighter">
@@ -312,12 +331,12 @@ export default function Dashboard() {
             <div className="my-4 space-y-2">
               <div className="flex justify-between">
                 <span className="text-xs font-black uppercase text-white/50">התקדמות</span>
-                <span className="text-xs font-black" style={{ color: LIME }}>{stepPct}%</span>
+                <span className="text-xs font-black" style={{ color: ACCENT }}>{stepPct}%</span>
               </div>
               <div className="w-full h-2 rounded-full overflow-hidden bg-white/15">
                 <div
                   className="h-full rounded-full transition-all duration-700"
-                  style={{ width: `${stepPct}%`, backgroundColor: LIME }}
+                  style={{ width: `${stepPct}%`, backgroundColor: ACCENT }}
                 />
               </div>
             </div>
@@ -329,24 +348,29 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black uppercase text-white/50">רצף אימונים</span>
-                <span className="text-sm font-black" style={{ color: LIME }} title="רצף אימונים רצוף">{d.streak ?? 0} ימים 🔥</span>
+                <span className="text-sm font-black" style={{ color: ACCENT }} title="רצף אימונים רצוף">{d.streak ?? 0} ימים 🔥</span>
               </div>
             </div>
 
-            <p className="text-[10px] font-black uppercase tracking-widest mt-4" style={{ color: LIME }}>
+            <p className="text-[10px] font-black uppercase tracking-widest mt-4" style={{ color: ACCENT }}>
               אין מקום לתירוצים
             </p>
           </div>
         </div>
 
-        {/* ③ Nutrition Circular — 4 cols — LIGHT GLASS */}
-        <div className="md:col-span-4 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500">
+        {/* ③ Nutrition Circular — 4 cols */}
+        <div className={`md:col-span-4 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500 ${CARD}`}>
           <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">מאקרו יומי</p>
           <h2 className="text-xl font-black uppercase tracking-tight text-[#151C25] dark:text-white mb-1">תזונה לביצועים</h2>
           <p className="text-[#656464] font-bold text-xs mb-5">הדלק שלך לניצחון</p>
 
           <div className="relative flex justify-center items-center py-2">
-            <CircularMacroProgress value={protein} target={proteinTarget} color={LIME} trackColor="rgba(21,28,37,0.08)" />
+            <CircularMacroProgress
+              value={protein}
+              target={proteinTarget}
+              color={ACCENT}
+              trackColor={dark ? 'rgba(0,191,255,0.1)' : 'rgba(21,28,37,0.08)'}
+            />
             <div className="absolute flex flex-col items-center">
               <span className="text-3xl font-black text-[#151C25] dark:text-white">{protein}ג'</span>
               <span className="text-[10px] font-black uppercase tracking-widest text-[#656464]">
@@ -374,31 +398,31 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ④ Metabolic Analysis — 8 cols — WHITE */}
-        <div className="md:col-span-8 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
+        {/* ④ Metabolic Analysis — 8 cols */}
+        <div className={`md:col-span-8 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] ${CARD}`}>
           <div className="flex justify-between items-center mb-7">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">נתוני גוף</p>
               <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-[#151C25] dark:text-white">ניתוח מטבולי</h2>
             </div>
-            <span className="px-3 py-1 bg-[#121212] text-[10px] font-black rounded-full uppercase" style={{ color: LIME }}>
+            <span className="px-3 py-1 bg-[#121212] text-[10px] font-black rounded-full uppercase" style={{ color: ACCENT }}>
               בזמן אמת
             </span>
           </div>
 
           <div className="space-y-6">
             {[
-              { label: 'הידרציה',    pct: waterPct, sub: `${water.toFixed(1)}L / ${waterTarget}L יעד יומי`, barColor: '#151C25' },
-              { label: 'יעד קלורי', pct: calPct,   sub: null,                                                barColor: LIME },
-              { label: 'איכות שינה', pct: sleepPct, sub: `${sleepHours}h שינה הלילה`,                       barColor: '#151C25' },
-              { label: `דופק במנוחה — ${d.restingHR || 62} bpm`, pct: hrPct, sub: null,                     barColor: '#151C25' },
+              { label: 'הידרציה',    pct: waterPct, sub: `${water.toFixed(1)}L / ${waterTarget}L יעד יומי`, barColor: dark ? '#2A2A2A' : '#151C25' },
+              { label: 'יעד קלורי', pct: calPct,   sub: null,                                                barColor: ACCENT },
+              { label: 'איכות שינה', pct: sleepPct, sub: `${sleepHours}h שינה הלילה`,                       barColor: dark ? '#2A2A2A' : '#151C25' },
+              { label: `דופק במנוחה — ${d.restingHR || 62} bpm`, pct: hrPct, sub: null,                     barColor: dark ? '#2A2A2A' : '#151C25' },
             ].map((row, i) => (
               <div key={i}>
                 <div className="flex justify-between mb-2 items-end">
                   <span className="text-sm font-black uppercase text-[#151C25] dark:text-white">{row.label}</span>
                   <span className="text-lg font-black text-[#151C25] dark:text-white">{row.pct}%</span>
                 </div>
-                <div className="h-3 bg-[#F0F0F0] dark:bg-[#2C2C2C] rounded-full overflow-hidden">
+                <div className={`h-3 ${TRACK} rounded-full overflow-hidden`}>
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{ width: `${row.pct}%`, backgroundColor: row.barColor }}
@@ -416,9 +440,9 @@ export default function Dashboard() {
                 <button
                   key={ml}
                   onClick={() => addWater(ml / 1000)}
-                  className="py-2 rounded-lg font-black text-xs active:scale-90 duration-200 bg-[#F5F5F5] text-[#151C25] dark:text-white hover:text-[#121212] transition-all"
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = LIME }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F5F5F5' }}
+                  className="py-2 rounded-lg font-black text-xs active:scale-90 duration-200 bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#151C25] dark:text-white hover:text-[#121212] transition-all"
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = ACCENT; e.currentTarget.style.color = '#121212' }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = dark ? '#1A1A1A' : '#F5F5F5'; e.currentTarget.style.color = '' }}
                 >
                   +{ml}ml
                 </button>
@@ -427,20 +451,20 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ⑤ AI Insight — full width — photo hero (dark overlay preserved for readability) */}
+        {/* ⑤ AI Insight — full width — photo hero */}
         <div className="md:col-span-12">
           <div
             className="p-8 md:p-12 rounded-2xl flex flex-col md:flex-row items-center gap-8 overflow-hidden relative"
             style={{ backgroundImage: `url(/images/workout.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
           >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#151C25] via-[#151C25]/75 to-transparent opacity-80" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#000] via-[#000]/75 to-transparent opacity-85" />
             <div className="relative z-10 md:w-2/3">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2 text-white/50">
                 המלצת AI אישית
               </p>
               <h3 className="text-3xl md:text-4xl font-black tracking-tighter leading-none mb-4 text-white">
                 מקסם את{' '}
-                <span style={{ color: LIME }}>24 השעות הבאות</span>{' '}
+                <span style={{ color: ACCENT }}>24 השעות הבאות</span>{' '}
                 שלך.
               </h3>
               <p className="font-bold text-base max-w-xl leading-relaxed mb-6 text-white/70">
@@ -452,15 +476,15 @@ export default function Dashboard() {
                 <button
                   onClick={() => navigate('/plans')}
                   className="px-8 py-3 rounded-md font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform active:scale-95 shadow-xl text-[#121212]"
-                  style={{ backgroundColor: LIME }}
+                  style={{ backgroundColor: ACCENT }}
                 >
                   {d.nextWorkout?.name ? `תוכנית: ${d.nextWorkout.name}` : 'צפה בתוכנית האימונים'}
                 </button>
                 <button
                   onClick={() => openAI('תן לי תוכנית מפורטת לאימון היום')}
                   className="border-2 text-white px-8 py-3 rounded-md font-black uppercase tracking-widest text-sm hover:text-[#121212] transition-all active:scale-95"
-                  style={{ borderColor: LIME }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = LIME }}
+                  style={{ borderColor: ACCENT }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = ACCENT }}
                   onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent' }}
                 >
                   שאל את AI
@@ -470,12 +494,12 @@ export default function Dashboard() {
 
             <div className="md:w-1/3 flex justify-center relative z-10">
               <div className="w-48 h-48 md:w-52 md:h-52 rounded-full flex flex-col items-center justify-center shadow-2xl relative border-2"
-                style={{ backgroundColor: '#0f0f0f', borderColor: LIME }}>
-                <span className="text-5xl font-black" style={{ color: LIME }}>{readinessScore}</span>
+                style={{ backgroundColor: '#0a0a0a', borderColor: ACCENT }}>
+                <span className="text-5xl font-black" style={{ color: ACCENT }}>{readinessScore}</span>
                 <span className="text-xs font-black uppercase tracking-widest text-white/50 mt-1">ציון מוכנות</span>
                 <span className="text-xs font-black mt-1" style={{ color: readinessColor }}>{readinessLabel}</span>
                 <div className="absolute -top-2 -right-2 px-2 py-1 rounded-full font-black text-[10px] italic shadow-xl text-[#121212]"
-                  style={{ backgroundColor: LIME }}>
+                  style={{ backgroundColor: ACCENT }}>
                   KINETIC AI
                 </div>
               </div>
@@ -489,15 +513,15 @@ export default function Dashboard() {
 
         {/* ⑥ Massa Mode Insight */}
         {massaInsight && (
-          <div className="md:col-span-12 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] bg-white dark:bg-[#1C1C1E] border border-[#F0F0F0] dark:border-[#2C2C2C]">
+          <div className={`md:col-span-12 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] ${CARD}`}>
             <div
               className="shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg"
-              style={{ backgroundColor: '#CCFF00' }}
+              style={{ backgroundColor: ACCENT }}
             >
               🏋️
             </div>
             <div className="flex-1 text-right md:text-right">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-black mb-1" style={{ color: '#CCFF00' }}>
+              <p className="text-[10px] uppercase tracking-[0.2em] font-black mb-1" style={{ color: ACCENT }}>
                 MASSA MODE
               </p>
               <p className="text-base font-black text-[#151C25] dark:text-white leading-snug">
@@ -509,14 +533,14 @@ export default function Dashboard() {
                 <div className="text-center">
                   <p className="text-[10px] uppercase tracking-widest text-[#656464] font-black">ממוצע קל'</p>
                   <p className="text-xl font-black text-[#151C25] dark:text-white">{massaInsight.avgCal}</p>
-                  <p className="text-[10px] font-bold" style={{ color: massaInsight.avgCal >= 2800 ? '#CCFF00' : '#9CA3AF' }}>
+                  <p className="text-[10px] font-bold" style={{ color: massaInsight.avgCal >= 2800 ? ACCENT : '#9CA3AF' }}>
                     / 2800
                   </p>
                 </div>
                 <div className="text-center">
                   <p className="text-[10px] uppercase tracking-widest text-[#656464] font-black">ממוצע חלבון</p>
                   <p className="text-xl font-black text-[#151C25] dark:text-white">{massaInsight.avgProt}g</p>
-                  <p className="text-[10px] font-bold" style={{ color: massaInsight.avgProt >= 130 ? '#CCFF00' : '#9CA3AF' }}>
+                  <p className="text-[10px] font-bold" style={{ color: massaInsight.avgProt >= 130 ? ACCENT : '#9CA3AF' }}>
                     / 130g
                   </p>
                 </div>
@@ -526,7 +550,7 @@ export default function Dashboard() {
         )}
 
         {/* ⑧ Weekly Analytics — full width */}
-        <div className="md:col-span-12 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
+        <div className={`md:col-span-12 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] ${CARD}`}>
           <div className="flex justify-between items-end mb-6">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">7 DAYS</p>
@@ -534,24 +558,24 @@ export default function Dashboard() {
                 ניתוח שבועי
               </h2>
             </div>
-            <span className="px-3 py-1 bg-[#121212] text-[10px] font-black rounded-full uppercase" style={{ color: '#CCFF00' }}>
+            <span className="px-3 py-1 bg-[#121212] text-[10px] font-black rounded-full uppercase" style={{ color: ACCENT }}>
               תזונה + משקל
             </span>
           </div>
           <WeeklyAnalyticsSection />
         </div>
 
-        {/* ⑨ Quick Stats — full width — LIGHT GLASS */}
+        {/* ⑨ Quick Stats — full width */}
         <div className="md:col-span-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { icon: 'favorite',   label: 'דופק מנוחה', value: `${d.restingHR || 62}`, unit: 'bpm',  color: '#FF6B6B' },
             { icon: 'bedtime',    label: 'שינה',        value: String(sleepHours),      unit: 'שעות', color: '#00b4d8' },
             { icon: 'water_drop', label: 'הידרציה',     value: water.toFixed(1),        unit: 'L',    color: '#00b4d8' },
-            { icon: 'timer',      label: 'דקות פעיל',   value: `${d.activeMinutes || 0}`, unit: 'דק׳', color: LIME },
+            { icon: 'timer',      label: 'דקות פעיל',   value: `${d.activeMinutes || 0}`, unit: 'דק׳', color: ACCENT },
           ].map((m, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl space-y-2 shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-300"
+              className={`p-5 rounded-2xl space-y-2 shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-300 ${CARD}`}
             >
               <span
                 className="material-symbols-outlined"
