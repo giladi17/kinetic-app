@@ -52,8 +52,8 @@ export default function Onboarding() {
         method: 'POST',
         body: JSON.stringify(profileData),
       })
-      // Persist to Prisma (PostgreSQL) so profile survives server restarts
-      authFetch(`${API}/profile`, {
+      // Must await so GET /api/profile in refreshUser finds the record
+      await authFetch(`${API}/profile`, {
         method: 'POST',
         body: JSON.stringify(profileData),
       }).catch(() => {})
