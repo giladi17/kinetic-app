@@ -153,7 +153,7 @@ export default function AppTour({ onDone }) {
       return
     }
 
-    if (type === EVENTS.STEP_AFTER) {
+    if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
       const nextIndex = index + (action === ACTIONS.PREV ? -1 : 1)
 
       // Past the last step → finish
