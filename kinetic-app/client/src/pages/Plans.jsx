@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authFetch } from '../api'
+import { driver } from 'driver.js'
+import 'driver.js/dist/driver.css'
 import { useLang } from '../context/LanguageContext'
 import { EXERCISE_VIDEOS } from '../data/exerciseVideos'
 import ExerciseInfographic from '../components/ExerciseInfographic'
@@ -51,6 +53,33 @@ export default function Plans() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [showCreate])
+
+  // ── Relay-race tour: station 3 ──────────────────────────────────────────
+  useEffect(() => {
+    if (loading || plans.length === 0) return
+    if (localStorage.getItem('kinetic_tour') !== 'plans') return
+    const t = setTimeout(() => {
+      const d = driver({
+        animate: true,
+        showProgress: false,
+        steps: [{
+          element: '#tour-plan',
+          popover: {
+            title: 'תוכניות אימון',
+            description: 'בחר את הפרוטוקול שלך והתחל לעבוד — PPL, Full Body, או תוכנית מותאמת אישית.',
+            nextBtnText: 'סיום ✓',
+          },
+        }],
+        onDestroyStarted: () => {
+          localStorage.setItem('kinetic_tour', 'done')
+          d.destroy()
+          navigate('/dashboard')
+        },
+      })
+      d.drive()
+    }, 800)
+    return () => clearTimeout(t)
+  }, [loading, plans]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function openPlan(id) {
     const res = await authFetch(`${API}/plans/${id}`)
@@ -261,6 +290,7 @@ export default function Plans() {
               return (
                 <button
                   key={plan.id}
+                  id={idx === 0 ? 'tour-plan' : undefined}
                   onClick={() => openPlan(plan.id)}
                   className={`group text-right p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] active:scale-[0.98] rounded-2xl shadow-[0_8px_48px_rgba(0,0,0,0.08)] bg-white dark:bg-[#1C1C1E] ${isFeatured ? 'col-span-2 md:col-span-2' : ''} ${isActive ? 'ring-2 ring-[#00BFFF] ring-offset-2 ring-offset-[#F8F9FF] dark:ring-offset-[#0e0e0e]' : ''}`}
                 >

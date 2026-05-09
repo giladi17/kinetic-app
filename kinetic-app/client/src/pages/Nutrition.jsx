@@ -1,6 +1,9 @@
 import { Component, useEffect, useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { premiumFetch, authFetch } from '../api'
 import saladImg from '../assets/salad.jpg'
+import { driver } from 'driver.js'
+import 'driver.js/dist/driver.css'
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
 
@@ -112,6 +115,7 @@ function getFoodEmoji(name) {
 }
 
 function Nutrition() {
+  const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [presets, setPresets] = useState([])
   const [gapFiller, setGapFiller] = useState(null)
@@ -146,6 +150,32 @@ function Nutrition() {
     fetchGapFiller()
     authFetch(`${API}/nutrition/recent`).then(r => r.json()).then(setRecentMeals).catch(() => {})
   }, [])
+
+  // ── Relay-race tour: station 2 ──────────────────────────────────────────
+  useEffect(() => {
+    if (localStorage.getItem('kinetic_tour') !== 'nutrition') return
+    const t = setTimeout(() => {
+      const d = driver({
+        animate: true,
+        showProgress: false,
+        steps: [{
+          element: '#tour-nut',
+          popover: {
+            title: 'הזנה אוטומטית',
+            description: 'פשוט כתוב מה אכלת כאן, או השתמש בכפתורים המהירים למטה — ה-AI יחשב הכל.',
+            nextBtnText: 'הבא ←',
+          },
+        }],
+        onDestroyStarted: () => {
+          localStorage.setItem('kinetic_tour', 'plans')
+          d.destroy()
+          navigate('/plans')
+        },
+      })
+      d.drive()
+    }, 800)
+    return () => clearTimeout(t)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function quickLog(presetKey) {
     try {
@@ -309,6 +339,7 @@ function Nutrition() {
             <p className="text-[#656464] text-xs mt-1">כתוב מה אכלת בשפה חופשית</p>
           </div>
           <textarea
+            id="tour-nut"
             className="w-full bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] dark:text-white text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors resize-none"
             placeholder={`לדוגמה: "2 פרוסות לחם עם חביתה וקוטג'"`}
             rows={3}

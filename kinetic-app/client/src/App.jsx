@@ -19,7 +19,6 @@ import Plans from './pages/Plans'
 import Settings from './pages/Settings'
 import Pricing from './pages/Pricing'
 import OnboardingTour from './components/OnboardingTour'
-import WelcomeBriefing from './components/WelcomeBriefing'
 import Login from './pages/Login'
 import LandingPage from './pages/LandingPage'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -34,15 +33,15 @@ function AppRoutes() {
   const { user, userLoading, refreshUser } = useUser()
   const [notifToast, setNotifToast] = useState(false)
   const [showTour, setShowTour] = useState(false)
-  const [showBriefing, setShowBriefing] = useState(false)
 
   useEffect(() => {
     if (!userLoading && user && user.onboardingDone === 0) {
       navigate('/onboarding', { replace: true })
     } else if (!userLoading && user && user.onboardingDone !== 0 && !user.tourDone) {
       setShowTour(true)
-    } else if (!userLoading && user && user.onboardingDone !== 0 && user.tourDone && !localStorage.getItem('hasSeenBriefing')) {
-      setShowBriefing(true)
+    } else if (!userLoading && user && user.onboardingDone !== 0 && user.tourDone && !localStorage.getItem('kinetic_tour')) {
+      // Seed the relay key so the first page (Dashboard) knows to start the tour
+      localStorage.setItem('kinetic_tour', 'dashboard')
     }
   }, [user, userLoading, navigate])
 
@@ -110,8 +109,7 @@ function AppRoutes() {
 
   return (
     <>
-      {showTour && <OnboardingTour onDone={() => { setShowTour(false); setShowBriefing(!localStorage.getItem('hasSeenBriefing')) }} />}
-      {showBriefing && <WelcomeBriefing onDone={() => setShowBriefing(false)} />}
+      {showTour && <OnboardingTour onDone={() => { setShowTour(false); localStorage.setItem('kinetic_tour', 'dashboard') }} />}
       {showBanner && (
         <div className="fixed bottom-24 left-4 right-4 z-50 bg-surface-container-high rounded-xl p-4 flex items-center gap-3 shadow-lg">
           <span className="material-symbols-outlined text-primary">notifications</span>

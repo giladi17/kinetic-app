@@ -100,3 +100,42 @@ body {
   background-image: radial-gradient(circle at 2px 2px, #1a1a1a 1px, transparent 0);
   background-size: 24px 24px;
 }
+
+/* ── driver.js tour — dark teal theme ─────────────────────────────────── */
+.driver-popover {
+  background-color: #050505 !important;
+  border: 1px solid rgba(0, 191, 255, 0.2) !important;
+  color: white !important;
+  border-radius: 16px !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.7) !important;
+}
+.driver-popover-title {
+  color: #00BFFF !important;
+  font-size: 1rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+}
+.driver-popover-description {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+}
+.driver-popover-footer button {
+  background-color: #00BFFF !important;
+  color: #000 !important;
+  text-shadow: none !important;
+  border: none !important;
+  font-weight: 900 !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+.driver-popover-footer button:hover {
+  background-color: #33ccff !important;
+}
+.driver-popover-close-btn { color: rgba(255,255,255,0.4) !important; }
+.driver-popover-arrow-side-left.driver-popover-arrow  { border-right-color: #050505 !important; }
+.driver-popover-arrow-side-right.driver-popover-arrow { border-left-color:  #050505 !important; }
+.driver-popover-arrow-side-top.driver-popover-arrow   { border-bottom-color:#050505 !important; }
+.driver-popover-arrow-side-bottom.driver-popover-arrow{ border-top-color:   #050505 !important; }

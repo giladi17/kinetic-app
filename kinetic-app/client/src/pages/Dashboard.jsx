@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { driver } from 'driver.js'
+import 'driver.js/dist/driver.css'
 import { fetchDashboard, authFetch } from '../api'
 import { useUser } from '../context/UserContext'
 import { useAuth } from '../context/AuthContext'
@@ -173,6 +175,34 @@ export default function Dashboard() {
     const timer = setTimeout(async () => { await registerPushNotifications() }, 3000)
     return () => clearTimeout(timer)
   }, [])
+
+  // ── Relay-race tour: station 1 ──────────────────────────────────────────
+  useEffect(() => {
+    if (loading) return
+    const tourState = localStorage.getItem('kinetic_tour')
+    if (tourState !== 'dashboard') return
+    const t = setTimeout(() => {
+      const d = driver({
+        animate: true,
+        showProgress: false,
+        steps: [{
+          element: '#tour-dash',
+          popover: {
+            title: 'לוח הבקרה שלך',
+            description: 'כאן תוכל לראות את ההתקדמות היומית שלך — מאקרו, צעדים, ומדד התאוששות.',
+            nextBtnText: 'הבא ←',
+          },
+        }],
+        onDestroyStarted: () => {
+          localStorage.setItem('kinetic_tour', 'nutrition')
+          d.destroy()
+          navigate('/nutrition')
+        },
+      })
+      d.drive()
+    }, 800)
+    return () => clearTimeout(t)
+  }, [loading]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function addWater(amount) {
     try {
@@ -359,7 +389,7 @@ export default function Dashboard() {
         </div>
 
         {/* ③ Nutrition Circular — 4 cols */}
-        <div className={`md:col-span-4 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500 ${CARD}`}>
+        <div id="tour-dash" className={`md:col-span-4 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500 ${CARD}`}>
           <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">מאקרו יומי</p>
           <h2 className="text-xl font-black uppercase tracking-tight text-[#151C25] dark:text-white mb-1">תזונה לביצועים</h2>
           <p className="text-[#656464] font-bold text-xs mb-5">הדלק שלך לניצחון</p>
