@@ -101,56 +101,63 @@ body {
   background-size: 24px 24px;
 }
 
-/* ── driver.js — Premium RTL Dark Teal Theme ──────────────────────────── */
+/* ── Premium KINETIC Driver.js Theme ──────────────────────────────────── */
 .driver-popover {
-  background-color: #050505 !important;
-  border: 1px solid rgba(0, 191, 255, 0.2) !important;
-  color: white !important;
+  background-color: #09090b !important;
+  border: 1px solid rgba(0, 191, 255, 0.15) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1), 0 0 20px rgba(0, 191, 255, 0.05) !important;
+  border-radius: 16px !important;
+  padding: 24px 28px !important;
+  font-family: inherit !important;
   direction: rtl !important;
   text-align: right !important;
-  border-radius: 12px !important;
-  padding: 24px !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9) !important;
-  min-width: 320px !important;
-  font-family: 'Space Grotesk', sans-serif !important;
+  min-width: 340px !important;
 }
 .driver-popover-title {
   color: #00BFFF !important;
-  font-size: 1.4rem !important;
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
   margin-bottom: 12px !important;
-  font-weight: 700 !important;
+  padding-left: 20px !important;
 }
 .driver-popover-description {
-  color: #A0A0A0 !important;
-  font-size: 1.05rem !important;
-  line-height: 1.5 !important;
+  color: #a1a1aa !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 24px !important;
 }
 .driver-popover-footer {
-  margin-top: 24px !important;
+  margin-top: 0 !important;
   display: flex !important;
   justify-content: flex-end !important;
 }
 .driver-popover-footer button {
   background-color: #00BFFF !important;
-  color: #050505 !important;
-  text-shadow: none !important;
-  border: none !important;
+  color: #000000 !important;
   font-weight: 700 !important;
-  padding: 10px 20px !important;
+  padding: 10px 24px !important;
   border-radius: 8px !important;
-  cursor: pointer !important;
-  transition: opacity 0.2s !important;
-  font-family: 'Space Grotesk', sans-serif !important;
+  border: none !important;
+  text-shadow: none !important;
+  box-shadow: 0 4px 14px rgba(0, 191, 255, 0.3) !important;
+  transition: all 0.2s ease !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
 }
-.driver-popover-footer button:hover { opacity: 0.8 !important; }
+.driver-popover-footer button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5) !important;
+}
 .driver-popover-close-btn {
+  color: #52525b !important;
+  top: 20px !important;
+  left: 20px !important;
   right: auto !important;
-  left: 15px !important;
-  top: 15px !important;
-  color: #A0A0A0 !important;
+  transition: color 0.2s !important;
 }
-.driver-popover-close-btn:hover { color: white !important; }
-.driver-popover-arrow-side-left.driver-popover-arrow   { border-right-color: #050505 !important; }
-.driver-popover-arrow-side-right.driver-popover-arrow  { border-left-color:  #050505 !important; }
-.driver-popover-arrow-side-top.driver-popover-arrow    { border-bottom-color:#050505 !important; }
-.driver-popover-arrow-side-bottom.driver-popover-arrow { border-top-color:   #050505 !important; }
+.driver-popover-close-btn:hover { color: #ffffff !important; }
+.driver-popover-arrow-side-left.driver-popover-arrow   { border-right-color: #09090b !important; }
+.driver-popover-arrow-side-right.driver-popover-arrow  { border-left-color:  #09090b !important; }
+.driver-popover-arrow-side-top.driver-popover-arrow    { border-bottom-color:#09090b !important; }
+.driver-popover-arrow-side-bottom.driver-popover-arrow { border-top-color:   #09090b !important; }
