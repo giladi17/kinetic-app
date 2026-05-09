@@ -158,6 +158,7 @@ function Nutrition() {
       const d = driver({
         animate: true,
         showProgress: false,
+        showButtons: ['next'],
         steps: [{
           popover: {
             title: 'הזנה אוטומטית',

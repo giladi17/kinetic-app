@@ -185,6 +185,7 @@ export default function Dashboard() {
       const d = driver({
         animate: true,
         showProgress: false,
+        showButtons: ['next'],
         steps: [{
           popover: {
             title: 'לוח הבקרה שלך',

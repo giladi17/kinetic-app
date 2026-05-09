@@ -62,6 +62,7 @@ export default function Plans() {
       const d = driver({
         animate: true,
         showProgress: false,
+        showButtons: ['next'],
         steps: [{
           popover: {
             title: 'תוכניות אימון',
