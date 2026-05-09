@@ -280,7 +280,7 @@ function Nutrition() {
         >
           <div>
             <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
-            <h1 id="tour-nutrition-title" className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תזונה</h1>
+            <h1 className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תזונה</h1>
           </div>
           <p className="text-[#151C25] dark:text-white text-4xl md:text-6xl font-black tracking-tighter leading-tight mt-6">
             הדלק<br/>של האלופים
@@ -302,14 +302,13 @@ function Nutrition() {
       <div className="px-5 md:px-10 pt-10 max-w-5xl mx-auto space-y-8">
 
         {/* ── AI Smart Input ── */}
-        <div id="nutrition-ai-section" className="bg-white/80 dark:bg-[#1C1C1E] backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] space-y-4">
+        <div className="bg-white/80 dark:bg-[#1C1C1E] backdrop-blur-[24px] rounded-2xl p-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] space-y-4">
           <div>
             <span className="text-[#506600] text-[9px] font-black tracking-[0.3em] uppercase block mb-1">AI ASSISTANT</span>
             <h3 className="font-black text-[#151C25] dark:text-white text-lg uppercase tracking-tight leading-none">הזנה חכמה ✨</h3>
             <p className="text-[#656464] text-xs mt-1">כתוב מה אכלת בשפה חופשית</p>
           </div>
           <textarea
-            id="tour-nutrition-input"
             className="w-full bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] dark:text-white text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors resize-none"
             placeholder={`לדוגמה: "2 פרוסות לחם עם חביתה וקוטג'"`}
             rows={3}

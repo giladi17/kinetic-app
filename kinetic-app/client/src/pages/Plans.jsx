@@ -135,7 +135,7 @@ export default function Plans() {
         <div className="flex flex-col md:flex-row-reverse min-h-[520px]">
           <div className="md:w-[52%] px-6 md:px-16 py-16 text-right flex flex-col justify-center">
             <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">TRAINING PROTOCOLS</span>
-            <h1 id="tour-plans-title" className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תוכניות<br/>אימון</h1>
+            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תוכניות<br/>אימון</h1>
             <p className="text-[#656464] text-sm mt-4 uppercase tracking-widest font-bold">בנה את הגוף שלך</p>
             <button
               onClick={() => setShowCreate(true)}
@@ -247,13 +247,13 @@ export default function Plans() {
         )}
 
         {/* ── Premium Catalog — Asymmetric Bento Grid ── */}
-        <section id="plans-catalog">
+        <section>
           <div className="flex items-center gap-4 mb-6">
             <span className="text-xs font-black tracking-[0.3em] uppercase text-[#151C25] dark:text-white">PREMIUM CATALOG</span>
             <span className="text-xs font-black text-[#656464]">{plans.length} PROTOCOLS</span>
           </div>
 
-          <div id="tour-plans-list" className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {plans.map((plan, idx) => {
               const isActive = activePlan?.id === plan.id
               const isFeatured = idx === 0
