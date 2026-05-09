@@ -247,7 +247,7 @@ export default function Plans() {
         )}
 
         {/* ── Premium Catalog — Asymmetric Bento Grid ── */}
-        <section>
+        <section id="plans-catalog">
           <div className="flex items-center gap-4 mb-6">
             <span className="text-xs font-black tracking-[0.3em] uppercase text-[#151C25] dark:text-white">PREMIUM CATALOG</span>
             <span className="text-xs font-black text-[#656464]">{plans.length} PROTOCOLS</span>

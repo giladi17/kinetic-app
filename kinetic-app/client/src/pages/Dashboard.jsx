@@ -236,7 +236,7 @@ export default function Dashboard() {
     <main className="mt-20 md:mt-24 px-4 md:px-8 max-w-7xl mx-auto pb-32 bg-[#F8F9FF] dark:bg-[#050505] text-[#151C25] dark:text-white min-h-screen">
 
       {/* ── Page Header ── */}
-      <header className="mb-8 pt-6">
+      <header id="dashboard-header" className="mb-8 pt-6">
         <p className="uppercase tracking-[0.2em] text-[#656464] font-black text-xs mb-2">
           הגבולות שלך נמצאים מאחוריך
         </p>

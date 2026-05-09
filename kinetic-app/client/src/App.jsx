@@ -19,6 +19,7 @@ import Plans from './pages/Plans'
 import Settings from './pages/Settings'
 import Pricing from './pages/Pricing'
 import OnboardingTour from './components/OnboardingTour'
+import AppTour from './components/AppTour'
 import Login from './pages/Login'
 import LandingPage from './pages/LandingPage'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -33,12 +34,15 @@ function AppRoutes() {
   const { user, userLoading, refreshUser } = useUser()
   const [notifToast, setNotifToast] = useState(false)
   const [showTour, setShowTour] = useState(false)
+  const [showAppTour, setShowAppTour] = useState(false)
 
   useEffect(() => {
     if (!userLoading && user && user.onboardingDone === 0) {
       navigate('/onboarding', { replace: true })
     } else if (!userLoading && user && user.onboardingDone !== 0 && !user.tourDone) {
       setShowTour(true)
+    } else if (!userLoading && user && user.onboardingDone !== 0 && user.tourDone && !localStorage.getItem('hasSeenTomTour')) {
+      setShowAppTour(true)
     }
   }, [user, userLoading, navigate])
 
@@ -106,7 +110,8 @@ function AppRoutes() {
 
   return (
     <>
-      {showTour && <OnboardingTour onDone={() => setShowTour(false)} />}
+      {showTour && <OnboardingTour onDone={() => { setShowTour(false); setShowAppTour(!localStorage.getItem('hasSeenTomTour')) }} />}
+      {showAppTour && <AppTour onDone={() => setShowAppTour(false)} />}
       {showBanner && (
         <div className="fixed bottom-24 left-4 right-4 z-50 bg-surface-container-high rounded-xl p-4 flex items-center gap-3 shadow-lg">
           <span className="material-symbols-outlined text-primary">notifications</span>
