@@ -135,7 +135,7 @@ export default function Plans() {
         <div className="flex flex-col md:flex-row-reverse min-h-[520px]">
           <div className="md:w-[52%] px-6 md:px-16 py-16 text-right flex flex-col justify-center">
             <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">TRAINING PROTOCOLS</span>
-            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תוכניות<br/>אימון</h1>
+            <h1 id="tour-plans-title" className="text-7xl md:text-9xl font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תוכניות<br/>אימון</h1>
             <p className="text-[#656464] text-sm mt-4 uppercase tracking-widest font-bold">בנה את הגוף שלך</p>
             <button
               onClick={() => setShowCreate(true)}

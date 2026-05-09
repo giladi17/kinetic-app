@@ -100,7 +100,7 @@ const JOYRIDE_STYLES = {
 // Each step carries its own route so the callback knows where to navigate
 const STEPS = [
   {
-    target: '#tour-dashboard-stats',
+    target: '#tour-dashboard-title',
     route: '/dashboard',
     placement: 'bottom',
     disableBeacon: true,
@@ -108,7 +108,7 @@ const STEPS = [
     content: 'כאן תראה הכל: מדד התאוששות, ביצועים שבועיים, ואתגר יומי שנבחר עבורך כל בוקר.',
   },
   {
-    target: '#tour-nutrition-input',
+    target: '#tour-nutrition-title',
     route: '/nutrition',
     placement: 'bottom',
     disableBeacon: true,
@@ -116,9 +116,9 @@ const STEPS = [
     content: 'הזן ארוחות בטקסט חופשי או בלחיצת כפתור — ה-AI יחשב קלוריות, חלבון, פחמימות ושומן.',
   },
   {
-    target: '#tour-plans-list',
+    target: '#tour-plans-title',
     route: '/plans',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     title: 'פרוטוקולי אימון 💪',
     content: 'בחר את הפרוטוקול שלך והתחל לעקוב אחרי ההתקדמות. יש PPL, Full Body, ותוכניות מותאמות אישית.',
@@ -134,7 +134,7 @@ export default function AppTour({ onDone }) {
   // Kick off on dashboard after giving it time to render
   useEffect(() => {
     navigate('/dashboard', { replace: true })
-    const t = setTimeout(() => setRunTour(true), 800)
+    const t = setTimeout(() => setRunTour(true), 600)
     return () => clearTimeout(t)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -172,7 +172,7 @@ export default function AppTour({ onDone }) {
         setTimeout(() => {
           setStepIndex(nextIndex)
           setRunTour(true)
-        }, 800)
+        }, 600)
       } else {
         setStepIndex(nextIndex)
       }

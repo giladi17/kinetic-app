@@ -280,7 +280,7 @@ function Nutrition() {
         >
           <div>
             <span className="text-[#506600] text-[10px] font-black tracking-[0.35em] uppercase block mb-3">OPTIMAL FUELING</span>
-            <h1 className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תזונה</h1>
+            <h1 id="tour-nutrition-title" className="text-[5rem] md:text-[8rem] font-black tracking-tighter leading-none text-[#151C25] dark:text-white">תזונה</h1>
           </div>
           <p className="text-[#151C25] dark:text-white text-4xl md:text-6xl font-black tracking-tighter leading-tight mt-6">
             הדלק<br/>של האלופים
