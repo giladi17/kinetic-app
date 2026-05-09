@@ -278,7 +278,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
 
         {/* ① Recovery Index — 8 cols */}
-        <div className={`md:col-span-8 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500 ${CARD}`}>
+        <div id="tour-dashboard-stats" className={`md:col-span-8 p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] transition-all duration-500 ${CARD}`}>
           <div className="flex justify-between items-end mb-8">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#656464] font-black mb-1">ביצועים שבועיים</p>

@@ -309,6 +309,7 @@ function Nutrition() {
             <p className="text-[#656464] text-xs mt-1">כתוב מה אכלת בשפה חופשית</p>
           </div>
           <textarea
+            id="tour-nutrition-input"
             className="w-full bg-[#EEF4FF] rounded-xl px-4 py-3 text-[#151C25] dark:text-white text-sm outline-none placeholder:text-[#656464] focus:bg-[#DCE3F0] transition-colors resize-none"
             placeholder={`לדוגמה: "2 פרוסות לחם עם חביתה וקוטג'"`}
             rows={3}

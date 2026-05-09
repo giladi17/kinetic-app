@@ -253,7 +253,7 @@ export default function Plans() {
             <span className="text-xs font-black text-[#656464]">{plans.length} PROTOCOLS</span>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div id="tour-plans-list" className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {plans.map((plan, idx) => {
               const isActive = activePlan?.id === plan.id
               const isFeatured = idx === 0

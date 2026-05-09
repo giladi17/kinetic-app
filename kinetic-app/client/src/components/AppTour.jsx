@@ -97,39 +97,33 @@ const JOYRIDE_STYLES = {
   },
 }
 
-const TOUR_STEPS = [
+// Each step carries its own route so the callback knows where to navigate
+const STEPS = [
   {
-    target: '#dashboard-header',
+    target: '#tour-dashboard-stats',
+    route: '/dashboard',
     placement: 'bottom',
     disableBeacon: true,
-    title: 'ברוך הבא ל-KINETIC 👋',
-    content: 'זהו לוח הביצועים שלך — כאן תראה הכל: Readiness Score, פעילות שבועית, ואתגר יומי שאני בוחר לך כל בוקר.',
+    title: 'לוח ביצועים 📊',
+    content: 'כאן תראה הכל: מדד התאוששות, ביצועים שבועיים, ואתגר יומי שנבחר עבורך כל בוקר.',
   },
   {
-    target: '#nutrition-ai-section',
+    target: '#tour-nutrition-input',
+    route: '/nutrition',
     placement: 'bottom',
     disableBeacon: true,
     title: 'הזנה חכמה ✨',
-    content: 'כאן אתה מזין ארוחות בטקסט חופשי או בלחיצת כפתור, וה-AI יחשב הכל — קלוריות, חלבון, פחמימות ושומן.',
+    content: 'הזן ארוחות בטקסט חופשי או בלחיצת כפתור — ה-AI יחשב קלוריות, חלבון, פחמימות ושומן.',
   },
   {
-    target: '#plans-catalog',
+    target: '#tour-plans-list',
+    route: '/plans',
     placement: 'top',
     disableBeacon: true,
     title: 'פרוטוקולי אימון 💪',
     content: 'בחר את הפרוטוקול שלך והתחל לעקוב אחרי ההתקדמות. יש PPL, Full Body, ותוכניות מותאמות אישית.',
   },
-  {
-    target: '#dashboard-header',
-    placement: 'bottom',
-    disableBeacon: true,
-    title: 'הכל מוכן! 🚀',
-    content: 'אני כאן בכל עת — לחץ על כפתור ה-AI בפינה כדי לשאול אותי כל דבר. בוא נתחיל!',
-  },
 ]
-
-// Route to navigate to before showing each step
-const STEP_ROUTES = ['/dashboard', '/nutrition', '/plans', '/dashboard']
 
 export default function AppTour({ onDone }) {
   const navigate = useNavigate()
@@ -137,35 +131,51 @@ export default function AppTour({ onDone }) {
   const [runTour, setRunTour] = useState(false)
   const [stepIndex, setStepIndex] = useState(0)
 
-  // Start tour after a short delay so the dashboard has rendered its targets
+  // Kick off on dashboard after giving it time to render
   useEffect(() => {
     navigate('/dashboard', { replace: true })
-    const t = setTimeout(() => setRunTour(true), 400)
+    const t = setTimeout(() => setRunTour(true), 500)
     return () => clearTimeout(t)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function finish() {
+    localStorage.setItem(TOUR_KEY, 'true')
+    setRunTour(false)
+    onDone?.()
+    navigate('/dashboard', { replace: true })
+  }
 
   function handleCallback(data) {
     const { action, index, status, type } = data
 
     if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
-      localStorage.setItem(TOUR_KEY, 'true')
-      setRunTour(false)
-      onDone?.()
+      finish()
       return
     }
 
-    if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
-      const nextStepIndex = index + (action === ACTIONS.PREV ? -1 : 1)
-      const clamped = Math.max(0, Math.min(nextStepIndex, TOUR_STEPS.length - 1))
+    if (type === EVENTS.STEP_AFTER) {
+      const nextIndex = index + (action === ACTIONS.PREV ? -1 : 1)
 
-      // Pause Joyride, navigate, then resume on the new page after DOM settles
-      setRunTour(false)
-      navigate(STEP_ROUTES[clamped])
+      // Past the last step → finish
+      if (nextIndex >= STEPS.length) {
+        finish()
+        return
+      }
 
-      setTimeout(() => {
-        setStepIndex(clamped)
-        setRunTour(true)
-      }, 300)
+      const nextStep = STEPS[nextIndex]
+
+      if (nextStep.route !== window.location.pathname) {
+        // Pause first so Joyride stops hunting for the old target
+        setRunTour(false)
+        navigate(nextStep.route)
+        // Give the new page 400 ms to mount its DOM before Joyride searches
+        setTimeout(() => {
+          setStepIndex(nextIndex)
+          setRunTour(true)
+        }, 400)
+      } else {
+        setStepIndex(nextIndex)
+      }
     }
   }
 
@@ -181,7 +191,7 @@ export default function AppTour({ onDone }) {
   return (
     <Suspense fallback={null}>
       <JoyrideComponent
-        steps={TOUR_STEPS}
+        steps={STEPS}
         run={runTour}
         stepIndex={stepIndex}
         continuous
