@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { Suspense, useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import * as JoyrideModule from 'react-joyride'
-const Joyride = JoyrideModule.default ?? JoyrideModule
-const { ACTIONS, EVENTS, STATUS } = JoyrideModule
-import { useUser } from '../context/UserContext'
-import { getPersona } from '../data/personas'
+import { ACTIONS, EVENTS, STATUS } from 'react-joyride'
+
+// Dynamic import bypasses Rollup's static default-export analysis on the ESM
+// bundle, which lacks a proper `default` export and causes [MISSING_EXPORT].
+const JoyrideComponent = React.lazy(() =>
+  import('react-joyride').then(mod => ({ default: mod.default ?? mod.Joyride }))
+)
 
 const TOUR_KEY = 'hasSeenTomTour'
 
@@ -127,30 +129,24 @@ const TOUR_STEPS = [
   },
 ]
 
-// Route needed for each step index
 const STEP_ROUTES = ['/dashboard', '/nutrition', '/plans', '/dashboard']
 
 export default function AppTour({ onDone }) {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user } = useUser()
-  const persona = getPersona(user?.gender, user?.aiPersona)
 
   const [run, setRun] = useState(false)
   const [stepIndex, setStepIndex] = useState(0)
   const [pendingStep, setPendingStep] = useState(null)
 
-  // Start tour on mount — navigate to dashboard first if needed
   useEffect(() => {
     if (location.pathname !== '/dashboard') {
       navigate('/dashboard', { replace: true })
     } else {
-      // Small delay so the page has rendered its targets
       setTimeout(() => setRun(true), 400)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // When location changes, resume if a pending step is waiting
   useEffect(() => {
     if (pendingStep === null) return
     const timer = setTimeout(() => {
@@ -178,20 +174,19 @@ export default function AppTour({ onDone }) {
 
     if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
       const next = index + (action === ACTIONS.PREV ? -1 : 1)
-      const clampedNext = Math.max(0, Math.min(next, TOUR_STEPS.length - 1))
-      const targetRoute = STEP_ROUTES[clampedNext]
+      const clamped = Math.max(0, Math.min(next, TOUR_STEPS.length - 1))
+      const targetRoute = STEP_ROUTES[clamped]
 
       if (targetRoute && location.pathname !== targetRoute) {
         setRun(false)
-        setPendingStep(clampedNext)
+        setPendingStep(clamped)
         navigate(targetRoute)
       } else {
-        setStepIndex(clampedNext)
+        setStepIndex(clamped)
       }
     }
   }, [location.pathname, navigate, finish])
 
-  // Locale strings in Hebrew
   const locale = {
     back: 'חזור',
     close: 'סגור',
@@ -202,20 +197,22 @@ export default function AppTour({ onDone }) {
   }
 
   return (
-    <Joyride
-      steps={TOUR_STEPS}
-      run={run}
-      stepIndex={stepIndex}
-      continuous
-      showSkipButton
-      showProgress
-      disableCloseOnEsc={false}
-      disableOverlayClose={false}
-      spotlightClicks={false}
-      styles={JOYRIDE_STYLES}
-      locale={locale}
-      callback={handleCallback}
-      floaterProps={{ disableAnimation: false }}
-    />
+    <Suspense fallback={null}>
+      <JoyrideComponent
+        steps={TOUR_STEPS}
+        run={run}
+        stepIndex={stepIndex}
+        continuous
+        showSkipButton
+        showProgress
+        disableCloseOnEsc={false}
+        disableOverlayClose={false}
+        spotlightClicks={false}
+        styles={JOYRIDE_STYLES}
+        locale={locale}
+        callback={handleCallback}
+        floaterProps={{ disableAnimation: false }}
+      />
+    </Suspense>
   )
 }
