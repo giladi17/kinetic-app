@@ -101,6 +101,7 @@ export default function Dashboard() {
   const [challenge,     setChallenge]     = useState(null)
   const [challengeDone, setChallengeDone] = useState(false)
   const [readiness,     setReadiness]     = useState(null)
+  const [massaInsight,  setMassaInsight]  = useState(null)
 
   useEffect(() => {
     const validDash = appDashboard && !appDashboard.error ? appDashboard : null
@@ -136,6 +137,13 @@ export default function Dashboard() {
     authFetch(`${API}/api/readiness`)
       .then(r => r.json())
       .then(setReadiness)
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    authFetch(`${API}/api/analytics/massa-insight`)
+      .then(r => r.json())
+      .then(d => { if (!d.error) setMassaInsight(d) })
       .catch(() => {})
   }, [])
 
@@ -479,7 +487,45 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ⑥ Weekly Analytics — full width */}
+        {/* ⑥ Massa Mode Insight */}
+        {massaInsight && (
+          <div className="md:col-span-12 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-[0_24px_48px_rgba(0,0,0,0.06)] bg-white dark:bg-[#1C1C1E] border border-[#F0F0F0] dark:border-[#2C2C2C]">
+            <div
+              className="shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg"
+              style={{ backgroundColor: '#CCFF00' }}
+            >
+              🏋️
+            </div>
+            <div className="flex-1 text-right md:text-right">
+              <p className="text-[10px] uppercase tracking-[0.2em] font-black mb-1" style={{ color: '#CCFF00' }}>
+                MASSA MODE
+              </p>
+              <p className="text-base font-black text-[#151C25] dark:text-white leading-snug">
+                {massaInsight.message}
+              </p>
+            </div>
+            {massaInsight.daysWithData > 0 && (
+              <div className="flex gap-6 shrink-0">
+                <div className="text-center">
+                  <p className="text-[10px] uppercase tracking-widest text-[#656464] font-black">ממוצע קל'</p>
+                  <p className="text-xl font-black text-[#151C25] dark:text-white">{massaInsight.avgCal}</p>
+                  <p className="text-[10px] font-bold" style={{ color: massaInsight.avgCal >= 2800 ? '#CCFF00' : '#9CA3AF' }}>
+                    / 2800
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] uppercase tracking-widest text-[#656464] font-black">ממוצע חלבון</p>
+                  <p className="text-xl font-black text-[#151C25] dark:text-white">{massaInsight.avgProt}g</p>
+                  <p className="text-[10px] font-bold" style={{ color: massaInsight.avgProt >= 130 ? '#CCFF00' : '#9CA3AF' }}>
+                    / 130g
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ⑧ Weekly Analytics — full width */}
         <div className="md:col-span-12 bg-white dark:bg-[#1C1C1E] p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.06)]">
           <div className="flex justify-between items-end mb-6">
             <div>
@@ -495,7 +541,7 @@ export default function Dashboard() {
           <WeeklyAnalyticsSection />
         </div>
 
-        {/* ⑦ Quick Stats — full width — LIGHT GLASS */}
+        {/* ⑨ Quick Stats — full width — LIGHT GLASS */}
         <div className="md:col-span-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { icon: 'favorite',   label: 'דופק מנוחה', value: `${d.restingHR || 62}`, unit: 'bpm',  color: '#FF6B6B' },

@@ -185,11 +185,13 @@ function Nutrition() {
     } catch { toast('שגיאה בטעינת המלצות') } finally { setRecLoading(false) }
   }
 
-  async function parseAI() {
-    if (!aiText.trim()) return
+  async function parseAI(quickText) {
+    const text = quickText || aiText
+    if (!text.trim()) return
+    if (quickText) setAiText(quickText)
     setAiParsing(true); setAiResult(null)
     try {
-      const res = await authFetch(`${API}/nutrition/parse`, { method: 'POST', body: JSON.stringify({ text: aiText }) })
+      const res = await authFetch(`${API}/nutrition/parse`, { method: 'POST', body: JSON.stringify({ text }) })
       setAiResult(await res.json())
     } catch { toast('שגיאה בניתוח הטקסט') } finally { setAiParsing(false) }
   }
@@ -314,8 +316,21 @@ function Nutrition() {
             onChange={e => { setAiText(e.target.value); setAiResult(null) }}
             dir="rtl"
           />
+          {/* Quick Add chips */}
+          <div className="flex flex-wrap gap-2">
+            {["שייק חלבון", "חזה עוף ואורז", "קוטג'", "סקופ חלבון"].map(label => (
+              <button
+                key={label}
+                onClick={() => parseAI(label)}
+                disabled={aiParsing}
+                className="px-3 py-1.5 rounded-xl font-black text-xs bg-[#EEF4FF] dark:bg-[#2C2C2C] text-[#506600] dark:text-[#CCFF00] hover:bg-[#DCE3F0] dark:hover:bg-[#3C3C3C] active:scale-95 transition-all duration-150 disabled:opacity-50"
+              >
+                + {label}
+              </button>
+            ))}
+          </div>
           <button
-            onClick={parseAI}
+            onClick={() => parseAI()}
             disabled={aiParsing || !aiText.trim()}
             className="w-full flex items-center justify-center gap-2 bg-[#151C25] dark:bg-[#CCFF00] text-white dark:text-black py-3 rounded-xl font-black text-sm tracking-wide shadow-[0_4px_24px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_24px_rgba(204,255,0,0.3)] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 disabled:opacity-60"
           >

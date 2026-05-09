@@ -2093,6 +2093,52 @@ app.get('/api/analytics/weekly-summary', requireAuth, asyncHandler(async (req, r
   res.json({ nutritionData, weightData, averages })
 }))
 // PATCH /api/stats
+
+// GET /api/analytics/massa-insight
+app.get('/api/analytics/massa-insight', requireAuth, asyncHandler(async (req, res) => {
+  const prismaUserId = await getPrismaUserId(req)
+  let totalCalories = 0, totalProtein = 0, daysWithData = 0
+  const now = new Date()
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(d.getDate() - i)
+    const dateStr  = d.toISOString().split('T')[0]
+    const dayStart = new Date(dateStr + 'T00:00:00.000Z')
+    const dayEnd   = new Date(dateStr + 'T23:59:59.999Z')
+    if (prismaUserId) {
+      const agg = await prisma.nutritionLog.aggregate({
+        where: { userId: prismaUserId, date: { gte: dayStart, lte: dayEnd } },
+        _sum: { calories: true, protein: true },
+      })
+      const cal  = Math.round(agg._sum.calories || 0)
+      const prot = Math.round(agg._sum.protein  || 0)
+      if (cal > 0 || prot > 0) { totalCalories += cal; totalProtein += prot; daysWithData++ }
+    }
+  }
+
+  const avgCal  = daysWithData > 0 ? Math.round(totalCalories / daysWithData) : 0
+  const avgProt = daysWithData > 0 ? Math.round(totalProtein  / daysWithData) : 0
+  const CAL_TARGET  = 2800
+  const PROT_TARGET = 130
+
+  let message
+  if (daysWithData === 0) {
+    message = 'התחל לתעד תזונה כדי לקבל תובנות מצב המסה.'
+  } else if (avgCal >= CAL_TARGET && avgProt >= PROT_TARGET) {
+    message = 'מצב המסה הופעל! עמדת ביעד הקלורי ובחלבון השבוע. המשך כך 💪'
+  } else if (avgCal >= CAL_TARGET && avgProt < PROT_TARGET) {
+    message = `הקלוריות שם, אבל חסרים ${PROT_TARGET - avgProt}g חלבון בממוצע. קח שייק חלבון.`
+  } else if (avgCal < CAL_TARGET && avgProt >= PROT_TARGET) {
+    message = `חלבון על נקודה, אבל חסרות ${CAL_TARGET - avgCal} קלוריות בממוצע. תוסיף אותן למסה.`
+  } else if (avgCal > CAL_TARGET * 0.7 && avgProt > PROT_TARGET * 0.7) {
+    message = 'כמעט שם — עקביות היא המפתח. עוד מאמץ קטן ותגיע ליעד השבוע.'
+  } else {
+    message = 'שבוע קשה לעקביות. זה קורה. היום הוא יום חדש — תתחיל בלהשיג 1500 קלוריות עד הצהריים.'
+  }
+
+  res.json({ message, avgCal, avgProt, daysWithData })
+}))
 app.patch('/api/stats', requireAuth, (req, res) => {
   const allowed = ['steps', 'step_goal', 'resting_hr', 'sleep', 'hydration', 'active_minutes', 'body_fat', 'gender', 'ai_persona']
   const updates = Object.entries(req.body).filter(([k]) => allowed.includes(k))

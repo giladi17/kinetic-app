@@ -116,7 +116,7 @@ export default function Plans() {
         <div className="fixed inset-0 bg-[#151C25]/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setVideoExercise(null)}>
           <div className="w-full max-w-md" onClick={e => e.stopPropagation()}>
             <div className="flex justify-end mb-3">
-              <button onClick={() => setVideoExercise(null)} className="bg-white/80 backdrop-blur-[24px] rounded-full p-2 shadow-xl hover:bg-[#CCFF00] transition-colors">
+              <button onClick={() => setVideoExercise(null)} className="bg-white/80 dark:bg-[#2C2C2C] backdrop-blur-[24px] rounded-full p-2 shadow-xl hover:bg-[#CCFF00] transition-colors">
                 <span className="material-symbols-outlined text-[#151C25]">close</span>
               </button>
             </div>
@@ -160,7 +160,7 @@ export default function Plans() {
               <span className="block text-[10px] font-black tracking-[0.3em] uppercase mb-1 text-[#506600]">ACTIVE PLAN</span>
               <p className="text-2xl font-black uppercase text-[#151C25] dark:text-white">{activePlan.name}</p>
               <p className="text-[#656464] text-sm mt-1 font-medium">
-                {t('plans.todayWorkout')}: <span className="text-[#151C25] font-black">{todayDay.name}</span>
+                {t('plans.todayWorkout')}: <span className="text-[#151C25] dark:text-white font-black">{todayDay.name}</span>
               </p>
             </div>
             <button
@@ -195,7 +195,7 @@ export default function Plans() {
                   {selected.days?.length} {t('plans.days')}
                 </span>
               </div>
-              <button onClick={() => setSelected(null)} className="text-[#656464] hover:text-[#151C25] transition-colors p-1">
+              <button onClick={() => setSelected(null)} className="text-[#656464] hover:text-[#151C25] dark:hover:text-white transition-colors p-1">
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
